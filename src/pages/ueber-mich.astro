@@ -1,0 +1,173 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import DisclaimerBanner from '../components/DisclaimerBanner.astro';
+---
+
+<BaseLayout
+  title="Über mich"
+  description="Lerne Malin kennen – Coach & Strategieberaterin bei Evoque. Der Ansatz: Problemursprung verstehen und im Hier und Jetzt verändern."
+>
+  <!-- Vorstellung -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Über mich</p>
+      <div class="intro">
+        <div class="intro__media">
+          <img
+            src="/images/About_Me_Malin_Images/DSC00751.jpg"
+            alt="Porträt von Malin, Coach bei Evoque"
+            width="560"
+            height="700"
+          />
+        </div>
+        <div class="intro__text">
+          <h1>Schön, dass du da bist.</h1>
+          <p class="lead">
+            [PLATZHALTER: Bio-Text – persönliche Vorstellung von Malin: Wer sie ist,
+            ihr Werdegang, ihre Haltung und warum sie Menschen als Coach begleitet.]
+          </p>
+          <p class="text-muted">
+            [PLATZHALTER: Bio-Text – weiterer Absatz: Qualifikation, Erfahrung und was
+            ihr in der Begleitung wichtig ist.]
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Der Ansatz -->
+  <section class="section surface-sand">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Der Ansatz"
+        title="Verstehen, woher es kommt – verändern, wo du heute stehst."
+      >
+        <p>
+          Mein Weg führt vom Ursprung des Problems zur Veränderung im Hier und Jetzt.
+        </p>
+      </SectionHeading>
+
+      <div class="grid grid--3 approach-cards">
+        <article class="card">
+          <h3>1 · Problemursprung</h3>
+          <p class="text-muted">
+            Wir klären, worum es wirklich geht: was, wann, wo, wie lange – und warum.
+          </p>
+        </article>
+        <article class="card">
+          <h3>2 · Vergangenheit verstehen</h3>
+          <p class="text-muted">
+            Wir schauen auf die Wurzeln des Themas, ohne dort stehen zu bleiben.
+          </p>
+        </article>
+        <article class="card">
+          <h3>3 · Im Hier und Jetzt verändern</h3>
+          <p class="text-muted">
+            Aus Verstehen wird Handeln – Schritt für Schritt, in deinem Tempo.
+          </p>
+        </article>
+      </div>
+
+      <div class="anchor">
+        <div class="anchor__images">
+          <img
+            src="/images/About_Me_Malin_Images/DSC00829.jpg"
+            alt="Malin im Gespräch"
+            width="380"
+            height="475"
+          />
+          <img
+            src="/images/About_Me_Malin_Images/DSC00841.jpg"
+            alt="Malin in entspannter Atmosphäre"
+            width="380"
+            height="475"
+          />
+        </div>
+        <div class="anchor__text">
+          <h2>Ich bin dein Anker und deine Begleiterin.</h2>
+          <p>
+            Du musst den Weg nicht allein gehen. Ich bleibe an deiner Seite, halte den
+            Kurs mit dir und sorge dafür, dass du dranbleibst – bis du dein Ziel
+            erreichst.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abgrenzung Coaching vs. Therapie -->
+  <section class="section">
+    <div class="container container--narrow">
+      <SectionHeading
+        eyebrow="Wichtig zu wissen"
+        title="Coaching – keine Therapie."
+        align="center"
+      >
+        <p>
+          Ich begleite dich bei Problemen und Sorgen rund um deine
+          Persönlichkeitsentwicklung. Geht es um therapeutische Anliegen, ist eine
+          Psychotherapie oder Heilbehandlung der richtige Weg – das ersetzt mein
+          Coaching ausdrücklich nicht.
+        </p>
+      </SectionHeading>
+      <DisclaimerBanner variant="strong" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+  @media (min-width: 860px) {
+    .intro {
+      grid-template-columns: 0.85fr 1.15fr;
+    }
+  }
+  .intro__media img {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    object-fit: cover;
+    aspect-ratio: 4 / 5;
+  }
+
+  .approach-cards {
+    margin-bottom: var(--space-2xl);
+  }
+  .approach-cards .card h3 {
+    margin-bottom: var(--space-xs);
+  }
+  .approach-cards .card p {
+    margin: 0;
+  }
+
+  .anchor {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+  @media (min-width: 860px) {
+    .anchor {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .anchor__images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+  .anchor__images img {
+    width: 100%;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    object-fit: cover;
+    aspect-ratio: 4 / 5;
+  }
+  .anchor__text p {
+    margin-bottom: 0;
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+// Generischer Buchungs-Embed-Platzhalter.
+// Hier später das gewählte Tool (Calendly / Cal.com / TidyCal) einbetten –
+// KEINE eigene Kalenderlogik, nur der Einbettungspunkt.
+---
+
+<div class="booking-embed" id="buchung">
+  <!-- [PLATZHALTER: Buchungstool-Embed-Link] -->
+  <!--
+    Beispiel-Einbettung (später ersetzen), z. B.:
+    <iframe src="https://cal.com/USERNAME/kennenlernen" ...></iframe>
+    oder das Inline-Embed-Snippet des jeweiligen Anbieters.
+  -->
+  <div class="booking-embed__placeholder">
+    <span class="booking-embed__icon" aria-hidden="true">📅</span>
+    <h3>Online-Terminbuchung</h3>
+    <p class="text-muted">
+      [PLATZHALTER: Buchungstool-Embed-Link] – hier wird das externe Buchungstool
+      (z.&nbsp;B. Calendly, Cal.com oder TidyCal) eingebettet.
+    </p>
+    <p class="booking-embed__hint">
+      Bis dahin: Buchung per E-Mail oder Telefon (siehe Kontaktangaben).
+    </p>
+  </div>
+</div>
+
+<style>
+  .booking-embed {
+    scroll-margin-top: 100px;
+  }
+  .booking-embed__placeholder {
+    text-align: center;
+    background: var(--soft-sand);
+    border: 2px dashed var(--calm-earth);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl) var(--space-xl);
+  }
+  .booking-embed__icon {
+    font-size: 2.4rem;
+    display: block;
+    margin-bottom: var(--space-md);
+  }
+  .booking-embed__hint {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--calm-earth);
+  }
+</style>

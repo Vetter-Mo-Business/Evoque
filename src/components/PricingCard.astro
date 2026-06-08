@@ -1,0 +1,105 @@
+---
+interface Props {
+  name: string;
+  price: string;
+  perSession: string;
+  features: string[];
+  ctaLabel: string;
+  ctaHref: string;
+  badge?: string;
+}
+
+const { name, price, perSession, features, ctaLabel, ctaHref, badge } = Astro.props;
+---
+
+<article class={`pricing-card ${badge ? 'pricing-card--badged' : ''}`}>
+  {badge && <span class="badge badge--pilot pricing-card__badge">{badge}</span>}
+  <h3 class="pricing-card__name">{name}</h3>
+  <p class="pricing-card__price">{price}</p>
+  <p class="pricing-card__per">{perSession}</p>
+
+  <ul class="pricing-card__features">
+    {
+      features.map((f) => (
+        <li>
+          <span class="pricing-card__check" aria-hidden="true">✓</span>
+          <span>{f}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <a href={ctaHref} class="btn btn--primary pricing-card__cta">{ctaLabel}</a>
+</article>
+
+<style>
+  .pricing-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: var(--border-soft);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-xl);
+    height: 100%;
+  }
+  /* Pilot-Karte dezent über Soft-Sand abgesetzt – KEINE Akzentfarbe (visual.md). */
+  .pricing-card--badged {
+    background: var(--soft-sand);
+    border-color: var(--accent-pilot);
+  }
+  .pricing-card__badge {
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-lg);
+  }
+  .pricing-card__name {
+    margin-bottom: var(--space-md);
+  }
+  .pricing-card__price {
+    font-family: var(--font-heading);
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--forest-deep);
+    margin: 0 0 var(--space-2xs);
+  }
+  .pricing-card__per {
+    color: var(--calm-earth);
+    font-size: 0.95rem;
+    margin: 0 0 var(--space-lg);
+  }
+  .pricing-card__features {
+    list-style: none;
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    display: grid;
+    gap: var(--space-sm);
+    flex-grow: 1;
+  }
+  .pricing-card__features li {
+    display: grid;
+    grid-template-columns: 1.4em 1fr;
+    gap: var(--space-xs);
+    align-items: start;
+    line-height: 1.5;
+  }
+  .pricing-card__check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4em;
+    height: 1.4em;
+    border-radius: 999px;
+    background: var(--sage-harmony);
+    color: var(--forest-deep);
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 0.1em;
+  }
+  .pricing-card__cta {
+    width: 100%;
+    margin-top: auto;
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+interface Props {
+  quote: string;
+  author: string;
+}
+const { quote, author } = Astro.props;
+---
+
+<figure class="testimonial">
+  <blockquote class="testimonial__quote">
+    <p>{quote}</p>
+  </blockquote>
+  <figcaption class="testimonial__author">{author}</figcaption>
+</figure>
+
+<style>
+  .testimonial {
+    margin: 0;
+    background: #fff;
+    border-radius: var(--radius);
+    border: var(--border-soft);
+    box-shadow: var(--shadow-soft);
+    padding: var(--space-xl);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .testimonial__quote {
+    margin: 0 0 var(--space-lg);
+    position: relative;
+    padding-top: var(--space-lg);
+  }
+  .testimonial__quote::before {
+    content: '“';
+    position: absolute;
+    top: -0.2em;
+    left: -0.05em;
+    font-family: var(--font-heading);
+    font-size: 3.4rem;
+    line-height: 1;
+    color: var(--sage-harmony);
+  }
+  .testimonial__quote p {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .testimonial__author {
+    font-weight: 600;
+    color: var(--calm-earth);
+  }
+</style>

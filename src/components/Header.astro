@@ -1,0 +1,198 @@
+---
+const nav = [
+  { label: 'Start', href: '/' },
+  { label: 'Über mich', href: '/ueber-mich' },
+  { label: 'Coaching', href: '/coaching' },
+  { label: 'Kontakt & Buchung', href: '/kontakt' },
+];
+
+// Aktuellen Pfad ermitteln (für aria-current)
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-header__brand" href="/" aria-label="Evoque – Yourself, zur Startseite">
+      <img
+        src="/images/Logos/Title_SM_EVOQUE.png"
+        alt="EVOQUE Yourself – Coaching & Strategy"
+        width="180"
+        height="142"
+      />
+    </a>
+
+    <button
+      class="site-header__toggle"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+      aria-label="Menü öffnen"
+    >
+      <span class="site-header__toggle-bar"></span>
+      <span class="site-header__toggle-bar"></span>
+      <span class="site-header__toggle-bar"></span>
+    </button>
+
+    <nav id="primary-nav" class="site-nav" aria-label="Hauptnavigation">
+      <ul class="site-nav__list">
+        {
+          nav.map((item) => {
+            const itemPath = item.href.replace(/\/$/, '') || '/';
+            const isCurrent = itemPath === path;
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  class="site-nav__link"
+                  aria-current={isCurrent ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
+        }
+        <li class="site-nav__cta">
+          <a href="/kontakt#buchung" class="btn btn--primary">Kennenlerngespräch buchen</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(247, 245, 241, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: var(--border-soft);
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    min-height: 76px;
+  }
+  .site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .site-header__brand img {
+    height: 52px;
+    width: auto;
+  }
+
+  .site-nav__list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    margin: 0;
+    padding: 0;
+  }
+  .site-nav__link {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    color: var(--forest-deep);
+    padding: 0.4em 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .site-nav__link:hover {
+    border-bottom-color: var(--sage-harmony);
+  }
+  .site-nav__link[aria-current='page'] {
+    border-bottom-color: var(--forest-deep);
+  }
+  .site-nav__cta .btn {
+    padding: 0.7em 1.3em;
+    font-size: 0.95rem;
+  }
+
+  /* Burger-Button (mobil) */
+  .site-header__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    background: transparent;
+    border: var(--border-soft);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .site-header__toggle-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    margin-inline: auto;
+    background: var(--forest-deep);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  @media (max-width: 900px) {
+    .site-header__toggle {
+      display: flex;
+    }
+    .site-nav {
+      position: absolute;
+      inset: 76px 0 auto 0;
+      background: var(--bg);
+      border-bottom: var(--border-soft);
+      box-shadow: var(--shadow-soft);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.28s ease;
+    }
+    .site-nav[data-open='true'] {
+      max-height: 28rem;
+    }
+    .site-nav__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: var(--space-sm) var(--space-lg) var(--space-lg);
+    }
+    .site-nav__link {
+      display: block;
+      padding: var(--space-md) 0;
+      border-bottom: var(--border-soft);
+    }
+    .site-nav__cta {
+      margin-top: var(--space-md);
+    }
+    .site-nav__cta .btn {
+      width: 100%;
+    }
+    .site-header__toggle[aria-expanded='true'] .site-header__toggle-bar:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .site-header__toggle[aria-expanded='true'] .site-header__toggle-bar:nth-child(2) {
+      opacity: 0;
+    }
+    .site-header__toggle[aria-expanded='true'] .site-header__toggle-bar:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.site-header__toggle');
+  const navEl = document.getElementById('primary-nav');
+  if (toggle && navEl) {
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      toggle.setAttribute('aria-label', open ? 'Menü öffnen' : 'Menü schließen');
+      navEl.setAttribute('data-open', String(!open));
+    });
+  }
+</script>

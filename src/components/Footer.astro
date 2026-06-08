@@ -1,0 +1,122 @@
+---
+const year = 2026;
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <img
+        src="/images/Logos/0_logo.png"
+        alt="EVOQUE Yourself – Coaching"
+        width="120"
+        height="120"
+        class="site-footer__logo"
+      />
+      <p class="site-footer__tagline">
+        Coach &amp; Strategieberaterin für nachhaltige Zielerreichung.
+      </p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer-Navigation">
+      <h2 class="site-footer__heading">Seiten</h2>
+      <ul>
+        <li><a href="/ueber-mich">Über mich</a></li>
+        <li><a href="/coaching">Coaching</a></li>
+        <li><a href="/kontakt">Kontakt &amp; Buchung</a></li>
+      </ul>
+    </nav>
+
+    <nav class="site-footer__nav" aria-label="Rechtliches">
+      <h2 class="site-footer__heading">Rechtliches</h2>
+      <ul>
+        <li><a href="/impressum">Impressum</a></li>
+        <li><a href="/datenschutz">Datenschutz</a></li>
+        <li><a href="/kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="site-footer__bar">
+    <div class="container site-footer__bar-inner">
+      <p class="site-footer__note">
+        Coaching, keine Psychotherapie/Heilbehandlung.
+      </p>
+      <p class="site-footer__copy">
+        © {year} EVOQUE yourself · Coaching &amp; Strategie
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--forest-deep);
+    color: var(--on-dark);
+    margin-top: var(--space-3xl);
+  }
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-xl);
+    padding-block: var(--space-2xl);
+  }
+  @media (min-width: 760px) {
+    .site-footer__inner {
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: var(--space-2xl);
+    }
+  }
+  .site-footer__logo {
+    width: 110px;
+    height: auto;
+    border-radius: var(--radius);
+    margin-bottom: var(--space-md);
+  }
+  .site-footer__tagline {
+    color: var(--sage-harmony);
+    max-width: 32ch;
+    margin: 0;
+  }
+  .site-footer__heading {
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--sage-harmony);
+    margin: 0 0 var(--space-md);
+  }
+  .site-footer__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-sm);
+  }
+  .site-footer__nav a {
+    color: var(--on-dark);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+  .site-footer__nav a:hover {
+    border-bottom-color: var(--sage-harmony);
+  }
+
+  .site-footer__bar {
+    border-top: 1px solid rgba(172, 191, 175, 0.25);
+  }
+  .site-footer__bar-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    justify-content: space-between;
+    align-items: center;
+    padding-block: var(--space-lg);
+  }
+  .site-footer__note,
+  .site-footer__copy {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--sage-harmony);
+  }
+</style>

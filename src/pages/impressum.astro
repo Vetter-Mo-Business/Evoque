@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Impressum"
+  description="Impressum von Evoque – Yourself // Coaching & Strategy."
+>
+  <section class="section">
+    <div class="container container--narrow legal">
+      <p class="eyebrow">Rechtliches</p>
+      <h1>Impressum</h1>
+
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <p>
+        [PLATZHALTER: Impressumsdaten – Name, Anschrift, Rechtsform des
+        Coaching-Angebots.]
+      </p>
+
+      <h2>Kontakt</h2>
+      <p>
+        E-Mail: [PLATZHALTER: E-Mail]<br />
+        Telefon: [PLATZHALTER: Telefonnummer]
+      </p>
+
+      <h2>Umsatzsteuer-ID</h2>
+      <p>[PLATZHALTER: USt-IdNr. gemäß § 27 a UStG, falls vorhanden.]</p>
+
+      <h2>Verantwortlich für den Inhalt</h2>
+      <p>[PLATZHALTER: Name und Anschrift der verantwortlichen Person.]</p>
+
+      <h2>Streitschlichtung</h2>
+      <p>
+        [PLATZHALTER: Hinweis zur Verbraucherstreitbeilegung / EU-Plattform zur
+        Online-Streitbeilegung, falls zutreffend.]
+      </p>
+
+      <p class="legal__note text-muted">
+        Hinweis: Dieser Text ist ein Platzhalter und ersetzt keine Rechtsberatung. Die
+        konkreten Pflichtangaben sind vor Veröffentlichung zu ergänzen.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal h2 {
+    margin-top: var(--space-xl);
+    font-size: 1.4rem;
+  }
+  .legal__note {
+    margin-top: var(--space-2xl);
+    font-size: 0.9rem;
+  }
+</style>

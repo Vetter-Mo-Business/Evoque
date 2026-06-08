@@ -1,0 +1,263 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import TopicCard from '../components/TopicCard.astro';
+import ProcessPath from '../components/ProcessPath.astro';
+import PricingCard from '../components/PricingCard.astro';
+
+const packages = [
+  {
+    name: 'Pilot Starter',
+    price: '280 €',
+    perSession: '35 € / Sitzung',
+    badge: 'Pilotphase',
+    ctaLabel: 'Jetzt sichern',
+    ctaHref: '/kontakt#buchung',
+    features: [
+      '8 Sitzungen × 60 Min.',
+      '+ 30 Min. kostenloses Gespräch',
+      'Exklusiver Einführungspreis',
+      'Begrenzte Plätze',
+    ],
+  },
+  {
+    name: 'Starter Paket',
+    price: '590 €',
+    perSession: '59 € / Sitzung',
+    ctaLabel: 'Buchung',
+    ctaHref: '/kontakt#buchung',
+    features: [
+      '10 Sitzungen × 60 Min.',
+      '+ 30 Min. kostenloses Gespräch',
+      'Für fokussierte Themen',
+      '3 Monate gültig',
+    ],
+  },
+  {
+    name: 'Deep Dive',
+    price: '1.120 €',
+    perSession: '56 € / Sitzung',
+    ctaLabel: 'Buchung',
+    ctaHref: '/kontakt#buchung',
+    features: [
+      '20 Sitzungen × 60 Min.',
+      '+ 30 Min. kostenloses Gespräch',
+      'Tiefgehende Entwicklung',
+      '6 Monate gültig',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Coaching"
+  description="Themen, Ablauf und Paketoptionen des Evoque-Coachings: von Prüfungsangst über Prokrastination bis zu langjährigen Themen."
+>
+  <!-- Intro -->
+  <section class="section section--tight">
+    <div class="container container--narrow center">
+      <p class="eyebrow">Coaching</p>
+      <h1>Eine Begleitung, die zu deinem Thema passt.</h1>
+      <p class="lead">
+        Kein Verkauf einzelner Sitzungen, sondern eine echte Begleitung – so lange,
+        wie dein Thema es braucht.
+      </p>
+    </div>
+  </section>
+
+  <!-- Themen / Anliegen -->
+  <section class="section surface-sand">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Themen & Anliegen"
+        title="Womit Menschen zu mir kommen"
+      >
+        <p>Häufige Anliegen – und Raum für dein persönliches Thema.</p>
+      </SectionHeading>
+
+      <div class="grid grid--2 topics-grid">
+        <TopicCard title="Prüfungsangst">
+          Wieder ruhig, klar und handlungsfähig in Prüfungssituationen.
+        </TopicCard>
+        <TopicCard title="Prokrastination">
+          Aufschieben durchbrechen und verlässlich ins Tun kommen.
+        </TopicCard>
+        <TopicCard title="Langjährige Themen (z. B. Abnehmen)">
+          Themen, die dich seit Jahren begleiten, an der Wurzel angehen.
+        </TopicCard>
+        <TopicCard title="Dein Thema" placeholder>
+          [PLATZHALTER: weitere Themen – hier weitere Anliegen ergänzen, mit denen
+          Malin arbeitet.]
+        </TopicCard>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ablauf-Prozess -->
+  <section class="section">
+    <div class="container">
+      <div class="process">
+        <div class="process__intro">
+          <SectionHeading eyebrow="Der Ablauf" title="Dein Weg zum Ziel">
+            <p>
+              Ein klarer, begleiteter Weg – vom ersten Kennenlernen bis zu deinem Ziel.
+            </p>
+          </SectionHeading>
+          <img
+            src="/images/Instagram/pathway.png"
+            alt="Der Weg zum Ziel – ein begleiteter Pfad"
+            width="520"
+            height="520"
+            class="process__image"
+          />
+          <p class="process__note">
+            <strong>Hinweis:</strong> Der Umfang richtet sich nach Schwere und Dauer
+            deines Themas – jüngere Themen gehen schneller. Es werden
+            <strong>keine einzelnen Sitzungen verkauft</strong>, sondern eine
+            durchgehende Begleitung.
+          </p>
+        </div>
+        <div class="process__path">
+          <ProcessPath />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gruppe vs. persönliche Begleitung -->
+  <section class="section surface-sand">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Zwei Wege"
+        title="Reinschnuppern oder tief eintauchen"
+        align="center"
+      />
+      <div class="grid grid--2 offer-grid">
+        <article class="card offer-card">
+          <h3>Kostenlose Gruppenangebote</h3>
+          <p class="text-muted">
+            Dein kostenloses Reinschnuppern: Lerne den Ansatz in der Gruppe kennen und
+            spüre, ob es für dich passt – ganz unverbindlich.
+          </p>
+          <ul class="offer-list">
+            <li>Kostenlos &amp; unverbindlich</li>
+            <li>Erste Impulse und Methoden</li>
+            <li>Gemeinschaft &amp; Austausch</li>
+          </ul>
+        </article>
+        <article class="card offer-card offer-card--highlight">
+          <h3>Persönliche Begleitung</h3>
+          <p>
+            Tiefer, individueller und ganz auf dich zugeschnitten. Ich gehe gezielt auf
+            dein Thema ein – für die bessere, nachhaltige Erfahrung.
+          </p>
+          <ul class="offer-list">
+            <li>Individuell auf dich abgestimmt</li>
+            <li>Tiefe statt Oberfläche</li>
+            <li>Verbindliche Begleitung bis zum Ziel</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preise / Pakete -->
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Investition"
+        title="Deine Paketoptionen"
+        align="center"
+      >
+        <p>Mehr Sitzungen, günstiger pro Sitzung – wähle, was zu deinem Weg passt.</p>
+      </SectionHeading>
+
+      <div class="grid grid--3 pricing-grid">
+        {
+          packages.map((p) => (
+            <PricingCard
+              name={p.name}
+              price={p.price}
+              perSession={p.perSession}
+              features={p.features}
+              ctaLabel={p.ctaLabel}
+              ctaHref={p.ctaHref}
+              badge={p.badge}
+            />
+          ))
+        }
+      </div>
+
+      <p class="center pricing-note text-muted">
+        Alle Pakete beinhalten ein kostenloses 30-minütiges Kennenlerngespräch vorab.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .topics-grid,
+  .offer-grid {
+    margin-top: var(--space-md);
+  }
+
+  .process {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .process {
+      grid-template-columns: 0.95fr 1.05fr;
+    }
+  }
+  .process__image {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    margin-bottom: var(--space-lg);
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+  }
+  .process__note {
+    background: var(--soft-sand);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .offer-card {
+    height: 100%;
+  }
+  .offer-card h3 {
+    margin-bottom: var(--space-sm);
+  }
+  .offer-card--highlight {
+    background: var(--sage-harmony);
+  }
+  .offer-list {
+    list-style: none;
+    margin: var(--space-md) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-xs);
+  }
+  .offer-list li {
+    padding-left: 1.4em;
+    position: relative;
+  }
+  .offer-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+  }
+
+  .pricing-grid {
+    align-items: stretch;
+  }
+  .pricing-note {
+    margin-top: var(--space-xl);
+  }
+</style>

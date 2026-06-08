@@ -1,0 +1,40 @@
+---
+interface Props {
+  variant?: 'soft' | 'strong';
+}
+const { variant = 'soft' } = Astro.props;
+---
+
+<aside class={`disclaimer disclaimer--${variant}`} role="note">
+  <span class="disclaimer__icon" aria-hidden="true">ⓘ</span>
+  <p class="disclaimer__text">
+    <strong>Wichtiger Hinweis:</strong> Dies ist ein Coaching bei Problemen und Sorgen –
+    <strong>keine Therapie oder Heilbehandlung</strong> bei therapeutischen Anliegen.
+  </p>
+</aside>
+
+<style>
+  .disclaimer {
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+    border-radius: var(--radius);
+    padding: var(--space-lg) var(--space-xl);
+  }
+  .disclaimer--soft {
+    background: var(--soft-sand);
+    border: var(--border-soft);
+  }
+  .disclaimer--strong {
+    background: var(--sage-harmony);
+  }
+  .disclaimer__icon {
+    font-size: 1.4rem;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+  .disclaimer__text {
+    margin: 0;
+    color: var(--forest-deep);
+  }
+</style>

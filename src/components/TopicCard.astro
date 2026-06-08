@@ -1,0 +1,46 @@
+---
+interface Props {
+  title: string;
+  placeholder?: boolean;
+}
+const { title, placeholder = false } = Astro.props;
+---
+
+<article class={`topic-card ${placeholder ? 'topic-card--placeholder' : ''}`}>
+  <span class="topic-card__leaf" aria-hidden="true">🌱</span>
+  <h3 class="topic-card__title">{title}</h3>
+  <p class="topic-card__text"><slot /></p>
+</article>
+
+<style>
+  .topic-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-soft);
+    border: var(--border-soft);
+    height: 100%;
+  }
+  .topic-card--placeholder {
+    background: var(--soft-sand);
+    border-style: dashed;
+  }
+  .topic-card__leaf {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    background: var(--sage-harmony);
+    font-size: 1.4rem;
+    margin-bottom: var(--space-md);
+  }
+  .topic-card__title {
+    margin-bottom: var(--space-xs);
+  }
+  .topic-card__text {
+    margin: 0;
+    color: var(--calm-earth);
+  }
+</style>
