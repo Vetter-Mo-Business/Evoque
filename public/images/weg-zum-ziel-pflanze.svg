@@ -1,0 +1,39 @@
+<svg viewBox="0 0 240 760" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-label="Wachsende Pflanze als Wegweiser">
+  <g stroke="#152C1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- Stiel = der wachsende Strahl (von unten y=748 nach oben y=28) -->
+    <path id="stem" d="M120,748 C116,652 124,564 120,470 C116,382 124,300 120,210 C117,150 122,92 120,28" />
+
+    <!-- Blätter im Visitenkarten-Stil, von unten nach oben kleiner werdend -->
+    <g class="leaf" fill="#ACBFAF">
+      <path transform="translate(120,704) rotate(-140) scale(0.95)" d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"/>
+    </g>
+    <g class="leaf" fill="#ACBFAF">
+      <path transform="translate(120,606) rotate(-40) scale(0.9)" d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"/>
+    </g>
+    <g class="leaf" fill="#ACBFAF">
+      <path transform="translate(120,508) rotate(-140) scale(0.85)" d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"/>
+    </g>
+    <g class="leaf" fill="#ACBFAF">
+      <path transform="translate(120,408) rotate(-40) scale(0.8)" d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"/>
+    </g>
+    <g class="leaf" fill="#ACBFAF">
+      <path transform="translate(120,308) rotate(-140) scale(0.74)" d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"/>
+    </g>
+    <g class="leaf" fill="#ACBFAF">
+      <path transform="translate(120,214) rotate(-40) scale(0.68)" d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"/>
+    </g>
+
+    <!-- Kleine Triebspitze oben -->
+    <g class="leaf" fill="#ACBFAF">
+      <path transform="translate(120,86) rotate(-115) scale(0.5)" d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"/>
+      <path transform="translate(120,86) rotate(-65) scale(0.5)" d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"/>
+    </g>
+
+    <!-- Knotenpunkte: node-1 unten (Schritt 01) bis node-4 oben (Schritt 04-07) -->
+    <circle id="node-1" class="node" cx="120" cy="648" r="6.5" fill="#152C1A" stroke="none"/>
+    <circle id="node-2" class="node" cx="120" cy="486" r="6.5" fill="#152C1A" stroke="none"/>
+    <circle id="node-3" class="node" cx="120" cy="324" r="6.5" fill="#152C1A" stroke="none"/>
+    <circle id="node-4" class="node" cx="120" cy="162" r="6.5" fill="#152C1A" stroke="none"/>
+  </g>
+</svg>

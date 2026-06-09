@@ -2,7 +2,106 @@
 
 > Diese Datei ist die **alleinige Quelle** für alle visuellen Entscheidungen. Sie hat Vorrang vor jeder Skill-Empfehlung.
 
+## 1. Golden Ratio (Faktor 1.618)
+
+Abstände, Layout-Aufteilung und Schriftgrößen werden über den Faktor **1.618**
+abgeleitet, damit ein konsistentes, harmonisches System entsteht.
+
+### Spacing Scale
+Jeder Wert ist der vorige × 1.618:
+
+| Stufe   | Wert (px) |
+|---------|-----------|
+| base    | 8         |
+| small   | 13        |
+| medium  | 21        |
+| large   | 34        |
+| x-large | 55        |
+
+Nur diese Werte für Abstände (margin, padding, gap) verwenden – keine willkürlichen.
+
+### Layout Proportions
+Layouts im Goldenen Schnitt teilen, nicht 50/50 oder 70/30:
+- Content / Hauptbereich: **61.8 %**
+- Actions / Seitenleiste: **38.2 %**
+
+### Type Scale
+Jede Schriftstufe ist die vorige × 1.618:
+
+| Rolle      | Größe (px) |
+|------------|------------|
+| Body       | 16         |
+| Subheading | 26         |
+| Heading    | 42         |
+| Display    | 68         |
+
 ---
+
+## 2. Notifications / Toasts
+
+### Position
+- Desktop: **unten rechts** (bottom-right)
+- Mobile: **oben** (top)
+- **Nie zentriert** – blockiert den Inhalt, User kann nicht durchklicken.
+- Grundregel: nie das blockieren, womit der User gerade arbeitet.
+
+### Timing
+Dauer nach Wichtigkeit:
+
+| Typ               | Dauer                  |
+|-------------------|------------------------|
+| Info              | 4 s · auto-dismiss     |
+| Warnung           | 7 s · hält länger      |
+| Kritisch / Fehler | ∞ · until acknowledged |
+
+Je kritischer, desto länger sichtbar. Fehler verschwinden nie von selbst.
+
+### Stacking
+- Max. **3 sichtbar** gleichzeitig.
+- Spring-Animation: **Damping 20**, **Stiffness 180**.
+
+### Dismissible
+- Close-Button (Klick): immer einen Ausweg anbieten.
+- Swipe to dismiss: auf Mobile per Wischgeste.
+- Hover to pause: Timer friert ein, solange die Maus drauf ist.
+
+---
+
+## 3. Loading States
+
+### Skeleton
+- Form zuerst: setzt die richtige Erwartung, gefühlte Geschwindigkeit schlägt echte.
+- Einsetzen, wenn das Layout vorhersehbar ist (known shape).
+- Verwenden bei Ladezeiten **> 300 ms**.
+- Animation läuft **von links nach rechts**, damit kein Warte-Gefühl entsteht.
+
+### Spinner
+- Immer mit Kontext (z. B. Button „Saving…"), nie nackt ohne Beschreibung.
+- Einsetzen bei unbekannter Dauer und **< 3 s**.
+
+### Optimistic UI
+- Ergebnis sofort anzeigen (0 ms bei Klick), Sync läuft im Hintergrund.
+- Instant feedback geben.
+- Bei serverseitigem Fehler: Rollback (Zustand zurücksetzen).
+
+---
+
+## 4. UI-Details
+
+### Border Radius (verschachtelte Rundungen)
+- Regel: `inner = outer − padding`
+- Beispiel: outer 32px, padding 14px → inner 18px.
+- **Pflicht – aber nur, wenn ein abgerundetes Design gewählt wird.**
+  Bei bewusst eckigem/kantigem Design entfällt diese Regel.
+
+### Dark Mode Weight
+- Im Dark Mode Schriftstärke eine Stufe zurücknehmen.
+- Formel: `dark_mode: weight − 100` (z. B. Light 600 → Dark 500).
+
+### Text Centering (optisch)
+- CSS zentriert die Line-Box, das Auge zentriert die Cap-Height.
+- Korrektur für optische Mitte (z. B. in Buttons): `padding-top: +2px`.
+
 
 ## Marke
 - **Name:** EVOQUE – Yourself // Coaching & Strategy

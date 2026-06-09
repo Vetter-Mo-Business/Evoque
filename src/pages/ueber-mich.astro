@@ -22,7 +22,7 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
           />
         </div>
         <div class="intro__text">
-          <h1>Schön, dass du da bist.</h1>
+          <h1>Schön, dass Sie da bist.</h1>
           <p class="lead">
             [PLATZHALTER: Bio-Text – persönliche Vorstellung von Malin: Wer sie ist,
             ihr Werdegang, ihre Haltung und warum sie Menschen als Coach begleitet.]
@@ -72,16 +72,10 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
       <div class="anchor">
         <div class="anchor__images">
           <img
-            src="/images/About_Me_Malin_Images/DSC00829.jpg"
-            alt="Malin im Gespräch"
-            width="380"
-            height="475"
-          />
-          <img
-            src="/images/About_Me_Malin_Images/DSC00841.jpg"
-            alt="Malin in entspannter Atmosphäre"
-            width="380"
-            height="475"
+            src="/images/About_Me_Malin_Images/DSC00842.jpg"
+            alt="Malin – Porträt im Querformat"
+            width="780"
+            height="488"
           />
         </div>
         <div class="anchor__text">
@@ -156,16 +150,25 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
     }
   }
   .anchor__images {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-md);
+    /* ===== HIER EINSTELLEN ===== */
+    --img-zoom: 1; /* Zoom: 1 = Grundeinstellung, größer = näher ran (z. B. 1.2) */
+    --img-x: 50%; /* Links/Rechts: 0% = ganz links, 50% = Mitte, 100% = ganz rechts */
+    --img-y: 45%; /* Hoch/Runter: 0% = ganz oben, 50% = Mitte, 100% = ganz unten */
+    --img-ratio: 3.7 / 3; /* Bildausschnitt (Breite/Höhe): kleiner = höher/mehr drauf, z. B. 5 / 4 */
+    /* =========================== */
+
+    aspect-ratio: var(--img-ratio);
+    overflow: hidden;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
   }
   .anchor__images img {
     width: 100%;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-soft);
+    height: 100%;
     object-fit: cover;
-    aspect-ratio: 4 / 5;
+    object-position: var(--img-x) var(--img-y);
+    transform: scale(var(--img-zoom));
+    transform-origin: var(--img-x) var(--img-y);
   }
   .anchor__text p {
     margin-bottom: 0;

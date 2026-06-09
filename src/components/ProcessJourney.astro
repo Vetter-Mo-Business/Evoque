@@ -1,0 +1,397 @@
+---
+interface Step {
+  num: string;
+  title: string;
+  text: string;
+  /** Vertikale Lage = Knoten-cy / viewBox-Höhe (760). node-1 unten … node-4 oben. */
+  top: string;
+}
+
+// Inhalte 1:1 wie bisher. DOM-Reihenfolge = logische Lesereihenfolge 01 → 04–07.
+// top = cy/760: node-1 cy=648 → 85.263% (unten) … node-4 cy=162 → 21.316% (oben).
+const steps: Step[] = [
+  {
+    num: '01',
+    title: 'Kennenlerngespräch',
+    text: 'Problem klären: was, wann, wo, wie lange – und warum.',
+    top: '85.263%',
+  },
+  {
+    num: '02',
+    title: 'Zweites Gespräch',
+    text: 'Wir vertiefen das Bild und verstehen den Ursprung des Themas.',
+    top: '63.947%',
+  },
+  {
+    num: '03',
+    title: 'Ziel festlegen',
+    text: 'Wir bestimmen dein Ziel und den Weg dorthin.',
+    top: '42.632%',
+  },
+  {
+    num: '04 – 07',
+    title: 'Schritt für Schritt zum Ziel',
+    text: 'Begleitete Etappen: Veränderung im Hier und Jetzt – ich bleibe dein Anker.',
+    top: '21.316%',
+  },
+];
+---
+
+<section class="journey" data-journey>
+  <div class="journey__pin" data-pin>
+    <!-- Kopf: zentriert oben, bleibt während des Pins sichtbar -->
+    <div class="container journey__head">
+      <p class="eyebrow">Der Ablauf</p>
+      <h2>Dein Weg zum Ziel</h2>
+      <p>
+        Ein klarer, begleiteter Weg – vom ersten Kennenlernen bis zu deinem Ziel.
+        Schritt für Schritt, Sitzung für Sitzung.
+      </p>
+    </div>
+
+    <div class="container journey__cols">
+      <!-- Links: Pflanzen-SVG (inline, damit Stem/Blätter/Knoten animierbar sind) -->
+      <div class="journey__plant" data-plant>
+        <svg
+          class="plant"
+          viewBox="0 0 240 760"
+          fill="none"
+          aria-hidden="true"
+        >
+          <g
+            class="plant__ink"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <!-- Stiel = wachsender Strahl (unten y=748 → oben y=28) -->
+            <path
+              id="stem"
+              d="M120,748 C116,652 124,564 120,470 C116,382 124,300 120,210 C117,150 122,92 120,28"
+            ></path>
+
+            <g class="leaf" data-y="704">
+              <path
+                transform="translate(120,704) rotate(-140) scale(0.95)"
+                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            </g>
+            <g class="leaf" data-y="606">
+              <path
+                transform="translate(120,606) rotate(-40) scale(0.9)"
+                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            </g>
+            <g class="leaf" data-y="508">
+              <path
+                transform="translate(120,508) rotate(-140) scale(0.85)"
+                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            </g>
+            <g class="leaf" data-y="408">
+              <path
+                transform="translate(120,408) rotate(-40) scale(0.8)"
+                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            </g>
+            <g class="leaf" data-y="308">
+              <path
+                transform="translate(120,308) rotate(-140) scale(0.74)"
+                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            </g>
+            <g class="leaf" data-y="214">
+              <path
+                transform="translate(120,214) rotate(-40) scale(0.68)"
+                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            </g>
+            <!-- Triebspitze oben -->
+            <g class="leaf" data-y="86">
+              <path
+                transform="translate(120,86) rotate(-115) scale(0.5)"
+                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+              <path
+                transform="translate(120,86) rotate(-65) scale(0.5)"
+                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            </g>
+
+            <!-- Knoten: node-1 unten (01) … node-4 oben (04–07) -->
+            <circle id="node-1" class="node" cx="120" cy="648" r="6.5"></circle>
+            <circle id="node-2" class="node" cx="120" cy="486" r="6.5"></circle>
+            <circle id="node-3" class="node" cx="120" cy="324" r="6.5"></circle>
+            <circle id="node-4" class="node" cx="120" cy="162" r="6.5"></circle>
+          </g>
+        </svg>
+      </div>
+
+      <!--
+        Rechts: vier Schritt-Boxen. DOM-Reihenfolge 01→04 (Lesefluss).
+        Im gepinnten Modus wird jede Box per CSS exakt auf ihr Knoten-Verhältnis
+        gesetzt (top = cy/760, translateY(-50%)). Die Spalte ist genauso hoch wie
+        die SVG (gleicher CSS-Wert) → punktgenau, ohne JS-Messung.
+      -->
+      <ol class="journey__steps" data-steps>
+        {
+          steps.map((step) => (
+            <li class="journey__step" style={`--top:${step.top}`}>
+              <div class="journey__card" data-step>
+                <span class="journey__num">{step.num}</span>
+                <div class="journey__body">
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .journey {
+    /* obere Sektionsgrenze 10px nachgezogen (passend zur tieferen Überschrift) */
+    margin-top: calc(var(--space-md) + 10px);
+    /* Höhe der Pflanze = Höhe der Boxen-Spalte (identischer Wert!) */
+    --plant-h: min(62vh, 600px);
+  }
+  .journey__pin {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-xl);
+    padding-block: var(--space-xl);
+  }
+
+  /* Kopf zentriert oben */
+  .journey__head {
+    text-align: center;
+    max-width: 60ch;
+    margin-top: 50px; /* Überschrift 10px tiefer */
+  }
+  .journey__head h2 {
+    margin-bottom: var(--space-sm);
+  }
+  .journey__head p {
+    margin: 0 auto;
+    max-width: 52ch;
+  }
+
+  .journey__cols {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .journey__cols {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: var(--space-3xl);
+    }
+  }
+
+  /* ---------- Pflanze / SVG ---------- */
+  .journey__plant {
+    display: flex;
+    justify-content: center;
+  }
+  .journey__plant .plant {
+    height: var(--plant-h);
+    width: auto;
+  }
+  /* Farben strikt aus visual.md */
+  .journey__plant .plant__ink {
+    stroke: var(--forest-deep);
+  }
+  .journey__plant .leaf {
+    fill: var(--sage-harmony);
+  }
+  .journey__plant .node {
+    fill: var(--forest-deep);
+    stroke: none;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* ---------- Schritt-Boxen (kompakt) ---------- */
+  .journey__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+  }
+  .journey__step {
+    margin: 0;
+  }
+  .journey__card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+  .journey__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    padding-inline: 0.45em;
+    border-radius: 999px;
+    background: var(--forest-deep);
+    color: var(--on-dark);
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .journey__body {
+    background: #fff;
+    border-radius: var(--radius);
+    border: var(--border-soft);
+    padding: var(--space-sm) var(--space-md);
+    box-shadow: var(--shadow-soft);
+  }
+  .journey__body h3 {
+    font-size: 1.02rem;
+    margin-bottom: 2px;
+  }
+  .journey__body p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--calm-earth);
+  }
+
+  /* Gepinnter Modus: Boxen-Spalte so hoch wie die SVG; jede Box deterministisch
+     auf ihr Knoten-Verhältnis gesetzt – keine JS-Messung nötig. */
+  .journey__steps.is-pinned {
+    display: block;
+    position: relative;
+    height: var(--plant-h);
+  }
+  .journey__steps.is-pinned .journey__step {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--top);
+    transform: translateY(-50%);
+  }
+
+  /* ---------- Mobil (< 900px): normal gestapelt, keine Animation ---------- */
+  @media (max-width: 899.98px) {
+    .journey {
+      --plant-h: min(60vh, 460px);
+    }
+    .journey__pin {
+      min-height: 0;
+      display: block;
+      padding-block: 0;
+    }
+    .journey__pin > * + * {
+      margin-top: var(--space-2xl);
+    }
+  }
+
+  /* ---------- Reduced Motion: einspaltig, alles statisch sichtbar ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .journey__cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const root = document.querySelector<HTMLElement>('[data-journey]');
+  if (root) {
+    const pin = root.querySelector<HTMLElement>('[data-pin]')!;
+    const steps = root.querySelector<HTMLElement>('[data-steps]')!;
+    const stem = root.querySelector<SVGPathElement>('#stem')!;
+    const leaves = gsap.utils.toArray<SVGGElement>('.leaf', root);
+    const nodes = [1, 2, 3, 4].map(
+      (n) => root.querySelector<SVGCircleElement>('#node-' + n)!
+    );
+    const boxes = gsap.utils.toArray<HTMLElement>('[data-step]', root);
+
+    const mm = gsap.matchMedia();
+
+    // Nur ab 900px UND ohne reduzierte Bewegung: gepinnte Scroll-Animation.
+    mm.add(
+      '(min-width: 900px) and (prefers-reduced-motion: no-preference)',
+      () => {
+        const L = stem.getTotalLength();
+
+        // Längen-Anteil (0..1), an dem die Stem-Spitze die Höhe y passiert.
+        // y fällt monoton entlang des Pfades (748 → 28).
+        const fracAtY = (y: number) => {
+          let lo = 0;
+          let hi = L;
+          for (let i = 0; i < 24; i++) {
+            const mid = (lo + hi) / 2;
+            if (stem.getPointAtLength(mid).y > y) lo = mid;
+            else hi = mid;
+          }
+          return (lo + hi) / 2 / L;
+        };
+
+        // Boxen-Positionierung ist reines CSS – hier nur Klasse setzen.
+        steps.classList.add('is-pinned');
+
+        // Startzustände der Animation
+        gsap.set(stem, { strokeDasharray: L, strokeDashoffset: L });
+        gsap.set(leaves, { opacity: 0 });
+        gsap.set(nodes, { opacity: 0, scale: 0.2 });
+        gsap.set(boxes, { opacity: 0, x: 24 });
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            trigger: pin,
+            start: 'top top',
+            end: () => '+=' + window.innerHeight * 3,
+            pin: true,
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // Stiel zeichnet sich von unten nach oben über den gesamten Scrollweg.
+        tl.to(stem, { strokeDashoffset: 0, duration: 1 }, 0);
+
+        // Blätter faden ein, sobald die Spitze sie passiert.
+        leaves.forEach((leaf) => {
+          const y = Number(leaf.dataset.y);
+          tl.to(leaf, { opacity: 1, duration: 0.06 }, fracAtY(y));
+        });
+
+        // Knoten + zugehörige Box erscheinen, wenn die Spitze den Knoten erreicht.
+        boxes.forEach((box, i) => {
+          const at = fracAtY(Number(nodes[i].getAttribute('cy')));
+          tl.to(nodes[i], { opacity: 1, scale: 1, duration: 0.04 }, at);
+          tl.to(
+            box,
+            { opacity: 1, x: 0, duration: 0.12, ease: 'power2.out' },
+            at
+          );
+        });
+
+        // Pin-Start/-Ende mit finalen Maßen rechnen, sobald Layout/Fonts stehen.
+        let active = true;
+        const refresh = () => {
+          if (active) ScrollTrigger.refresh();
+        };
+        const fontsReady: Promise<unknown> =
+          (document as any).fonts?.ready ?? Promise.resolve();
+        fontsReady.then(() => requestAnimationFrame(refresh));
+        window.addEventListener('load', refresh);
+
+        return () => {
+          active = false;
+          window.removeEventListener('load', refresh);
+          steps.classList.remove('is-pinned');
+        };
+      }
+    );
+  }
+</script>

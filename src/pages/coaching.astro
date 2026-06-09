@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import TopicCard from '../components/TopicCard.astro';
-import ProcessPath from '../components/ProcessPath.astro';
+import ProcessJourney from '../components/ProcessJourney.astro';
 import PricingCard from '../components/PricingCard.astro';
 
 const packages = [
@@ -75,54 +75,64 @@ const packages = [
         <p>Häufige Anliegen – und Raum für dein persönliches Thema.</p>
       </SectionHeading>
 
-      <div class="grid grid--2 topics-grid">
-        <TopicCard title="Prüfungsangst">
-          Wieder ruhig, klar und handlungsfähig in Prüfungssituationen.
-        </TopicCard>
-        <TopicCard title="Prokrastination">
-          Aufschieben durchbrechen und verlässlich ins Tun kommen.
-        </TopicCard>
-        <TopicCard title="Langjährige Themen (z. B. Abnehmen)">
-          Themen, die dich seit Jahren begleiten, an der Wurzel angehen.
-        </TopicCard>
-        <TopicCard title="Dein Thema" placeholder>
-          [PLATZHALTER: weitere Themen – hier weitere Anliegen ergänzen, mit denen
-          Malin arbeitet.]
-        </TopicCard>
+      <div
+        class="topic-slider"
+        data-topic-slider
+        role="group"
+        aria-roledescription="Karussell"
+        aria-label="Themen, mit denen Menschen kommen"
+      >
+        <div class="topic-slider__viewport" data-viewport>
+          <div class="topic-slider__track" data-track>
+            <div class="topic-slider__slide">
+              <TopicCard title="Prüfungsangst">
+                Wieder ruhig, klar und handlungsfähig in Prüfungssituationen.
+              </TopicCard>
+            </div>
+            <div class="topic-slider__slide">
+              <TopicCard title="Prokrastination">
+                Aufschieben durchbrechen und verlässlich ins Tun kommen.
+              </TopicCard>
+            </div>
+            <div class="topic-slider__slide">
+              <TopicCard title="Langjährige Themen (z. B. Abnehmen)">
+                Themen, die dich seit Jahren begleiten, an der Wurzel angehen.
+              </TopicCard>
+            </div>
+            <div class="topic-slider__slide">
+              <TopicCard title="Dein Thema" placeholder>
+                [PLATZHALTER: weitere Themen – hier weitere Anliegen ergänzen, mit
+                denen Malin arbeitet.]
+              </TopicCard>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-slider__controls">
+          <button
+            type="button"
+            class="topic-slider__nav"
+            data-prev
+            aria-label="Vorheriges Thema"
+          >
+            ‹
+          </button>
+          <div class="topic-slider__dots" data-dots aria-hidden="true"></div>
+          <button
+            type="button"
+            class="topic-slider__nav"
+            data-next
+            aria-label="Nächstes Thema"
+          >
+            ›
+          </button>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Ablauf-Prozess -->
-  <section class="section">
-    <div class="container">
-      <div class="process">
-        <div class="process__intro">
-          <SectionHeading eyebrow="Der Ablauf" title="Dein Weg zum Ziel">
-            <p>
-              Ein klarer, begleiteter Weg – vom ersten Kennenlernen bis zu deinem Ziel.
-            </p>
-          </SectionHeading>
-          <img
-            src="/images/Instagram/pathway.png"
-            alt="Der Weg zum Ziel – ein begleiteter Pfad"
-            width="520"
-            height="520"
-            class="process__image"
-          />
-          <p class="process__note">
-            <strong>Hinweis:</strong> Der Umfang richtet sich nach Schwere und Dauer
-            deines Themas – jüngere Themen gehen schneller. Es werden
-            <strong>keine einzelnen Sitzungen verkauft</strong>, sondern eine
-            durchgehende Begleitung.
-          </p>
-        </div>
-        <div class="process__path">
-          <ProcessPath />
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- Ablauf-Prozess: gepinnte Scroll-Animation -->
+  <ProcessJourney />
 
   <!-- Gruppe vs. persönliche Begleitung -->
   <section class="section surface-sand">
@@ -196,35 +206,115 @@ const packages = [
 </BaseLayout>
 
 <style>
-  .topics-grid,
   .offer-grid {
     margin-top: var(--space-md);
   }
 
-  .process {
-    display: grid;
-    gap: var(--space-2xl);
-    align-items: start;
+  /* ===== Themen-Slider ===== */
+  .topic-slider {
+    margin-top: var(--space-md);
   }
-  @media (min-width: 900px) {
-    .process {
-      grid-template-columns: 0.95fr 1.05fr;
+  .topic-slider__viewport {
+    position: relative;
+    overflow: hidden;
+  }
+  /* Fade rechts: deutet an, dass noch eine weitere Karte folgt */
+  .topic-slider__viewport::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 14%;
+    max-width: 120px;
+    background: linear-gradient(
+      to right,
+      rgba(225, 210, 203, 0),
+      var(--soft-sand)
+    );
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+    z-index: 2;
+  }
+  .topic-slider.is-end .topic-slider__viewport::after {
+    opacity: 0;
+  }
+  .topic-slider__track {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: stretch;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  /* Mobil: 1 Karte + Andeutung der nächsten */
+  .topic-slider__slide {
+    flex: 0 0 82%;
+    min-width: 0;
+  }
+  /* Tablet: 2 Karten + Andeutung */
+  @media (min-width: 560px) {
+    .topic-slider__slide {
+      flex-basis: 46%;
     }
   }
-  .process__image {
-    width: 100%;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card);
-    margin-bottom: var(--space-lg);
-    object-fit: cover;
-    aspect-ratio: 1 / 1;
+  /* Desktop: 3 Karten + die vierte rechts angedeutet */
+  @media (min-width: 900px) {
+    .topic-slider__slide {
+      flex-basis: 30%;
+    }
   }
-  .process__note {
-    background: var(--soft-sand);
-    border-radius: var(--radius);
-    padding: var(--space-lg);
-    margin: 0;
-    font-size: 0.95rem;
+
+  .topic-slider__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+  .topic-slider__nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 999px;
+    background: var(--forest-deep);
+    color: var(--on-dark);
+    font-size: 1.6rem;
+    line-height: 1;
+    padding-bottom: 0.12em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease,
+      opacity 0.2s ease;
+  }
+  .topic-slider__nav:hover {
+    background: #0e2113;
+    transform: translateY(-2px);
+  }
+  .topic-slider__dots {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  .topic-slider__dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: rgba(21, 44, 26, 0.22);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  .topic-slider__dot:hover {
+    background: rgba(21, 44, 26, 0.4);
+  }
+  .topic-slider__dot[aria-current='true'] {
+    background: var(--forest-deep);
+    transform: scale(1.25);
   }
 
   .offer-card {
@@ -261,3 +351,149 @@ const packages = [
     margin-top: var(--space-xl);
   }
 </style>
+
+<script>
+  // Themen-Slider: läuft automatisch von links nach rechts,
+  // kann aber per Pfeilen, Punkten und Wischgeste auch manuell bedient werden.
+  const slider = document.querySelector<HTMLElement>('[data-topic-slider]');
+  if (slider) {
+    const viewport = slider.querySelector<HTMLElement>('[data-viewport]')!;
+    const track = slider.querySelector<HTMLElement>('[data-track]')!;
+    const slides = Array.from(track.children) as HTMLElement[];
+    const prevBtn = slider.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const nextBtn = slider.querySelector<HTMLButtonElement>('[data-next]')!;
+    const dotsWrap = slider.querySelector<HTMLElement>('[data-dots]')!;
+
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    const AUTOPLAY_MS = 2800; // Auto-Lauf: startet früher / etwas zügiger
+    const RESUME_MS = 10000; // nach eigener Bedienung 10 s warten
+
+    let index = 0;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    let resumeTimer: ReturnType<typeof setTimeout> | undefined;
+
+    // Punkte aufbauen (einer pro Slide)
+    const dots = slides.map((_, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'topic-slider__dot';
+      dot.setAttribute('aria-label', `Thema ${i + 1} anzeigen`);
+      dot.addEventListener('click', () => {
+        goTo(i);
+        scheduleResume();
+      });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    function maxOffset() {
+      return Math.max(0, track.scrollWidth - viewport.clientWidth);
+    }
+
+    // Größter Index, der noch sinnvoll anfahrbar ist (letzte Karte sichtbar)
+    function lastIndex() {
+      const max = maxOffset();
+      for (let i = 0; i < slides.length; i++) {
+        if (slides[i].offsetLeft >= max - 1) return i;
+      }
+      return slides.length - 1;
+    }
+
+    function goTo(i: number) {
+      const last = lastIndex();
+      if (i > last) i = 0; // am Ende wieder an den Anfang
+      if (i < 0) i = last;
+      index = i;
+      const max = maxOffset();
+      const x = Math.min(slides[i].offsetLeft, max);
+      track.style.transform = `translateX(${-x}px)`;
+      dots.forEach((d, di) =>
+        d.setAttribute('aria-current', di === index ? 'true' : 'false')
+      );
+      // Fade ausblenden, sobald die letzte Karte voll sichtbar ist
+      slider!.classList.toggle('is-end', x >= max - 1);
+    }
+
+    function next() {
+      goTo(index + 1);
+    }
+    function prev() {
+      goTo(index - 1);
+    }
+
+    function play() {
+      if (resumeTimer) {
+        clearTimeout(resumeTimer);
+        resumeTimer = undefined;
+      }
+      if (reduceMotion || timer) return;
+      timer = setInterval(next, AUTOPLAY_MS);
+    }
+    function stop() {
+      if (timer) {
+        clearInterval(timer);
+        timer = undefined;
+      }
+    }
+    // Nach eigener Bedienung erst nach RESUME_MS wieder automatisch laufen
+    function scheduleResume() {
+      stop();
+      if (resumeTimer) clearTimeout(resumeTimer);
+      if (reduceMotion) return;
+      resumeTimer = setTimeout(play, RESUME_MS);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      next();
+      scheduleResume();
+    });
+    prevBtn.addEventListener('click', () => {
+      prev();
+      scheduleResume();
+    });
+
+    // Pause bei Hover / Fokus; danach erst nach kurzer Wartezeit weiter
+    slider.addEventListener('mouseenter', stop);
+    slider.addEventListener('mouseleave', scheduleResume);
+    slider.addEventListener('focusin', stop);
+    slider.addEventListener('focusout', scheduleResume);
+
+    // Wischgeste (Touch)
+    let startX = 0;
+    let dragging = false;
+    viewport.addEventListener(
+      'touchstart',
+      (e) => {
+        startX = e.touches[0].clientX;
+        dragging = true;
+        stop();
+      },
+      { passive: true }
+    );
+    viewport.addEventListener(
+      'touchend',
+      (e) => {
+        if (!dragging) return;
+        dragging = false;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) {
+          dx < 0 ? next() : prev();
+        }
+        scheduleResume();
+      },
+      { passive: true }
+    );
+
+    // Bei Resize Position neu berechnen
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => goTo(index), 150);
+    });
+
+    goTo(0);
+    play();
+  }
+</script>
