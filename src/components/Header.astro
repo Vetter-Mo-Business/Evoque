@@ -1,9 +1,9 @@
 ---
 const nav = [
   { label: 'Start', href: '/' },
-  { label: 'Über mich', href: '/ueber-mich' },
   { label: 'Coaching', href: '/coaching' },
-  { label: 'Kontakt & Buchung', href: '/kontakt' },
+  { label: 'Über mich', href: '/ueber-mich' },
+  { label: 'Preise', href: '/preise' },
 ];
 
 // Aktuellen Pfad ermitteln (für aria-current)
@@ -52,7 +52,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
           })
         }
         <li class="site-nav__cta">
-          <a href="/kontakt#buchung" class="btn btn--primary">Kennenlerngespräch buchen</a>
+          <a href="/kontakt#buchung" class="btn btn--primary">Kontakt & Buchen</a>
         </li>
       </ul>
     </nav>

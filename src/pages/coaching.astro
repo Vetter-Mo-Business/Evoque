@@ -3,50 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import TopicCard from '../components/TopicCard.astro';
 import ProcessJourney from '../components/ProcessJourney.astro';
-import PricingCard from '../components/PricingCard.astro';
-
-const packages = [
-  {
-    name: 'Pilot Starter',
-    price: '280 €',
-    perSession: '35 € / Sitzung',
-    badge: 'Pilotphase',
-    ctaLabel: 'Jetzt sichern',
-    ctaHref: '/kontakt#buchung',
-    features: [
-      '8 Sitzungen × 60 Min.',
-      '+ 30 Min. kostenloses Gespräch',
-      'Exklusiver Einführungspreis',
-      'Begrenzte Plätze',
-    ],
-  },
-  {
-    name: 'Starter Paket',
-    price: '590 €',
-    perSession: '59 € / Sitzung',
-    ctaLabel: 'Buchung',
-    ctaHref: '/kontakt#buchung',
-    features: [
-      '10 Sitzungen × 60 Min.',
-      '+ 30 Min. kostenloses Gespräch',
-      'Für fokussierte Themen',
-      '3 Monate gültig',
-    ],
-  },
-  {
-    name: 'Deep Dive',
-    price: '1.120 €',
-    perSession: '56 € / Sitzung',
-    ctaLabel: 'Buchung',
-    ctaHref: '/kontakt#buchung',
-    features: [
-      '20 Sitzungen × 60 Min.',
-      '+ 30 Min. kostenloses Gespräch',
-      'Tiefgehende Entwicklung',
-      '6 Monate gültig',
-    ],
-  },
-];
+import DisclaimerBanner from '../components/DisclaimerBanner.astro';
 ---
 
 <BaseLayout
@@ -134,73 +91,68 @@ const packages = [
   <!-- Ablauf-Prozess: gepinnte Scroll-Animation -->
   <ProcessJourney />
 
-  <!-- Gruppe vs. persönliche Begleitung -->
+  <!-- USP: Der Unterschied zur üblichen Herangehensweise -->
   <section class="section surface-sand">
     <div class="container">
       <SectionHeading
-        eyebrow="Zwei Wege"
-        title="Reinschnuppern oder tief eintauchen"
+        eyebrow="Der Unterschied"
+        title="Warum echte Begleitung mehr bewirkt"
         align="center"
-      />
+      >
+        <p>
+          Viele setzen auf einzelne Sitzungen und schnelle Tipps. Ich begleite dich
+          anders – so lange, bis dein Ziel wirklich erreicht ist.
+        </p>
+      </SectionHeading>
       <div class="grid grid--2 offer-grid">
-        <article class="card offer-card">
-          <h3>Kostenlose Gruppenangebote</h3>
+        <article class="card offer-card offer-card--others">
+          <span class="offer-card__tag offer-card__tag--muted">Der übliche Weg</span>
+          <h3>Wie es oft läuft</h3>
           <p class="text-muted">
-            Dein kostenloses Reinschnuppern: Lerne den Ansatz in der Gruppe kennen und
-            spüre, ob es für dich passt – ganz unverbindlich.
+            Einzelne Sitzungen, schnelle Tipps – und danach stehst du wieder allein
+            mit deinem Thema da. Oberfläche statt Ursache.
           </p>
-          <ul class="offer-list">
-            <li>Kostenlos &amp; unverbindlich</li>
-            <li>Erste Impulse und Methoden</li>
-            <li>Gemeinschaft &amp; Austausch</li>
+          <ul class="offer-list offer-list--cons">
+            <li>Einzelne Sitzungen ohne roten Faden</li>
+            <li>Schnelle Tipps statt echter Ursachenarbeit</li>
+            <li>Nach der Sitzung auf dich allein gestellt</li>
+            <li>Das alte Thema kommt immer wieder zurück</li>
           </ul>
         </article>
         <article class="card offer-card offer-card--highlight">
-          <h3>Persönliche Begleitung</h3>
+          <span class="offer-card__tag">So begleite ich dich</span>
+          <h3>Persönliche Begleitung bei Evoque</h3>
           <p>
-            Tiefer, individueller und ganz auf dich zugeschnitten. Ich gehe gezielt auf
-            dein Thema ein – für die bessere, nachhaltige Erfahrung.
+            Eine echte Begleitung, ganz auf dich zugeschnitten – ich bleibe an deiner
+            Seite, bis du dein Ziel erreicht hast. An der Wurzel, nicht an der Oberfläche.
           </p>
           <ul class="offer-list">
+            <li>Durchgehende Begleitung bis zum Ziel</li>
+            <li>An der Ursache arbeiten – nachhaltig</li>
             <li>Individuell auf dich abgestimmt</li>
-            <li>Tiefe statt Oberfläche</li>
-            <li>Verbindliche Begleitung bis zum Ziel</li>
+            <li>Dein verlässlicher Anker auf dem ganzen Weg</li>
           </ul>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Preise / Pakete -->
+  <!-- Abgrenzung Coaching vs. Therapie -->
   <section class="section">
-    <div class="container">
+    <div class="container container--narrow">
       <SectionHeading
-        eyebrow="Investition"
-        title="Deine Paketoptionen"
+        eyebrow="Wichtig zu wissen"
+        title="Coaching – keine Therapie."
         align="center"
       >
-        <p>Mehr Sitzungen, günstiger pro Sitzung – wähle, was zu deinem Weg passt.</p>
+        <p>
+          Ich begleite dich bei Problemen und Sorgen rund um deine
+          Persönlichkeitsentwicklung. Geht es um therapeutische Anliegen, ist eine
+          Psychotherapie oder Heilbehandlung der richtige Weg – das ersetzt mein
+          Coaching ausdrücklich nicht.
+        </p>
       </SectionHeading>
-
-      <div class="grid grid--3 pricing-grid">
-        {
-          packages.map((p) => (
-            <PricingCard
-              name={p.name}
-              price={p.price}
-              perSession={p.perSession}
-              features={p.features}
-              ctaLabel={p.ctaLabel}
-              ctaHref={p.ctaHref}
-              badge={p.badge}
-            />
-          ))
-        }
-      </div>
-
-      <p class="center pricing-note text-muted">
-        Alle Pakete beinhalten ein kostenloses 30-minütiges Kennenlerngespräch vorab.
-      </p>
+      <DisclaimerBanner variant="strong" />
     </div>
   </section>
 </BaseLayout>
@@ -323,9 +275,44 @@ const packages = [
   .offer-card h3 {
     margin-bottom: var(--space-sm);
   }
+
+  /* Kleines Label oben auf den Karten */
+  .offer-card__tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--forest-deep);
+    background: var(--bg);
+    border-radius: 999px;
+    padding: 0.4em 0.9em;
+    margin-bottom: var(--space-sm);
+  }
+  .offer-card__tag--muted {
+    background: transparent;
+    color: var(--calm-earth);
+    border: var(--border-soft);
+  }
+
+  /* "Üblicher Weg": bewusst zurückgenommen, damit das eigene Angebot heraussticht */
+  .offer-card--others {
+    background: var(--bg);
+    border: var(--border-soft);
+    box-shadow: none;
+  }
+  .offer-card--others h3 {
+    color: var(--calm-earth);
+  }
+
+  /* Eigenes Angebot: klar hervorgehoben */
   .offer-card--highlight {
     background: var(--sage-harmony);
+    border: 1px solid rgba(21, 44, 26, 0.25);
+    box-shadow: var(--shadow-card);
   }
+
   .offer-list {
     list-style: none;
     margin: var(--space-md) 0 0;
@@ -342,14 +329,17 @@ const packages = [
     position: absolute;
     left: 0;
     font-weight: 700;
+    color: var(--forest-deep);
+  }
+  /* Negativliste für den "üblichen Weg": ✕ statt ✓, gedämpft */
+  .offer-list--cons li {
+    color: var(--calm-earth);
+  }
+  .offer-list--cons li::before {
+    content: '✕';
+    color: var(--calm-earth);
   }
 
-  .pricing-grid {
-    align-items: stretch;
-  }
-  .pricing-note {
-    margin-top: var(--space-xl);
-  }
 </style>
 
 <script>

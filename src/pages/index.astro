@@ -4,7 +4,6 @@ import Hero from '../components/Hero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import TopicCard from '../components/TopicCard.astro';
 import Testimonial from '../components/Testimonial.astro';
-import DisclaimerBanner from '../components/DisclaimerBanner.astro';
 ---
 
 <BaseLayout
@@ -12,11 +11,8 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
   description="Evoque – Yourself: Coaching für Menschen, die feststecken. Erreiche dein Ziel trotz Hürden – mit einer Begleiterin als Anker."
 >
   <Hero
-    eyebrow="Coaching & Strategy"
-    title="Komm ins Handeln – auch wenn du feststeckst."
-    text="Evoque begleitet Menschen, die ein Ziel haben, aber immer wieder an der gleichen Hürde scheitern – ob Prüfungsangst, Prokrastination oder ein langjähriges Thema. Gemeinsam verstehen wir, woher es kommt, und verändern es im Hier und Jetzt."
-    image="/images/Instagram/become_your_best_you.png"
-    imageAlt="Become your best you – Evoque Coaching"
+    video="/images/Animation/Hero_Video-1.mp4"
+    title="Become your best you"
     ctaHref="/kontakt#buchung"
     ctaLabel="Kennenlerngespräch buchen"
     secondaryHref="/coaching"
@@ -136,10 +132,6 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
         </div>
         <a href="/kontakt#buchung" class="btn btn--secondary">Kennenlerngespräch buchen</a>
       </div>
-
-      <div class="final-cta__disclaimer">
-        <DisclaimerBanner />
-      </div>
     </div>
   </section>
 </BaseLayout>
@@ -209,8 +201,5 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
   }
   .final-cta__text p:last-child {
     margin-bottom: 0;
-  }
-  .final-cta__disclaimer {
-    margin-top: var(--space-xl);
   }
 </style>

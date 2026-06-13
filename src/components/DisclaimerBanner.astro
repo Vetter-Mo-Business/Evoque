@@ -26,7 +26,7 @@ const { variant = 'soft' } = Astro.props;
     border: var(--border-soft);
   }
   .disclaimer--strong {
-    background: var(--sage-harmony);
+    background: var(--earth-deep);
   }
   .disclaimer__icon {
     font-size: 1.4rem;
@@ -36,5 +36,10 @@ const { variant = 'soft' } = Astro.props;
   .disclaimer__text {
     margin: 0;
     color: var(--forest-deep);
+  }
+  /* Auf dem dunklen Braun heller Text für ausreichenden Kontrast */
+  .disclaimer--strong .disclaimer__text,
+  .disclaimer--strong .disclaimer__icon {
+    color: var(--on-dark);
   }
 </style>

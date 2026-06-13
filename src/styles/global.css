@@ -9,6 +9,7 @@
   --sage-harmony: #acbfaf;  /* Marken-Akzentflächen, Icon-BG, sekundäre Buttons */
   --soft-sand: #e1d2cb;     /* Sektions-/Kartenflächen, sanfte Trennungen */
   --calm-earth: #857c75;    /* Sekundärtext/Captions; NICHT als Fließtext auf Weiß */
+  --earth-deep: #3f362d;    /* dunkles, warmes Braun (abgeleitet) – starke Hinweisflächen */
 
   /* --- Optionaler Sekundär-Akzent (sparsam) --- */
   --olive-sage: #abaf8d;    /* nur Hover/Aktiv */
@@ -40,9 +41,11 @@
   /* --- Layout --- */
   --maxw: 1140px;
   --maxw-narrow: 760px;
-  --radius: 14px;
-  --radius-sm: 8px;
-  --radius-lg: 22px;
+  /* Boxen/Karten: eckig, aber mit minimaler Weichheit, damit die Optik
+     nicht mit den runden Pill-Buttons (999px) kollidiert. */
+  --radius: 6px;
+  --radius-sm: 4px;
+  --radius-lg: 9px;
   --shadow-soft: 0 10px 30px rgba(21, 44, 26, 0.08);
   --shadow-card: 0 14px 40px rgba(21, 44, 26, 0.10);
 

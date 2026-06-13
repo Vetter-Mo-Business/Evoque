@@ -1,0 +1,73 @@
+---
+// Dekorativer floraler Eckschmuck (rein dekorativ, aria-hidden).
+// Blüten + Blätter im Markendesign – wird an zwei Bildecken als Rahmen gesetzt.
+const petal = 'M0,0 C5,-6 5,-18 0,-24 C-5,-18 -5,-6 0,0 Z';
+const leaf = 'M0,0 C8,-7 20,-8 30,-2 C20,4 8,6 0,0 Z';
+const ring = [0, 72, 144, 216, 288];
+
+const blossoms = [
+  { x: 168, y: 16, s: 1.0 },
+  { x: 16, y: 168, s: 0.95 },
+  { x: 92, y: 70, s: 0.66 },
+];
+const leaves = [
+  { x: 120, y: 14, rot: 8, s: 1 },
+  { x: 66, y: 36, rot: 38, s: 0.9 },
+  { x: 36, y: 66, rot: 52, s: 0.86 },
+  { x: 36, y: 120, rot: 86, s: 0.95 },
+  { x: 14, y: 132, rot: 104, s: 0.82 },
+];
+---
+
+<svg class="flower-corner" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+  <g class="fc-ink" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path class="fc-stem" d="M4,58 C30,32 78,12 184,6"></path>
+    <path class="fc-stem" d="M58,4 C32,30 12,78 6,184"></path>
+
+    {
+      leaves.map((l) => (
+        <path
+          class="fc-leaf"
+          transform={`translate(${l.x},${l.y}) rotate(${l.rot}) scale(${l.s})`}
+          d={leaf}
+        />
+      ))
+    }
+
+    {
+      blossoms.map((b) => (
+        <g transform={`translate(${b.x},${b.y}) scale(${b.s})`}>
+          {ring.map((a) => (
+            <path class="fc-petal" transform={`rotate(${a})`} d={petal} />
+          ))}
+          <circle class="fc-core" r="3.2" />
+        </g>
+      ))
+    }
+  </g>
+</svg>
+
+<style>
+  .flower-corner {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* Farben aus der Markenpalette (visual.md) */
+  .fc-ink {
+    stroke: var(--forest-deep);
+  }
+  .fc-stem {
+    fill: none;
+  }
+  .fc-leaf {
+    fill: var(--sage-harmony);
+  }
+  .fc-petal {
+    fill: var(--soft-sand);
+  }
+  .fc-core {
+    fill: var(--accent-pilot);
+    stroke: none;
+  }
+</style>

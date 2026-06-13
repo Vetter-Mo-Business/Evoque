@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
-import DisclaimerBanner from '../components/DisclaimerBanner.astro';
+import FlowerCorner from '../components/FlowerCorner.astro';
 ---
 
 <BaseLayout
@@ -14,12 +14,18 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
       <p class="eyebrow">Über mich</p>
       <div class="intro">
         <div class="intro__media">
+          <span class="intro-flower intro-flower--tl" aria-hidden="true">
+            <FlowerCorner />
+          </span>
           <img
             src="/images/About_Me_Malin_Images/DSC00751.jpg"
             alt="Porträt von Malin, Coach bei Evoque"
             width="560"
             height="700"
           />
+          <span class="intro-flower intro-flower--br" aria-hidden="true">
+            <FlowerCorner />
+          </span>
         </div>
         <div class="intro__text">
           <h1>Schön, dass Sie da bist.</h1>
@@ -90,24 +96,6 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
     </div>
   </section>
 
-  <!-- Abgrenzung Coaching vs. Therapie -->
-  <section class="section">
-    <div class="container container--narrow">
-      <SectionHeading
-        eyebrow="Wichtig zu wissen"
-        title="Coaching – keine Therapie."
-        align="center"
-      >
-        <p>
-          Ich begleite dich bei Problemen und Sorgen rund um deine
-          Persönlichkeitsentwicklung. Geht es um therapeutische Anliegen, ist eine
-          Psychotherapie oder Heilbehandlung der richtige Weg – das ersetzt mein
-          Coaching ausdrücklich nicht.
-        </p>
-      </SectionHeading>
-      <DisclaimerBanner variant="strong" />
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -115,18 +103,41 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
     display: grid;
     gap: var(--space-2xl);
     align-items: center;
+    /* etwas Luft, damit die obere Eckblume nicht an den "Über mich"-Text stößt */
+    margin-top: var(--space-lg);
   }
   @media (min-width: 860px) {
     .intro {
       grid-template-columns: 0.85fr 1.15fr;
     }
   }
+  .intro__media {
+    position: relative;
+  }
   .intro__media img {
+    display: block;
     width: 100%;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
     object-fit: cover;
     aspect-ratio: 4 / 5;
+  }
+
+  /* Floraler Eckschmuck als Blumenrahmen */
+  .intro-flower {
+    position: absolute;
+    width: clamp(84px, 32%, 150px);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .intro-flower--tl {
+    top: -20px;
+    left: -20px;
+  }
+  .intro-flower--br {
+    right: -20px;
+    bottom: -20px;
+    transform: rotate(180deg);
   }
 
   .approach-cards {

@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import PricingCard from '../components/PricingCard.astro';
+
+const packages = [
+  {
+    name: 'Pilot Starter',
+    badge: 'Pilotphase',
+    highlight: true,
+    ctaLabel: 'Jetzt Sichern!',
+    ctaHref: '/kontakt#buchung',
+    features: [
+      '8 Sitzungen × 60 Min.',
+      '+ 30 Min. kostenloses Gespräch',
+      'Exklusiver, vergünstigter Einführungspreis',
+      'Begrenzte Plätze',
+    ],
+  },
+  {
+    name: 'Starter Paket',
+    ctaLabel: 'Auf Nachfrage',
+    ctaHref: '/kontakt#buchung',
+    features: [
+      '10 Sitzungen × 60 Min.',
+      '+ 30 Min. kostenloses Gespräch',
+      'Für fokussierte Themen',
+      '3 Monate gültig',
+    ],
+  },
+  {
+    name: 'Deep Dive',
+    ctaLabel: 'Auf Nachfrage',
+    ctaHref: '/kontakt#buchung',
+    features: [
+      '20 Sitzungen × 60 Min.',
+      '+ 30 Min. kostenloses Gespräch',
+      'Tiefgehende Entwicklung',
+      '6 Monate gültig',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Preise"
+  description="Die Paketoptionen des Evoque-Coachings – mit vergünstigter Pilotphase. Konkrete Preise gern auf Nachfrage."
+>
+  <!-- Intro -->
+  <section class="section section--tight">
+    <div class="container container--narrow center">
+      <p class="eyebrow">Investition</p>
+      <h1>Deine Paketoptionen</h1>
+      <p class="lead">
+        Kein Verkauf einzelner Sitzungen, sondern eine echte Begleitung. Wähle den
+        Umfang, der zu deinem Weg passt. Konkrete Preise gern auf Nachfrage.
+      </p>
+    </div>
+  </section>
+
+  <!-- Pakete -->
+  <section class="section pakete">
+    <div class="container">
+      <div class="grid grid--3 pricing-grid">
+        {
+          packages.map((p) => (
+            <PricingCard
+              name={p.name}
+              features={p.features}
+              ctaLabel={p.ctaLabel}
+              ctaHref={p.ctaHref}
+              badge={p.badge}
+              highlight={p.highlight}
+            />
+          ))
+        }
+      </div>
+
+      <p class="center pricing-note text-muted">
+        Alle Pakete beinhalten ein kostenloses 30-minütiges Kennenlerngespräch vorab.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Pakete-Block (Karten + Hinweiszeile) nach oben rücken.
+     Größerer Wert = weiter nach oben. */
+  .pakete {
+    --pakete-offset-y: 2.5rem;
+    margin-top: calc(-1 * var(--pakete-offset-y));
+  }
+
+  .pricing-grid {
+    align-items: stretch;
+  }
+  .pricing-note {
+    margin-top: var(--space-xl);
+  }
+</style>
