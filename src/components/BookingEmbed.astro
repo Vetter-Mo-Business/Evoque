@@ -1,32 +1,124 @@
 ---
-// Generischer Buchungs-Embed-Platzhalter.
-// Hier später das gewählte Tool (Calendly / Cal.com / TidyCal) einbetten –
-// KEINE eigene Kalenderlogik, nur der Einbettungspunkt.
+// Cal.com Inline-Embed.
+//
+// EINRICHTUNG (einmalig):
+//   1. Auf https://cal.com kostenlos registrieren.
+//   2. Unter "Apps" den Google Kalender verbinden  -> belegte Zeiten werden
+//      automatisch online gesperrt (Zwei-Wege-Sync).
+//   3. Beim Event-Typ unter "Erweitert" die Option
+//      "Bestätigung erforderlich" aktivieren  -> Kunde stellt eine Anfrage,
+//      du bekommst eine Mail und bestätigst/lehnst ab. Erst nach Bestätigung
+//      landet der Termin in deinem Kalender und ist online als belegt markiert.
+//   4. Deinen Buchungslink unten als calLink eintragen, Format: "name/event"
+//      Beispiel: "malin-evoque/kennenlernen"
+//
+// Solange calLink leer ist, wird ein Platzhalter angezeigt.
+
+interface Props {
+  /** Cal.com-Link im Format "benutzername/event-typ". Leer = Platzhalter. */
+  calLink?: string;
+  /** Markenfarbe des eingebetteten Kalenders. */
+  brandColor?: string;
+}
+
+const { calLink = '', brandColor = '#152c1a' } = Astro.props;
+const isConfigured = calLink.trim().length > 0;
 ---
 
 <div class="booking-embed" id="buchung">
-  <!-- [PLATZHALTER: Buchungstool-Embed-Link] -->
-  <!--
-    Beispiel-Einbettung (später ersetzen), z. B.:
-    <iframe src="https://cal.com/USERNAME/kennenlernen" ...></iframe>
-    oder das Inline-Embed-Snippet des jeweiligen Anbieters.
-  -->
-  <div class="booking-embed__placeholder">
-    <span class="booking-embed__icon" aria-hidden="true">📅</span>
-    <h3>Online-Terminbuchung</h3>
-    <p class="text-muted">
-      [PLATZHALTER: Buchungstool-Embed-Link] – hier wird das externe Buchungstool
-      (z.&nbsp;B. Calendly, Cal.com oder TidyCal) eingebettet.
-    </p>
-    <p class="booking-embed__hint">
-      Bis dahin: Buchung per E-Mail oder Telefon (siehe Kontaktangaben).
-    </p>
-  </div>
+  {isConfigured ? (
+    <div class="booking-embed__cal" id="cal-inline" data-cal-link={calLink}></div>
+  ) : (
+    <div class="booking-embed__placeholder">
+      <span class="booking-embed__icon" aria-hidden="true">📅</span>
+      <h3>Online-Terminbuchung</h3>
+      <p class="text-muted">
+        Der Buchungskalender ist gleich startklar. Sobald der Cal.com-Link in
+        <code>src/pages/kontakt.astro</code> eingetragen ist, erscheint hier der
+        live verknüpfte Kalender mit Echtzeit-Verfügbarkeit.
+      </p>
+      <p class="booking-embed__hint">
+        Bis dahin: Buchung per E-Mail oder Telefon (siehe unten).
+      </p>
+    </div>
+  )}
 </div>
+
+{isConfigured && (
+  <script define:vars={{ calLink, brandColor }}>
+    (function (C, A, L) {
+      let p = function (a, ar) { a.q.push(ar); };
+      let d = C.document;
+      C.Cal = C.Cal || function () {
+        let cal = C.Cal;
+        let ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {};
+          cal.q = cal.q || [];
+          d.head.appendChild(d.createElement('script')).src = A;
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          const api = function () { p(api, arguments); };
+          const namespace = ar[1];
+          api.q = api.q || [];
+          if (typeof namespace === 'string') {
+            cal.ns[namespace] = cal.ns[namespace] || api;
+            p(cal.ns[namespace], ar);
+            p(cal, ['initNamespace', namespace]);
+          } else {
+            p(cal, ar);
+          }
+          return;
+        }
+        p(cal, ar);
+      };
+    })(window, 'https://app.cal.com/embed/embed.js', 'init');
+
+    Cal('init', { origin: 'https://cal.com' });
+    Cal('inline', {
+      elementOrSelector: '#cal-inline',
+      calLink: calLink,
+      config: { layout: 'month_view', theme: 'light' },
+    });
+    Cal('ui', {
+      hideEventTypeDetails: false,
+      layout: 'month_view',
+      theme: 'light',
+      styles: { branding: { brandColor: brandColor } },
+      cssVarsPerTheme: {
+        light: {
+          'cal-brand': brandColor,
+          'cal-bg': '#f7f5f1',
+          'cal-bg-emphasis': '#e1d2cb',
+          'cal-border': 'rgba(133, 124, 117, 0.28)',
+          'cal-text': '#152c1a',
+          'cal-text-emphasis': '#152c1a',
+          'cal-text-muted': '#857c75',
+        },
+      },
+    });
+  </script>
+)}
 
 <style>
   .booking-embed {
     scroll-margin-top: 100px;
+    background: linear-gradient(180deg, var(--soft-sand) 0%, var(--bg) 100%);
+    /* Wenig seitlicher Innenabstand, damit das Cal-Panel breit genug bleibt
+       und der Titel „Kennenlerngespräch" nicht umbricht. */
+    padding: clamp(var(--space-sm), 2vw, var(--space-lg))
+             clamp(var(--space-xs), 1.2vw, var(--space-sm));
+    border-radius: var(--radius-lg);
+    border: var(--border-soft);
+    box-shadow: var(--shadow-card);
+  }
+  .booking-embed__cal {
+    width: 100%;
+    min-height: 640px;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--bg);
   }
   .booking-embed__placeholder {
     text-align: center;
@@ -34,6 +126,12 @@
     border: 2px dashed var(--calm-earth);
     border-radius: var(--radius-lg);
     padding: var(--space-2xl) var(--space-xl);
+  }
+  .booking-embed__placeholder code {
+    font-size: 0.85em;
+    background: rgba(21, 44, 26, 0.06);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
   }
   .booking-embed__icon {
     font-size: 2.4rem;
