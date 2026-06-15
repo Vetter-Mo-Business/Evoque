@@ -11,5 +11,12 @@ export default defineConfig({
   // Anfrage greift und geschützte Seiten gar nicht erst ausgeliefert werden.
   output: 'server',
   adapter: vercel(),
+  // Astros Origin-Check (CSRF) deaktivieren: hinter Vercels Proxy stimmen
+  // Origin- und Host-Header nicht überein, wodurch das Login-POST sonst als
+  // "cross-site" abgelehnt wird ("Cross-site POST form submissions are
+  // forbidden"). Der Login-Cookie nutzt bereits sameSite: 'lax' als Schutz.
+  security: {
+    checkOrigin: false,
+  },
   integrations: [preact()],
 });
