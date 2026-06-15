@@ -2,9 +2,14 @@
 import { defineConfig } from 'astro/config';
 
 import preact from '@astrojs/preact';
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://evoque-yourself.example',
+  // On-Demand-Rendering, damit das Passwort-Gate (Middleware) bei jeder
+  // Anfrage greift und geschützte Seiten gar nicht erst ausgeliefert werden.
+  output: 'server',
+  adapter: vercel(),
   integrations: [preact()],
 });

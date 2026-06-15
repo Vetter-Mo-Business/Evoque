@@ -1,0 +1,138 @@
+---
+import '../styles/global.css';
+
+const COOKIE = 'evoque_gate';
+const password = import.meta.env.SITE_PASSWORD;
+
+// Rücksprungziel nur erlauben, wenn es ein interner Pfad ist (kein offener Redirect).
+const rawNext = Astro.url.searchParams.get('next') ?? '/';
+const next = rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/';
+
+let error = false;
+
+if (Astro.request.method === 'POST') {
+  const data = await Astro.request.formData();
+  const entered = (data.get('password') ?? '').toString();
+
+  if (password && entered === password) {
+    Astro.cookies.set(COOKIE, password, {
+      httpOnly: true,
+      secure: import.meta.env.PROD,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30, // 30 Tage angemeldet bleiben
+    });
+    return Astro.redirect(next);
+  }
+  error = true;
+}
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zugang · EVOQUE yourself</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/png" href="/images/Logos/0_logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="login-page">
+    <main class="login-card">
+      <img class="login-logo" src="/images/Logos/Title_SM_EVOQUE.png" alt="EVOQUE yourself" />
+      <h1>Vorschau geschützt</h1>
+      <p class="login-intro">
+        Diese Seite befindet sich noch in der Vorschau. Bitte gib das Passwort ein,
+        um sie anzusehen.
+      </p>
+
+      <form method="POST" class="login-form">
+        <label for="password">Passwort</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          autofocus
+          required
+        />
+        {error && <p class="login-error" role="alert">Falsches Passwort. Bitte versuche es erneut.</p>}
+        <button type="submit" class="btn btn--primary">Ansehen</button>
+      </form>
+    </main>
+
+    <style>
+      .login-page {
+        min-height: 100svh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-lg);
+        background: var(--soft-sand, #e7ddd4);
+      }
+      .login-card {
+        width: 100%;
+        max-width: 420px;
+        background: #fff;
+        border: var(--border-soft);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-soft);
+        padding: var(--space-2xl);
+        text-align: center;
+      }
+      .login-logo {
+        height: 44px;
+        width: auto;
+        margin-bottom: var(--space-lg);
+      }
+      .login-card h1 {
+        margin-bottom: var(--space-sm);
+      }
+      .login-intro {
+        color: var(--calm-earth);
+        margin-bottom: var(--space-xl);
+      }
+      .login-form {
+        display: grid;
+        gap: var(--space-sm);
+        text-align: left;
+      }
+      .login-form label {
+        font-family: var(--font-body);
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--calm-earth);
+      }
+      .login-form input {
+        width: 100%;
+        padding: 0.8em 1em;
+        font: inherit;
+        border: 1px solid rgba(21, 44, 26, 0.25);
+        border-radius: var(--radius);
+        background: var(--bg, #fff);
+      }
+      .login-form input:focus-visible {
+        outline: 2px solid var(--forest-deep);
+        outline-offset: 2px;
+      }
+      .login-form .btn {
+        margin-top: var(--space-sm);
+        width: 100%;
+      }
+      .login-error {
+        margin: 0;
+        color: #b3261e;
+        font-size: 0.9rem;
+      }
+    </style>
+  </body>
+</html>

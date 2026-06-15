@@ -26,32 +26,32 @@ import Testimonial from '../components/Testimonial.astro';
         <div class="approach__intro">
           <SectionHeading
             eyebrow="Der Ansatz"
-            title="Woher kommt das Problem?"
+            title="Veränderung beginnt mit Verstehen"
           >
             <p>
-              Veränderung beginnt mit Verstehen. Wir schauen gemeinsam auf den
-              Ursprung – und gestalten Schritt für Schritt einen neuen Weg.
+              Woher kommt das Problem? Wir schauen gemeinsam auf den
+              Ursprung und gestalten Schritt für Schritt einen neuen Weg.
             </p>
           </SectionHeading>
           <a href="/ueber-mich" class="btn btn--primary">Mehr über den Ansatz</a>
         </div>
         <ol class="approach__steps">
           <li>
-            <span class="approach__step-num">1</span>
+            <span class="approach__step-num"><span>1</span></span>
             <div>
               <h3>Vergangenheit verstehen</h3>
-              <p class="text-muted">Woher kommt das Thema? Wir finden den Ursprung.</p>
+              <p class="text-muted">Auf was basiert das Problem? Wir finden den Ursprung.</p>
             </div>
           </li>
           <li>
-            <span class="approach__step-num">2</span>
+            <span class="approach__step-num"><span>2</span></span>
             <div>
               <h3>Im Hier und Jetzt verändern</h3>
               <p class="text-muted">Aus dem Verstehen wird konkrete Veränderung.</p>
             </div>
           </li>
           <li>
-            <span class="approach__step-num">3</span>
+            <span class="approach__step-num"><span>3</span></span>
             <div>
               <h3>Anker & Begleiterin</h3>
               <p class="text-muted">
@@ -77,12 +77,29 @@ import Testimonial from '../components/Testimonial.astro';
 
       <div class="grid grid--3">
         <TopicCard title="Prüfungsangst">
+          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+            <path d="M14 3v4h4" />
+            <path d="M9 12h6" />
+            <path d="M9 16h4" />
+          </svg>
           Wieder ruhig und klar in Prüfungssituationen gehen.
         </TopicCard>
         <TopicCard title="Prokrastination">
+          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="13" r="8" />
+            <path d="M12 9v4l2.5 2" />
+            <path d="M9 2h6" />
+            <path d="M18.5 5.5l1.5 1.5" />
+          </svg>
           Ins Tun kommen, statt Aufgaben immer weiter aufzuschieben.
         </TopicCard>
         <TopicCard title="Langjährige Themen">
+          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="6" cy="19" r="2" />
+            <circle cx="18" cy="5" r="2" />
+            <path d="M8 19h6.5a3 3 0 0 0 0-6h-5a3 3 0 0 1 0-6H16" />
+          </svg>
           Themen wie Abnehmen, die dich schon lange begleiten, nachhaltig angehen.
         </TopicCard>
       </div>
@@ -126,7 +143,7 @@ import Testimonial from '../components/Testimonial.astro';
           <p class="eyebrow">Bereit für den ersten Schritt?</p>
           <h2>Lerne mich in einem kostenlosen Gespräch kennen.</h2>
           <p>
-            30 Minuten, unverbindlich – wir schauen, ob es passt und wie ich dich
+            30 Minuten, unverbindlich. <br> Wir schauen, ob es passt und wie ich dich
             begleiten kann.
           </p>
         </div>
@@ -167,6 +184,12 @@ import Testimonial from '../components/Testimonial.astro';
     margin: 0;
   }
   .approach__step-num {
+    /* ===================== HIER ANPASSEN =====================
+       Feinjustierung der Zahl im Kreis:
+       negativer Wert = nach oben, positiver = nach unten (z.B. -1px / 1px) */
+    --step-num-y: -3px;
+    /* ========================================================= */
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -178,6 +201,10 @@ import Testimonial from '../components/Testimonial.astro';
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: 1.2rem;
+    line-height: 1;
+  }
+  .approach__step-num > span {
+    transform: translateY(var(--step-num-y));
   }
 
   .themes-teaser__more {

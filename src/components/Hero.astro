@@ -39,14 +39,14 @@ const {
         {
           (ctaHref && ctaLabel) || (secondaryHref && secondaryLabel) ? (
             <div class="hero__actions">
-              {ctaHref && ctaLabel && (
-                <a href={ctaHref} class="btn btn--primary hero__btn">
-                  {ctaLabel}
-                </a>
-              )}
               {secondaryHref && secondaryLabel && (
                 <a href={secondaryHref} class="btn btn--secondary hero__btn">
                   {secondaryLabel}
+                </a>
+              )}
+              {ctaHref && ctaLabel && (
+                <a href={ctaHref} class="btn btn--primary hero__btn">
+                  {ctaLabel}
                 </a>
               )}
             </div>
@@ -220,11 +220,39 @@ const {
   document.querySelectorAll<HTMLVideoElement>('.hero__video').forEach((v) => {
     const tail = parseFloat(v.dataset.loopTail || '6'); // letzte Sekunden
     v.loop = false;
+
+    // Autoplay zuverlässig anstoßen. Auf einer frisch deployten Domain
+    // ist die Autoplay-Richtlinie strenger als lokal – darum erzwingen wir
+    // den stummen Zustand und versuchen das Abspielen mehrfach.
+    v.muted = true;
+    v.defaultMuted = true;
+    v.setAttribute('muted', '');
+
+    const tryPlay = () => {
+      const p = v.play();
+      if (p) p.catch(() => {});
+    };
+
+    tryPlay();
+    v.addEventListener('loadeddata', tryPlay, { once: true });
+    v.addEventListener('canplay', tryPlay, { once: true });
+
+    // Letzter Fallback: sollte der Browser den Start blockieren, startet
+    // das Video bei der ersten Interaktion des Besuchers.
+    const onInteract = () => {
+      tryPlay();
+      window.removeEventListener('pointerdown', onInteract);
+      window.removeEventListener('touchstart', onInteract);
+      window.removeEventListener('scroll', onInteract);
+    };
+    window.addEventListener('pointerdown', onInteract, { passive: true });
+    window.addEventListener('touchstart', onInteract, { passive: true });
+    window.addEventListener('scroll', onInteract, { passive: true });
+
     v.addEventListener('ended', () => {
       const start = Math.max(0, (v.duration || tail) - tail);
       v.currentTime = start;
-      const p = v.play();
-      if (p) p.catch(() => {});
+      tryPlay();
     });
   });
 </script>

@@ -19,8 +19,8 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
       <p class="eyebrow">Kontakt & Buchung</p>
       <h1>Lass uns kennenlernen.</h1>
       <p class="lead">
-        Buche dein kostenloses Kennenlerngespräch oder schreib mir direkt – ich freue
-        mich, von dir zu hören.
+        Buche dein kostenloses Kennenlerngespräch oder kontaktiere mich direkt <br> Ich freue
+        mich, von dir zu hören!
       </p>
     </div>
   </section>
@@ -37,60 +37,50 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
 
   <!-- Kontaktiere mich direkt -->
   <section class="section section--tight">
-    <div class="container container--narrow">
-      <h2 class="contact-direct__title">Kontaktiere mich direkt</h2>
-      <dl class="contact-list">
-        <div>
-          <dt>E-Mail</dt>
-          <dd>
-            <a href="mailto:evoqueyourself.coaching@gmail.com"
-              >evoqueyourself.coaching@gmail.com</a
-            >
-            <span class="contact-note">[PLATZHALTER: finale E-Mail-Adresse bestätigen]</span>
-          </dd>
-        </div>
-        <div>
-          <dt>Telefon</dt>
-          <dd>[PLATZHALTER: Telefonnummer]</dd>
-        </div>
-      </dl>
-
-      <div class="contact-card-visual">
-        <img
-          src="/images/Business Card/D50B700E-D3AF-45D6-AE41-8177F56A4E42.PNG"
-          alt="Visitenkarte von Evoque – Vorderseite"
-          width="400"
-          height="250"
-        />
-        <img
-          src="/images/Business Card/E2650570-2C2A-47F4-80A1-1A3D0E119117.PNG"
-          alt="Visitenkarte von Evoque – Rückseite"
-          width="400"
-          height="250"
-        />
-      </div>
-    </div>
-  </section>
-
-  <!-- Rechtliches: Anrisse -->
-  <section class="section surface-sand">
     <div class="container">
-      <div class="grid grid--2">
-        <article class="card legal-teaser">
-          <h2>Impressum</h2>
-          <p class="text-muted">[PLATZHALTER: Impressumsdaten – Kurzangabe]</p>
-          <a href="/impressum" class="btn btn--primary">Zum Impressum</a>
+      <h2 class="contact-direct__title">Kontaktiere mich direkt</h2>
+
+      <div class="contact-box">
+        <div class="contact-direct">
+        <article class="card contact-person">
+          <div class="contact-person__avatar">
+            <img
+              src="/images/About_Me_Malin_Images/DSC00751.jpg"
+              alt="Malin – Evoque"
+              width="160"
+              height="160"
+            />
+          </div>
+          <dl class="contact-list">
+            <div>
+              <dt>E-Mail</dt>
+              <dd>
+                <a href="mailto:evoqueyourself.coaching@gmail.com"
+                  >evoqueyourself.coaching@gmail.com</a
+                >
+                <span class="contact-note">[PLATZHALTER: finale E-Mail-Adresse bestätigen]</span>
+              </dd>
+            </div>
+            <div>
+              <dt>Telefon</dt>
+              <dd>[PLATZHALTER: Telefonnummer]</dd>
+            </div>
+          </dl>
         </article>
-        <article class="card legal-teaser">
-          <h2>Datenschutz</h2>
-          <p class="text-muted">
-            [PLATZHALTER: Datenschutzerklärung – Kurzangabe]
-          </p>
-          <a href="/datenschutz" class="btn btn--primary">Zur Datenschutzerklärung</a>
-        </article>
+
+        <div class="contact-card-visual">
+          <img
+            src="/images/Business Card/D50B700E-D3AF-45D6-AE41-8177F56A4E42.PNG"
+            alt="Visitenkarte von Evoque – Vorderseite"
+            width="400"
+            height="250"
+          />
+        </div>
+        </div>
       </div>
     </div>
   </section>
+
 </BaseLayout>
 
 <style>
@@ -99,8 +89,51 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
     margin-bottom: var(--space-xl);
   }
 
+  /* Große Box rund um den ganzen Direktkontakt-Bereich */
+  .contact-box {
+    background: var(--soft-sand);
+    border: var(--border-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: var(--space-2xl);
+  }
+
+  /* Zwei Spalten: links Personen-Karte, rechts Visitenkarte */
+  .contact-direct {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+  @media (min-width: 760px) {
+    .contact-direct {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Linke Karte mit Foto-Kreis oben */
+  .contact-person {
+    text-align: center;
+    display: grid;
+    gap: var(--space-lg);
+    justify-items: center;
+  }
+  .contact-person__avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 3px solid var(--sage-harmony);
+    box-shadow: var(--shadow-soft);
+  }
+  .contact-person__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
   .contact-list {
-    margin: 0 auto var(--space-2xl);
+    margin: 0;
     display: grid;
     gap: var(--space-lg);
     justify-items: center;
@@ -131,22 +164,15 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
   }
 
   .contact-card-visual {
-    display: grid;
-    gap: var(--space-md);
-  }
-  @media (min-width: 640px) {
-    .contact-card-visual {
-      grid-template-columns: 1fr 1fr;
-    }
+    display: flex;
+    justify-content: center;
   }
   .contact-card-visual img {
     width: 100%;
+    max-width: 400px;
+    height: auto;
     border-radius: var(--radius);
     box-shadow: var(--shadow-soft);
     border: var(--border-soft);
-  }
-
-  .legal-teaser h2 {
-    margin-bottom: var(--space-sm);
   }
 </style>
