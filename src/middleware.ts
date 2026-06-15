@@ -18,7 +18,13 @@ function isPublicPath(pathname: string): boolean {
 }
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  const password = import.meta.env.SITE_PASSWORD;
+  // Zur Laufzeit lesen (process.env) – so greifen auf Vercel gesetzte
+  // Variablen zuverlässig. import.meta.env als Fallback für lokales `astro dev`.
+  const password = (
+    process.env.SITE_PASSWORD ??
+    import.meta.env.SITE_PASSWORD ??
+    ''
+  ).trim();
 
   // Kein Passwort gesetzt -> Gate ist aus (praktisch für lokale Entwicklung,
   // wenn keine .env vorhanden ist). Auf Vercel SITE_PASSWORD setzen!
