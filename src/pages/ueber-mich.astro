@@ -1,7 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import FlowerCorner from '../components/FlowerCorner.astro';
+import portraitImg from '../assets/about/DSC00751.jpg';
+import anchorImg from '../assets/about/DSC00842.jpg';
 ---
 
 <BaseLayout
@@ -17,11 +20,14 @@ import FlowerCorner from '../components/FlowerCorner.astro';
           <span class="intro-flower intro-flower--tl" aria-hidden="true">
             <FlowerCorner />
           </span>
-          <img
-            src="/images/About_Me_Malin_Images/DSC00751.jpg"
+          <Image
+            src={portraitImg}
             alt="Porträt von Malin, Coach bei Evoque"
-            width="560"
-            height="700"
+            widths={[480, 640, 960]}
+            sizes="(min-width: 860px) 40vw, 90vw"
+            quality={72}
+            loading="eager"
+            fetchpriority="high"
           />
           <span class="intro-flower intro-flower--br" aria-hidden="true">
             <FlowerCorner />
@@ -77,11 +83,13 @@ import FlowerCorner from '../components/FlowerCorner.astro';
 
       <div class="anchor">
         <div class="anchor__images">
-          <img
-            src="/images/About_Me_Malin_Images/DSC00842.jpg"
+          <Image
+            src={anchorImg}
             alt="Malin – Porträt im Querformat"
-            width="780"
-            height="488"
+            widths={[640, 960, 1200]}
+            sizes="(min-width: 860px) 50vw, 90vw"
+            quality={72}
+            loading="lazy"
           />
         </div>
         <div class="anchor__text">

@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import BookingEmbed from '../components/BookingEmbed.astro';
+import portraitImg from '../assets/about/DSC00751.jpg';
 
 // Cal.com-Buchungslink im Format "benutzername/event-typ" eintragen.
 // Beispiel: 'malin-evoque/kennenlernen'. Leer lassen -> Platzhalter wird angezeigt.
@@ -44,11 +46,13 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
         <div class="contact-direct">
         <article class="card contact-person">
           <div class="contact-person__avatar">
-            <img
-              src="/images/About_Me_Malin_Images/DSC00751.jpg"
+            <Image
+              src={portraitImg}
               alt="Malin – Evoque"
-              width="160"
-              height="160"
+              widths={[300]}
+              sizes="150px"
+              quality={72}
+              loading="lazy"
             />
           </div>
           <dl class="contact-list">
