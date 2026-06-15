@@ -18,7 +18,7 @@ export default defineConfig({
     // Erlaubte Zielbreiten für die Bild-Optimierung. <Image>-Breiten müssen
     // aus dieser Liste stammen, sonst lehnt Vercel die Anfrage ab.
     imagesConfig: {
-      sizes: [300, 480, 640, 768, 960, 1200],
+      sizes: [300, 480, 640, 768, 960, 1200, 1600, 2048],
       formats: ['image/avif', 'image/webp'],
     },
   }),
