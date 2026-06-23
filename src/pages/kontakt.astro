@@ -9,21 +9,53 @@ import portraitImg from '../assets/about/DSC00751.jpg';
 // Beispiel: 'malin-evoque/kennenlernen'. Leer lassen -> Platzhalter wird angezeigt.
 // Einrichtungs-Anleitung steht in src/components/BookingEmbed.astro.
 const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
+
+const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
+const content = {
+  de: {
+    metaTitle: 'Kontakt & Buchung',
+    metaDesc: 'Buche dein kostenloses Kennenlerngespräch oder nimm direkt Kontakt zu Evoque auf.',
+    introEyebrow: 'Kontakt & Buchung',
+    introTitle: 'Lass uns kennenlernen.',
+    introLead:
+      'Buche dein kostenloses Kennenlerngespräch oder kontaktiere mich direkt – ich freue mich, von dir zu hören!',
+    bookEyebrow: 'Online buchen',
+    bookTitle: 'Termin direkt sichern',
+    directTitle: 'Kontaktiere mich direkt',
+    email: 'E-Mail',
+    emailNote: '[PLATZHALTER: finale E-Mail-Adresse bestätigen]',
+    phone: 'Telefon',
+    phoneValue: '[PLATZHALTER: Telefonnummer]',
+    portraitAlt: 'Malin – Evoque',
+    cardAlt: 'Visitenkarte von Evoque – Vorderseite',
+  },
+  en: {
+    metaTitle: 'Contact & Booking',
+    metaDesc: 'Book your free intro call or get in touch with Evoque directly.',
+    introEyebrow: 'Contact & Booking',
+    introTitle: 'Let’s get to know each other.',
+    introLead:
+      'Book your free intro call or contact me directly – I look forward to hearing from you!',
+    bookEyebrow: 'Book online',
+    bookTitle: 'Secure your appointment directly',
+    directTitle: 'Contact me directly',
+    email: 'Email',
+    emailNote: '[PLACEHOLDER: confirm final email address]',
+    phone: 'Phone',
+    phoneValue: '[PLACEHOLDER: phone number]',
+    portraitAlt: 'Malin – Evoque',
+    cardAlt: 'Evoque business card – front',
+  },
+}[lang];
 ---
 
-<BaseLayout
-  title="Kontakt & Buchung"
-  description="Buche dein kostenloses Kennenlerngespräch oder nimm direkt Kontakt zu Evoque auf."
->
+<BaseLayout title={content.metaTitle} description={content.metaDesc}>
   <!-- Intro -->
   <section class="section section--tight">
     <div class="container container--narrow center">
-      <p class="eyebrow">Kontakt & Buchung</p>
-      <h1>Lass uns kennenlernen.</h1>
-      <p class="lead">
-        Buche dein kostenloses Kennenlerngespräch oder kontaktiere mich direkt <br> Ich freue
-        mich, von dir zu hören!
-      </p>
+      <p class="eyebrow">{content.introEyebrow}</p>
+      <h1>{content.introTitle}</h1>
+      <p class="lead">{content.introLead}</p>
     </div>
   </section>
 
@@ -31,7 +63,7 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
   <section class="section section--tight">
     <div class="container">
       <div class="booking-wrap">
-        <SectionHeading eyebrow="Online buchen" title="Termin direkt sichern" />
+        <SectionHeading eyebrow={content.bookEyebrow} title={content.bookTitle} />
         <BookingEmbed calLink={CAL_LINK} />
       </div>
     </div>
@@ -40,7 +72,7 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
   <!-- Kontaktiere mich direkt -->
   <section class="section section--tight">
     <div class="container">
-      <h2 class="contact-direct__title">Kontaktiere mich direkt</h2>
+      <h2 class="contact-direct__title">{content.directTitle}</h2>
 
       <div class="contact-box">
         <div class="contact-direct">
@@ -48,7 +80,7 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
           <div class="contact-person__avatar">
             <Image
               src={portraitImg}
-              alt="Malin – Evoque"
+              alt={content.portraitAlt}
               widths={[300, 480]}
               sizes="150px"
               quality={85}
@@ -57,17 +89,17 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
           </div>
           <dl class="contact-list">
             <div>
-              <dt>E-Mail</dt>
+              <dt>{content.email}</dt>
               <dd>
                 <a href="mailto:evoqueyourself.coaching@gmail.com"
                   >evoqueyourself.coaching@gmail.com</a
                 >
-                <span class="contact-note">[PLATZHALTER: finale E-Mail-Adresse bestätigen]</span>
+                <span class="contact-note">{content.emailNote}</span>
               </dd>
             </div>
             <div>
-              <dt>Telefon</dt>
-              <dd>[PLATZHALTER: Telefonnummer]</dd>
+              <dt>{content.phone}</dt>
+              <dd>{content.phoneValue}</dd>
             </div>
           </dl>
         </article>
@@ -75,7 +107,7 @@ const CAL_LINK = 'tim-vetter-6ryc7s/kennenlerngesprach';
         <div class="contact-card-visual">
           <img
             src="/images/Business Card/D50B700E-D3AF-45D6-AE41-8177F56A4E42.PNG"
-            alt="Visitenkarte von Evoque – Vorderseite"
+            alt={content.cardAlt}
             width="400"
             height="250"
           />

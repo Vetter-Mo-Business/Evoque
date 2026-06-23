@@ -3,14 +3,24 @@ interface Props {
   variant?: 'soft' | 'strong';
 }
 const { variant = 'soft' } = Astro.props;
+const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
 ---
 
 <aside class={`disclaimer disclaimer--${variant}`} role="note">
   <span class="disclaimer__icon" aria-hidden="true">ⓘ</span>
-  <p class="disclaimer__text">
-    <strong>Wichtiger Hinweis:</strong> Dies ist ein Coaching bei Problemen und Sorgen –
-    <strong>keine Therapie oder Heilbehandlung</strong> bei therapeutischen Anliegen.
-  </p>
+  {
+    lang === 'en' ? (
+      <p class="disclaimer__text">
+        <strong>Important note:</strong> This is coaching for problems and worries –
+        <strong>not therapy or medical treatment</strong> for therapeutic concerns.
+      </p>
+    ) : (
+      <p class="disclaimer__text">
+        <strong>Wichtiger Hinweis:</strong> Dies ist ein Coaching bei Problemen und Sorgen –
+        <strong>keine Therapie oder Heilbehandlung</strong> bei therapeutischen Anliegen.
+      </p>
+    )
+  }
 </aside>
 
 <style>

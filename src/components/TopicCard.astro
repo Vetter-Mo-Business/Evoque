@@ -1,16 +1,29 @@
 ---
 interface Props {
   title: string;
+  /** Unterthemen (Detailbegriffe) zum Oberthema – als Chips dargestellt. */
+  items?: string[];
   placeholder?: boolean;
 }
-const { title, placeholder = false } = Astro.props;
+const { title, items, placeholder = false } = Astro.props;
+const hasItems = items && items.length > 0;
 ---
 
 <article class={`topic-card ${placeholder ? 'topic-card--placeholder' : ''}`}>
   <div class="topic-card__media" aria-hidden="true"><slot name="icon" /></div>
   <div class="topic-card__body">
     <h3 class="topic-card__title">{title}</h3>
-    <p class="topic-card__text"><slot /></p>
+    {
+      hasItems ? (
+        <ul class="topic-card__list">
+          {items!.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      ) : (
+        <p class="topic-card__text"><slot /></p>
+      )
+    }
   </div>
 </article>
 
@@ -64,10 +77,36 @@ const { title, placeholder = false } = Astro.props;
     padding: var(--space-xl);
   }
   .topic-card__title {
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-sm);
+    /* Feste Höhe für zwei Titelzeilen, damit die Unterthemen in allen
+       Karten bündig auf gleicher Höhe beginnen (kein Versatz bei
+       längeren Oberthemen). */
+    line-height: 1.25;
+    min-height: 2.5em;
   }
   .topic-card__text {
     margin: 0;
     color: var(--calm-earth);
+  }
+  /* Unterthemen als Chips unter dem Oberthema */
+  .topic-card__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+  .topic-card__list li {
+    font-size: 0.85rem;
+    line-height: 1;
+    color: var(--forest-deep);
+    background: var(--bg);
+    border: var(--border-soft);
+    border-radius: 999px;
+    padding: 0.45em 0.85em;
+  }
+  .topic-card--placeholder .topic-card__list li {
+    background: transparent;
   }
 </style>

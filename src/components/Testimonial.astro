@@ -1,16 +1,22 @@
 ---
 interface Props {
   quote: string;
+  /** Anonymisierter Autor, z. B. "Sarah M." oder "Kundin, 34". */
   author: string;
+  /** Optionaler Kontext, z. B. "Thema Abnehmen" oder "Begleitung 2025". */
+  context?: string;
 }
-const { quote, author } = Astro.props;
+const { quote, author, context } = Astro.props;
 ---
 
 <figure class="testimonial">
   <blockquote class="testimonial__quote">
     <p>{quote}</p>
   </blockquote>
-  <figcaption class="testimonial__author">{author}</figcaption>
+  <figcaption class="testimonial__author">
+    <span class="testimonial__author-name">{author}</span>
+    {context && <span class="testimonial__author-context">{context}</span>}
+  </figcaption>
 </figure>
 
 <style>
@@ -48,7 +54,18 @@ const { quote, author } = Astro.props;
     font-style: italic;
   }
   .testimonial__author {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
+  }
+  .testimonial__author-name {
     font-weight: 600;
     color: var(--calm-earth);
+  }
+  .testimonial__author-context {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--calm-earth);
+    opacity: 0.75;
   }
 </style>

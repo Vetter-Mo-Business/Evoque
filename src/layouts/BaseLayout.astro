@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { useTranslations, localizePath } from '../i18n/ui';
 
 interface Props {
   title: string;
@@ -13,17 +14,30 @@ const {
   description = 'Evoque – Yourself: psychologisches Persönlichkeitsentwicklungs-Coaching für nachhaltige Zielerreichung. Coaching, keine Psychotherapie.',
 } = Astro.props;
 
+const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
+const t = useTranslations(lang);
+
 const fullTitle = `${title} · EVOQUE yourself`;
+
+// hreflang-Alternativen für beide Sprachen
+const site = Astro.site?.origin ?? '';
+const pathDe = localizePath(Astro.url.pathname, 'de');
+const pathEn = localizePath(Astro.url.pathname, 'en');
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/png" href="/images/Logos/0_logo.png" />
+
+    <!-- Sprach-Alternativen (SEO) -->
+    <link rel="alternate" hreflang="de" href={site + pathDe} />
+    <link rel="alternate" hreflang="en" href={site + pathEn} />
+    <link rel="alternate" hreflang="x-default" href={site + pathDe} />
 
     <!-- Schriften: Playfair Display (Überschriften) + Jost (alles andere) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,7 +48,7 @@ const fullTitle = `${title} · EVOQUE yourself`;
     />
   </head>
   <body>
-    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+    <a class="skip-link" href="#main">{t('skip.toContent')}</a>
     <Header />
     <main id="main">
       <slot />

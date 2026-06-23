@@ -7,46 +7,52 @@ interface Step {
   top: string;
 }
 
-// Inhalte 1:1 wie bisher. DOM-Reihenfolge = logische Lesereihenfolge 01 → 04–07.
-// top = cy/760: node-1 cy=648 → 85.263% (unten) … node-4 cy=162 → 21.316% (oben).
-const steps: Step[] = [
-  {
-    num: '01',
-    title: 'Kennenlerngespräch',
-    text: 'Problem klären: was, wann, wo, wie lange – und warum.',
-    top: '85.263%',
+const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
+
+// DOM-Reihenfolge = logische Lesereihenfolge 01 → 05.
+// top = cy/760: node-1 cy=648 → 85.263% (unten) … node-5 cy=168 → 22.105% (oben).
+const tops = ['85.263%', '69.474%', '53.684%', '37.895%', '22.105%'];
+
+const head = {
+  de: {
+    eyebrow: 'Der Ablauf',
+    title: 'Dein Weg zum Ziel',
+    text: 'Ein klarer, begleiteter Weg – vom ersten Kennenlernen bis zu deinem Ziel. Schritt für Schritt, in deinem Tempo.',
   },
-  {
-    num: '02',
-    title: 'Zweites Gespräch',
-    text: 'Wir vertiefen das Bild und verstehen den Ursprung des Themas.',
-    top: '63.947%',
+  en: {
+    eyebrow: 'The process',
+    title: 'Your path to the goal',
+    text: 'A clear, guided path – from the first meeting to your goal. Step by step, at your own pace.',
   },
-  {
-    num: '03',
-    title: 'Ziel festlegen',
-    text: 'Wir bestimmen dein Ziel und den Weg dorthin.',
-    top: '42.632%',
-  },
-  {
-    num: '04 – 07',
-    title: 'Schritt für Schritt zum Ziel',
-    text: 'Begleitete Etappen: Veränderung im Hier und Jetzt – ich bleibe dein Anker.',
-    top: '21.316%',
-  },
-];
+}[lang];
+
+const stepsByLang: Record<'de' | 'en', { num: string; title: string; text: string }[]> = {
+  de: [
+    { num: '01', title: 'Kennenlerngespräch', text: 'Problem klären: was, wann, wo, wie lange – und warum.' },
+    { num: '02', title: 'Ursachenforschung', text: 'Blick in die Vergangenheit – wir verstehen den Ursprung des Themas.' },
+    { num: '03', title: 'Ziele festlegen', text: 'Wir bestimmen dein Ziel und den Weg dorthin.' },
+    { num: '04', title: 'Erste Übungen', text: 'Veränderung im Hier und Jetzt – wir kommen ins Tun.' },
+    { num: '05', title: 'Reflexion', text: 'Wir schärfen nach und passen an – der Prozess ist nicht statisch.' },
+  ],
+  en: [
+    { num: '01', title: 'Intro call', text: 'Clarify the problem: what, when, where, how long – and why.' },
+    { num: '02', title: 'Finding the cause', text: 'A look into the past – we understand where the topic originates.' },
+    { num: '03', title: 'Set goals', text: 'We define your goal and the path towards it.' },
+    { num: '04', title: 'First exercises', text: 'Change in the here and now – we get into action.' },
+    { num: '05', title: 'Reflection', text: 'We refine and adjust – the process is not static.' },
+  ],
+};
+
+const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
 ---
 
 <section class="journey" data-journey>
   <div class="journey__pin" data-pin>
     <!-- Kopf: zentriert oben, bleibt während des Pins sichtbar -->
     <div class="container journey__head">
-      <p class="eyebrow">Der Ablauf</p>
-      <h2>Dein Weg zum Ziel</h2>
-      <p>
-        Ein klarer, begleiteter Weg – vom ersten Kennenlernen bis zu deinem Ziel.
-        Schritt für Schritt, Sitzung für Sitzung.
-      </p>
+      <p class="eyebrow">{head.eyebrow}</p>
+      <h2>{head.title}</h2>
+      <p>{head.text}</p>
     </div>
 
     <div class="container journey__cols">
@@ -67,7 +73,7 @@ const steps: Step[] = [
             <!-- Stiel = wachsender Strahl (unten y=748 → oben y=28) -->
             <path
               id="stem"
-              d="M120,748 C116,652 124,564 120,470 C116,382 124,300 120,210 C117,150 122,92 120,28"
+              d="M120,748 C116,652 124,564 120,470 C116,382 124,300 120,210 C117,158 122,108 120,60"
             ></path>
 
             <g class="leaf" data-y="704">
@@ -100,21 +106,23 @@ const steps: Step[] = [
                 transform="translate(120,214) rotate(-40) scale(0.68)"
                 d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
             </g>
-            <!-- Triebspitze oben -->
-            <g class="leaf" data-y="86">
-              <path
-                transform="translate(120,86) rotate(-115) scale(0.5)"
-                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
-              <path
-                transform="translate(120,86) rotate(-65) scale(0.5)"
-                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            <!-- Krone: Knospe erblüht oben am Stiel zur Blume -->
+            <g class="bloom" data-bloom>
+              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(0 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(60 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(120 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(180 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(240 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(300 120 60)"></ellipse>
+              <circle class="bloom__center" cx="120" cy="60" r="9"></circle>
             </g>
 
-            <!-- Knoten: node-1 unten (01) … node-4 oben (04–07) -->
+            <!-- Knoten: node-1 unten (01) … node-5 oben (05) -->
             <circle id="node-1" class="node" cx="120" cy="648" r="6.5"></circle>
-            <circle id="node-2" class="node" cx="120" cy="486" r="6.5"></circle>
-            <circle id="node-3" class="node" cx="120" cy="324" r="6.5"></circle>
-            <circle id="node-4" class="node" cx="120" cy="162" r="6.5"></circle>
+            <circle id="node-2" class="node" cx="120" cy="528" r="6.5"></circle>
+            <circle id="node-3" class="node" cx="120" cy="408" r="6.5"></circle>
+            <circle id="node-4" class="node" cx="120" cy="288" r="6.5"></circle>
+            <circle id="node-5" class="node" cx="120" cy="168" r="6.5"></circle>
           </g>
         </svg>
       </div>
@@ -207,6 +215,16 @@ const steps: Step[] = [
     stroke: none;
     transform-box: fill-box;
     transform-origin: center;
+  }
+  /* Krone / Blüte */
+  .journey__plant .bloom__petal {
+    fill: var(--soft-sand);
+    stroke: var(--forest-deep);
+    stroke-width: 1.5;
+  }
+  .journey__plant .bloom__center {
+    fill: var(--accent-pilot);
+    stroke: none;
   }
 
   /* ---------- Schritt-Boxen (kompakt) ---------- */
@@ -309,10 +327,11 @@ const steps: Step[] = [
     const steps = root.querySelector<HTMLElement>('[data-steps]')!;
     const stem = root.querySelector<SVGPathElement>('#stem')!;
     const leaves = gsap.utils.toArray<SVGGElement>('.leaf', root);
-    const nodes = [1, 2, 3, 4].map(
+    const nodes = [1, 2, 3, 4, 5].map(
       (n) => root.querySelector<SVGCircleElement>('#node-' + n)!
     );
     const boxes = gsap.utils.toArray<HTMLElement>('[data-step]', root);
+    const bloom = root.querySelector<SVGGElement>('[data-bloom]')!;
 
     const mm = gsap.matchMedia();
 
@@ -343,6 +362,7 @@ const steps: Step[] = [
         gsap.set(leaves, { opacity: 0 });
         gsap.set(nodes, { opacity: 0, scale: 0.2 });
         gsap.set(boxes, { opacity: 0, x: 24 });
+        gsap.set(bloom, { opacity: 1, scale: 0, svgOrigin: '120 60' });
 
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
@@ -375,6 +395,18 @@ const steps: Step[] = [
             at
           );
         });
+
+        // Krone: Knospe erblüht erst, wenn der Stiel voll ausgefahren ist.
+        tl.to(
+          bloom,
+          {
+            scale: 1,
+            duration: 0.25,
+            ease: 'back.out(1.7)',
+            svgOrigin: '120 60',
+          },
+          1
+        );
 
         // Pin-Start/-Ende mit finalen Maßen rechnen, sobald Layout/Fonts stehen.
         let active = true;

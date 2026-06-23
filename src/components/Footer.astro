@@ -1,5 +1,10 @@
 ---
+import { useTranslations, localizePath, type Lang } from '../i18n/ui';
+
 const year = 2026;
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+const t = useTranslations(lang);
+const l = (p: string) => localizePath(p, lang);
 ---
 
 <footer class="site-footer">
@@ -13,36 +18,50 @@ const year = 2026;
         class="site-footer__logo"
       />
       <p class="site-footer__tagline">
-        Coach &amp; Strategieberaterin für nachhaltige Zielerreichung.
+        {t('footer.tagline')}
       </p>
     </div>
 
-    <nav class="site-footer__nav" aria-label="Footer-Navigation">
-      <h2 class="site-footer__heading">Seiten</h2>
+    <nav class="site-footer__nav" aria-label={t('footer.pages')}>
+      <h2 class="site-footer__heading">{t('footer.pages')}</h2>
       <ul>
-        <li><a href="/ueber-mich">Über mich</a></li>
-        <li><a href="/coaching">Coaching</a></li>
-        <li><a href="/kontakt">Kontakt &amp; Buchung</a></li>
+        <li><a href={l('/ueber-mich')}>{t('footer.about')}</a></li>
+        <li><a href={l('/coaching')}>{t('footer.coaching')}</a></li>
+        <li><a href={l('/kontakt')}>{t('footer.contact')}</a></li>
       </ul>
     </nav>
 
-    <nav class="site-footer__nav" aria-label="Rechtliches">
-      <h2 class="site-footer__heading">Rechtliches</h2>
+    <nav class="site-footer__nav" aria-label={t('footer.legal')}>
+      <h2 class="site-footer__heading">{t('footer.legal')}</h2>
       <ul>
-        <li><a href="/impressum">Impressum</a></li>
-        <li><a href="/datenschutz">Datenschutz</a></li>
-        <li><a href="/kontakt">Kontakt</a></li>
+        <li><a href={l('/impressum')}>{t('footer.imprint')}</a></li>
+        <li><a href={l('/datenschutz')}>{t('footer.privacy')}</a></li>
+        <li><a href={l('/kontakt')}>{t('footer.contactShort')}</a></li>
       </ul>
     </nav>
+  </div>
+
+  <div class="container site-footer__credit-row">
+    <span class="site-footer__credit">
+      {t('footer.credit')}
+      <img
+        src="/images/github.png"
+        alt="VeMo IT &amp; Design"
+        width="18"
+        height="18"
+        class="site-footer__credit-logo"
+        loading="lazy"
+      />
+    </span>
   </div>
 
   <div class="site-footer__bar">
     <div class="container site-footer__bar-inner">
       <p class="site-footer__note">
-        Coaching, keine Psychotherapie/Heilbehandlung.
+        {t('footer.note')}
       </p>
       <p class="site-footer__copy">
-        © {year} EVOQUE yourself · Coaching &amp; Strategie
+        © {year} {t('footer.copy')}
       </p>
     </div>
   </div>
@@ -118,5 +137,27 @@ const year = 2026;
     margin: 0;
     font-size: 0.85rem;
     color: var(--sage-harmony);
+  }
+
+  /* Kooperations-Hinweis: bewusst sehr dezent, zurückhaltend.
+     Sitzt über der Copyright-Linie, auf Container-Breite. */
+  .site-footer__credit-row {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: var(--space-md);
+  }
+  .site-footer__credit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 0.72rem;
+    color: var(--sage-harmony);
+    opacity: 0.6;
+  }
+  .site-footer__credit-logo {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    flex-shrink: 0;
   }
 </style>

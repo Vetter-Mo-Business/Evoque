@@ -1,13 +1,23 @@
 ---
+import { useTranslations, localizePath, type Lang } from '../i18n/ui';
+
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+const t = useTranslations(lang);
+
 const nav = [
-  { label: 'Start', href: '/' },
-  { label: 'Coaching', href: '/coaching' },
-  { label: 'Über mich', href: '/ueber-mich' },
-  { label: 'Preise', href: '/preise' },
-];
+  { key: 'nav.start', href: '/' },
+  { key: 'nav.coaching', href: '/coaching' },
+  { key: 'nav.about', href: '/ueber-mich' },
+  { key: 'nav.prices', href: '/preise' },
+  { key: 'nav.companies', href: '/fuer-unternehmen' },
+] as const;
 
 // Aktuellen Pfad ermitteln (für aria-current)
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const ctaHref = localizePath('/kontakt', lang) + '#buchung';
+const switchToDe = localizePath(Astro.url.pathname, 'de');
+const switchToEn = localizePath(Astro.url.pathname, 'en');
 ---
 
 <header class="site-header">
@@ -36,23 +46,51 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
       <ul class="site-nav__list">
         {
           nav.map((item) => {
-            const itemPath = item.href.replace(/\/$/, '') || '/';
+            const href = localizePath(item.href, lang);
+            const itemPath = href.replace(/\/$/, '') || '/';
             const isCurrent = itemPath === path;
             return (
               <li>
                 <a
-                  href={item.href}
+                  href={href}
                   class="site-nav__link"
                   aria-current={isCurrent ? 'page' : undefined}
                 >
-                  {item.label}
+                  {t(item.key)}
                 </a>
               </li>
             );
           })
         }
+        <li class="site-nav__lang">
+          <details class="lang">
+            <summary class="lang__toggle" aria-label={t('lang.label')} title={t('lang.label')}>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M3 12h18" />
+                <path d="M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z" />
+              </svg>
+            </summary>
+            <ul class="lang__menu">
+              <li>
+                <a href={switchToDe} class={`lang__option ${lang === 'de' ? 'is-active' : ''}`} hreflang="de">Deutsch</a>
+              </li>
+              <li>
+                <a href={switchToEn} class={`lang__option ${lang === 'en' ? 'is-active' : ''}`} hreflang="en">English</a>
+              </li>
+            </ul>
+          </details>
+        </li>
         <li class="site-nav__cta">
-          <a href="/kontakt#buchung" class="btn btn--primary">Kontakt & Buchen</a>
+          <a href={ctaHref} class="btn btn--primary">{t('nav.cta')}</a>
         </li>
       </ul>
     </nav>
@@ -86,6 +124,11 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     width: auto;
   }
 
+  /* Nav füllt die Restbreite, damit die Links links am Logo liegen
+     und Globe + CTA per margin-left:auto nach rechts rücken. */
+  .site-nav {
+    flex: 1;
+  }
   .site-nav__list {
     list-style: none;
     display: flex;
@@ -93,6 +136,10 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     gap: var(--space-lg);
     margin: 0;
     padding: 0;
+  }
+  /* Globe (und der folgende CTA) ans rechte Ende schieben */
+  .site-nav__lang {
+    margin-left: auto;
   }
   .site-nav__link {
     font-family: var(--font-body);
@@ -113,6 +160,75 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
   .site-nav__cta .btn {
     padding: 0.7em 1.3em;
     font-size: 0.95rem;
+  }
+
+  /* Sprach-Umschalter: dezenter Globe mit kleinem Aufklapp-Menü */
+  .site-nav__lang {
+    display: flex;
+    align-items: center;
+  }
+  .lang {
+    position: relative;
+  }
+  .lang__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--calm-earth);
+    list-style: none;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  .lang__toggle::-webkit-details-marker {
+    display: none;
+  }
+  .lang__toggle:hover,
+  .lang[open] .lang__toggle {
+    color: var(--forest-deep);
+    background: rgba(21, 44, 26, 0.06);
+  }
+  .lang__toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+  .lang__menu {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-2xs);
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 140px;
+    background: #fff;
+    border: var(--border-soft);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-soft);
+    z-index: 120;
+  }
+  .lang__option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.55em 0.8em;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--forest-deep);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .lang__option:hover {
+    background: rgba(21, 44, 26, 0.06);
+  }
+  .lang__option.is-active {
+    font-weight: 600;
+    color: var(--forest-deep);
+    background: var(--soft-sand);
   }
 
   /* Burger-Button (mobil) */
@@ -172,6 +288,15 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     .site-nav__cta .btn {
       width: 100%;
     }
+    .site-nav__lang {
+      margin-top: var(--space-md);
+      margin-left: 0;
+      justify-content: flex-start;
+    }
+    .lang__menu {
+      right: auto;
+      left: 0;
+    }
     .site-header__toggle[aria-expanded='true'] .site-header__toggle-bar:nth-child(1) {
       transform: translateY(7px) rotate(45deg);
     }
@@ -193,6 +318,16 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
       toggle.setAttribute('aria-expanded', String(!open));
       toggle.setAttribute('aria-label', open ? 'Menü öffnen' : 'Menü schließen');
       navEl.setAttribute('data-open', String(!open));
+    });
+  }
+
+  // Sprach-Umschalter: Klick außerhalb schließt das Menü
+  const langDetails = document.querySelector<HTMLDetailsElement>('.lang');
+  if (langDetails) {
+    document.addEventListener('click', (e) => {
+      if (langDetails.open && !langDetails.contains(e.target as Node)) {
+        langDetails.removeAttribute('open');
+      }
     });
   }
 </script>

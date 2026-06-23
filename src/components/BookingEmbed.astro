@@ -23,6 +23,19 @@ interface Props {
 
 const { calLink = '', brandColor = '#152c1a' } = Astro.props;
 const isConfigured = calLink.trim().length > 0;
+const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
+const ph = {
+  de: {
+    title: 'Online-Terminbuchung',
+    text: 'Der Buchungskalender ist gleich startklar. Sobald der Cal.com-Link eingetragen ist, erscheint hier der live verknüpfte Kalender mit Echtzeit-Verfügbarkeit.',
+    hint: 'Bis dahin: Buchung per E-Mail oder Telefon (siehe unten).',
+  },
+  en: {
+    title: 'Online appointment booking',
+    text: 'The booking calendar is almost ready. As soon as the Cal.com link is set, the live-connected calendar with real-time availability appears here.',
+    hint: 'Until then: booking by email or phone (see below).',
+  },
+}[lang];
 ---
 
 <div class="booking-embed" id="buchung">
@@ -31,15 +44,9 @@ const isConfigured = calLink.trim().length > 0;
   ) : (
     <div class="booking-embed__placeholder">
       <span class="booking-embed__icon" aria-hidden="true">📅</span>
-      <h3>Online-Terminbuchung</h3>
-      <p class="text-muted">
-        Der Buchungskalender ist gleich startklar. Sobald der Cal.com-Link in
-        <code>src/pages/kontakt.astro</code> eingetragen ist, erscheint hier der
-        live verknüpfte Kalender mit Echtzeit-Verfügbarkeit.
-      </p>
-      <p class="booking-embed__hint">
-        Bis dahin: Buchung per E-Mail oder Telefon (siehe unten).
-      </p>
+      <h3>{ph.title}</h3>
+      <p class="text-muted">{ph.text}</p>
+      <p class="booking-embed__hint">{ph.hint}</p>
     </div>
   )}
 </div>

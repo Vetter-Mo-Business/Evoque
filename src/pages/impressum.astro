@@ -1,44 +1,72 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
+const c = {
+  de: {
+    metaTitle: 'Impressum',
+    metaDesc: 'Impressum von Evoque – Yourself // Coaching & Strategy.',
+    eyebrow: 'Rechtliches',
+    title: 'Impressum',
+    h1: 'Angaben gemäß § 5 DDG',
+    p1: '[PLATZHALTER: Impressumsdaten – Name, Anschrift, Rechtsform des Coaching-Angebots.]',
+    hContact: 'Kontakt',
+    email: 'E-Mail',
+    phone: 'Telefon',
+    hVat: 'Umsatzsteuer-ID',
+    pVat: '[PLATZHALTER: USt-IdNr. gemäß § 27 a UStG, falls vorhanden.]',
+    hResp: 'Verantwortlich für den Inhalt',
+    pResp: '[PLATZHALTER: Name und Anschrift der verantwortlichen Person.]',
+    hDispute: 'Streitschlichtung',
+    pDispute: '[PLATZHALTER: Hinweis zur Verbraucherstreitbeilegung / EU-Plattform zur Online-Streitbeilegung, falls zutreffend.]',
+    note: 'Hinweis: Dieser Text ist ein Platzhalter und ersetzt keine Rechtsberatung. Die konkreten Pflichtangaben sind vor Veröffentlichung zu ergänzen.',
+  },
+  en: {
+    metaTitle: 'Imprint',
+    metaDesc: 'Imprint of Evoque – Yourself // Coaching & Strategy.',
+    eyebrow: 'Legal',
+    title: 'Imprint',
+    h1: 'Information pursuant to § 5 DDG (German Digital Services Act)',
+    p1: '[PLACEHOLDER: imprint details – name, address, legal form of the coaching offer.]',
+    hContact: 'Contact',
+    email: 'Email',
+    phone: 'Phone',
+    hVat: 'VAT ID',
+    pVat: '[PLACEHOLDER: VAT ID pursuant to § 27 a German VAT Act, if applicable.]',
+    hResp: 'Responsible for the content',
+    pResp: '[PLACEHOLDER: name and address of the responsible person.]',
+    hDispute: 'Dispute resolution',
+    pDispute: '[PLACEHOLDER: note on consumer dispute resolution / EU online dispute resolution platform, if applicable.]',
+    note: 'Note: This text is a placeholder and does not replace legal advice. The specific mandatory details must be added before publication.',
+  },
+}[lang];
 ---
 
-<BaseLayout
-  title="Impressum"
-  description="Impressum von Evoque – Yourself // Coaching & Strategy."
->
+<BaseLayout title={c.metaTitle} description={c.metaDesc}>
   <section class="section">
     <div class="container container--narrow legal">
-      <p class="eyebrow">Rechtliches</p>
-      <h1>Impressum</h1>
+      <p class="eyebrow">{c.eyebrow}</p>
+      <h1>{c.title}</h1>
 
-      <h2>Angaben gemäß § 5 DDG</h2>
+      <h2>{c.h1}</h2>
+      <p>{c.p1}</p>
+
+      <h2>{c.hContact}</h2>
       <p>
-        [PLATZHALTER: Impressumsdaten – Name, Anschrift, Rechtsform des
-        Coaching-Angebots.]
+        {c.email}: [PLATZHALTER: E-Mail]<br />
+        {c.phone}: [PLATZHALTER: Telefonnummer]
       </p>
 
-      <h2>Kontakt</h2>
-      <p>
-        E-Mail: [PLATZHALTER: E-Mail]<br />
-        Telefon: [PLATZHALTER: Telefonnummer]
-      </p>
+      <h2>{c.hVat}</h2>
+      <p>{c.pVat}</p>
 
-      <h2>Umsatzsteuer-ID</h2>
-      <p>[PLATZHALTER: USt-IdNr. gemäß § 27 a UStG, falls vorhanden.]</p>
+      <h2>{c.hResp}</h2>
+      <p>{c.pResp}</p>
 
-      <h2>Verantwortlich für den Inhalt</h2>
-      <p>[PLATZHALTER: Name und Anschrift der verantwortlichen Person.]</p>
+      <h2>{c.hDispute}</h2>
+      <p>{c.pDispute}</p>
 
-      <h2>Streitschlichtung</h2>
-      <p>
-        [PLATZHALTER: Hinweis zur Verbraucherstreitbeilegung / EU-Plattform zur
-        Online-Streitbeilegung, falls zutreffend.]
-      </p>
-
-      <p class="legal__note text-muted">
-        Hinweis: Dieser Text ist ein Platzhalter und ersetzt keine Rechtsberatung. Die
-        konkreten Pflichtangaben sind vor Veröffentlichung zu ergänzen.
-      </p>
+      <p class="legal__note text-muted">{c.note}</p>
     </div>
   </section>
 </BaseLayout>

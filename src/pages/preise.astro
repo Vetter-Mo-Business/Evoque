@@ -2,59 +2,98 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import PricingCard from '../components/PricingCard.astro';
+import { localizePath, type Lang } from '../i18n/ui';
 
-const packages = [
-  {
-    name: 'Pilot Starter',
-    badge: 'Pilotphase',
-    highlight: true,
-    ctaLabel: 'Jetzt Sichern!',
-    ctaHref: '/kontakt#buchung',
-    features: [
-      '8 Sitzungen × 60 Min.',
-      '+ 30 Min. kostenloses Gespräch',
-      'Exklusiver, vergünstigter Einführungspreis',
-      'Begrenzte Plätze',
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+const ctaHref = localizePath('/kontakt', lang) + '#buchung';
+
+const content = {
+  de: {
+    metaTitle: 'Preise',
+    metaDesc:
+      'Die Paketoptionen des Evoque-Coachings – mit vergünstigter Pilotphase. Konkrete Preise gern auf Nachfrage.',
+    introEyebrow: 'Investition',
+    introTitle: 'Deine Paketoptionen',
+    introLead:
+      'Kein Verkauf einzelner Sitzungen, sondern eine echte Begleitung. Wähle den Umfang, der zu deinem Weg passt. Konkrete Preise gern auf Nachfrage.',
+    note: 'Alle Pakete beinhalten ein kostenloses 30-minütiges Kennenlerngespräch vorab.',
+    faqEyebrow: 'Häufige Fragen',
+    faqTitle: 'Gut zu wissen, bevor wir starten',
+    packages: [
+      {
+        name: 'Pilot Starter',
+        badge: 'Pilotphase',
+        highlight: true,
+        ctaLabel: 'Jetzt Sichern!',
+        features: ['8 Sitzungen × 60 Min.', '+ 30 Min. kostenloses Gespräch', 'Exklusiver, vergünstigter Einführungspreis', 'Begrenzte Plätze'],
+      },
+      {
+        name: 'Starter Paket',
+        ctaLabel: 'Auf Nachfrage',
+        features: ['10 Sitzungen × 60 Min.', '+ 30 Min. kostenloses Gespräch', 'Für fokussierte Themen', '3 Monate gültig'],
+      },
+      {
+        name: 'Deep Dive',
+        ctaLabel: 'Auf Nachfrage',
+        features: ['20 Sitzungen × 60 Min.', '+ 30 Min. kostenloses Gespräch', 'Tiefgehende Entwicklung', '6 Monate gültig'],
+      },
+    ],
+    faq: [
+      { q: 'Wie lange dauert eine Begleitung?', a: 'Das richtet sich nach deinem Thema – jüngere Themen gehen schneller, tiefer verwurzelte brauchen länger. Ich verkaufe keine einzelnen Sitzungen, sondern begleite dich so lange, bis dein Ziel erreicht ist.' },
+      { q: 'Findet das Coaching online oder vor Ort statt?', a: 'Beides ist möglich. Viele Begleitungen laufen flexibel online; wenn ein persönliches Treffen sinnvoll ist, finden wir einen Weg. Wir klären das im Kennenlerngespräch.' },
+      { q: 'Woran erkenne ich, ob Coaching das Richtige für mich ist?', a: 'Coaching passt, wenn du bei Problemen und Sorgen rund um deine Persönlichkeitsentwicklung weiterkommen möchtest. Geht es um therapeutische Anliegen, ist eine Psychotherapie der richtige Weg – mein Coaching ersetzt diese ausdrücklich nicht.' },
+      { q: 'Was kostet die Begleitung?', a: 'Der Umfang richtet sich nach Schwere und Dauer deines Themas. Die Paketoptionen besprechen wir transparent im kostenlosen Kennenlerngespräch – ohne Druck.' },
+      { q: 'Wie fange ich an?', a: 'Mit einem kostenlosen, unverbindlichen Kennenlerngespräch. Dort schauen wir gemeinsam, ob es passt und wie ich dich begleiten kann.' },
     ],
   },
-  {
-    name: 'Starter Paket',
-    ctaLabel: 'Auf Nachfrage',
-    ctaHref: '/kontakt#buchung',
-    features: [
-      '10 Sitzungen × 60 Min.',
-      '+ 30 Min. kostenloses Gespräch',
-      'Für fokussierte Themen',
-      '3 Monate gültig',
+  en: {
+    metaTitle: 'Pricing',
+    metaDesc:
+      'The package options of Evoque coaching – with a discounted pilot phase. Specific prices gladly on request.',
+    introEyebrow: 'Investment',
+    introTitle: 'Your package options',
+    introLead:
+      'Not single sessions for sale, but real guidance. Choose the scope that fits your path. Specific prices gladly on request.',
+    note: 'All packages include a free 30-minute intro call beforehand.',
+    faqEyebrow: 'Frequently asked',
+    faqTitle: 'Good to know before we start',
+    packages: [
+      {
+        name: 'Pilot Starter',
+        badge: 'Pilot phase',
+        highlight: true,
+        ctaLabel: 'Secure now!',
+        features: ['8 sessions × 60 min.', '+ 30 min. free call', 'Exclusive, discounted introductory price', 'Limited spots'],
+      },
+      {
+        name: 'Starter Package',
+        ctaLabel: 'On request',
+        features: ['10 sessions × 60 min.', '+ 30 min. free call', 'For focused topics', 'Valid for 3 months'],
+      },
+      {
+        name: 'Deep Dive',
+        ctaLabel: 'On request',
+        features: ['20 sessions × 60 min.', '+ 30 min. free call', 'In-depth development', 'Valid for 6 months'],
+      },
+    ],
+    faq: [
+      { q: 'How long does guidance take?', a: 'It depends on your topic – more recent topics go faster, deeply rooted ones take longer. I don’t sell single sessions; I support you until your goal is reached.' },
+      { q: 'Does coaching take place online or in person?', a: 'Both are possible. Many sessions run flexibly online; if an in-person meeting makes sense, we find a way. We clarify this in the intro call.' },
+      { q: 'How do I know whether coaching is right for me?', a: 'Coaching fits if you want to move forward with problems and worries around your personal development. For therapeutic concerns, psychotherapy is the right path – my coaching explicitly does not replace it.' },
+      { q: 'What does the guidance cost?', a: 'The scope depends on the severity and duration of your topic. We discuss the package options transparently in the free intro call – without pressure.' },
+      { q: 'How do I start?', a: 'With a free, no-obligation intro call. There we look together at whether it fits and how I can support you.' },
     ],
   },
-  {
-    name: 'Deep Dive',
-    ctaLabel: 'Auf Nachfrage',
-    ctaHref: '/kontakt#buchung',
-    features: [
-      '20 Sitzungen × 60 Min.',
-      '+ 30 Min. kostenloses Gespräch',
-      'Tiefgehende Entwicklung',
-      '6 Monate gültig',
-    ],
-  },
-];
+}[lang];
 ---
 
-<BaseLayout
-  title="Preise"
-  description="Die Paketoptionen des Evoque-Coachings – mit vergünstigter Pilotphase. Konkrete Preise gern auf Nachfrage."
->
+<BaseLayout title={content.metaTitle} description={content.metaDesc}>
   <!-- Intro -->
   <section class="section section--tight">
     <div class="container container--narrow center">
-      <p class="eyebrow">Investition</p>
-      <h1>Deine Paketoptionen</h1>
-      <p class="lead">
-        Kein Verkauf einzelner Sitzungen, sondern eine echte Begleitung. Wähle den
-        Umfang, der zu deinem Weg passt. Konkrete Preise gern auf Nachfrage.
-      </p>
+      <p class="eyebrow">{content.introEyebrow}</p>
+      <h1>{content.introTitle}</h1>
+      <p class="lead">{content.introLead}</p>
     </div>
   </section>
 
@@ -63,12 +102,12 @@ const packages = [
     <div class="container">
       <div class="grid grid--3 pricing-grid">
         {
-          packages.map((p) => (
+          content.packages.map((p) => (
             <PricingCard
               name={p.name}
               features={p.features}
               ctaLabel={p.ctaLabel}
-              ctaHref={p.ctaHref}
+              ctaHref={ctaHref}
               badge={p.badge}
               highlight={p.highlight}
             />
@@ -76,9 +115,30 @@ const packages = [
         }
       </div>
 
-      <p class="center pricing-note text-muted">
-        Alle Pakete beinhalten ein kostenloses 30-minütiges Kennenlerngespräch vorab.
-      </p>
+      <p class="center pricing-note text-muted">{content.note}</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section faq-section">
+    <div class="container container--narrow">
+      <SectionHeading
+        eyebrow={content.faqEyebrow}
+        title={content.faqTitle}
+        align="center"
+      />
+      <div class="faq">
+        {
+          content.faq.map((item) => (
+            <details class="expectation">
+              <summary class="expectation__summary">{item.q}</summary>
+              <div class="expectation__body">
+                <p>{item.a}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -96,5 +156,56 @@ const packages = [
   }
   .pricing-note {
     margin-top: var(--space-xl);
+  }
+
+  /* FAQ: weißer Abschnitt, Fragen gestapelt (Layout wie zuvor) */
+  .faq-section {
+    background: #fff;
+  }
+  .faq {
+    margin-top: var(--space-lg);
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  /* Aufklapp-Box */
+  .expectation {
+    background: var(--bg);
+    border: var(--border-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .expectation__summary {
+    cursor: pointer;
+    list-style: none;
+    padding: var(--space-md) var(--space-lg);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--forest-deep);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+  .expectation__summary::-webkit-details-marker {
+    display: none;
+  }
+  .expectation__summary::after {
+    content: '+';
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--calm-earth);
+    flex-shrink: 0;
+  }
+  .expectation[open] .expectation__summary::after {
+    content: '–';
+  }
+  .expectation__body {
+    padding: 0 var(--space-lg) var(--space-lg);
+  }
+  .expectation__body p {
+    margin: 0;
+    color: var(--calm-earth);
+    line-height: 1.6;
   }
 </style>

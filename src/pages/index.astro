@@ -4,19 +4,21 @@ import Hero from '../components/Hero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import TopicCard from '../components/TopicCard.astro';
 import Testimonial from '../components/Testimonial.astro';
+import { useTranslations, localizePath, type Lang } from '../i18n/ui';
+
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+const t = useTranslations(lang);
+const l = (p: string) => localizePath(p, lang);
 ---
 
-<BaseLayout
-  title="Start"
-  description="Evoque – Yourself: Coaching für Menschen, die feststecken. Erreiche dein Ziel trotz Hürden – mit einer Begleiterin als Anker."
->
+<BaseLayout title={t('home.meta.title')} description={t('home.meta.description')}>
   <Hero
     video="/images/Animation/Hero_Video-1.mp4"
     title="Become your best you"
-    ctaHref="/kontakt#buchung"
-    ctaLabel="Kennenlerngespräch buchen"
-    secondaryHref="/coaching"
-    secondaryLabel="So läuft das Coaching"
+    ctaHref={l('/kontakt') + '#buchung'}
+    ctaLabel={t('home.hero.cta')}
+    secondaryHref={l('/coaching')}
+    secondaryLabel={t('home.hero.secondary')}
   />
 
   <!-- Ansatz-Teaser -->
@@ -25,38 +27,33 @@ import Testimonial from '../components/Testimonial.astro';
       <div class="approach">
         <div class="approach__intro">
           <SectionHeading
-            eyebrow="Der Ansatz"
-            title="Veränderung beginnt mit Verstehen"
+            eyebrow={t('home.approach.eyebrow')}
+            title={t('home.approach.title')}
           >
-            <p>
-              Woher kommt das Problem? Wir schauen gemeinsam auf den
-              Ursprung und gestalten Schritt für Schritt einen neuen Weg.
-            </p>
+            <p>{t('home.approach.text')}</p>
           </SectionHeading>
-          <a href="/ueber-mich" class="btn btn--primary">Mehr über den Ansatz</a>
+          <a href={l('/ueber-mich')} class="btn btn--primary">{t('home.approach.more')}</a>
         </div>
         <ol class="approach__steps">
           <li>
             <span class="approach__step-num"><span>1</span></span>
             <div>
-              <h3>Vergangenheit verstehen</h3>
-              <p class="text-muted">Auf was basiert das Problem? Wir finden den Ursprung.</p>
+              <h3>{t('home.approach.s1.title')}</h3>
+              <p class="text-muted">{t('home.approach.s1.text')}</p>
             </div>
           </li>
           <li>
             <span class="approach__step-num"><span>2</span></span>
             <div>
-              <h3>Im Hier und Jetzt verändern</h3>
-              <p class="text-muted">Aus dem Verstehen wird konkrete Veränderung.</p>
+              <h3>{t('home.approach.s2.title')}</h3>
+              <p class="text-muted">{t('home.approach.s2.text')}</p>
             </div>
           </li>
           <li>
             <span class="approach__step-num"><span>3</span></span>
             <div>
-              <h3>Anker & Begleiterin</h3>
-              <p class="text-muted">
-                Ich bleibe an deiner Seite, bis du dein Ziel erreichst.
-              </p>
+              <h3>{t('home.approach.s3.title')}</h3>
+              <p class="text-muted">{t('home.approach.s3.text')}</p>
             </div>
           </li>
         </ol>
@@ -68,68 +65,88 @@ import Testimonial from '../components/Testimonial.astro';
   <section class="section">
     <div class="container">
       <SectionHeading
-        eyebrow="Themen & Anliegen"
-        title="Wobei Evoque dich begleitet"
+        eyebrow={t('home.topics.eyebrow')}
+        title={t('home.topics.title')}
         align="center"
       >
-        <p>Typische Anliegen – und Raum für dein ganz persönliches Thema.</p>
+        <p>{t('home.topics.lead')}</p>
       </SectionHeading>
 
       <div class="grid grid--3">
-        <TopicCard title="Prüfungsangst">
+        <TopicCard title={t('home.topics.c1.title')}>
           <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
             <path d="M14 3v4h4" />
             <path d="M9 12h6" />
             <path d="M9 16h4" />
           </svg>
-          Wieder ruhig und klar in Prüfungssituationen gehen.
+          {t('home.topics.c1.text')}
         </TopicCard>
-        <TopicCard title="Prokrastination">
+        <TopicCard title={t('home.topics.c2.title')}>
           <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="13" r="8" />
             <path d="M12 9v4l2.5 2" />
             <path d="M9 2h6" />
             <path d="M18.5 5.5l1.5 1.5" />
           </svg>
-          Ins Tun kommen, statt Aufgaben immer weiter aufzuschieben.
+          {t('home.topics.c2.text')}
         </TopicCard>
-        <TopicCard title="Langjährige Themen">
+        <TopicCard title={t('home.topics.c3.title')}>
           <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="6" cy="19" r="2" />
             <circle cx="18" cy="5" r="2" />
             <path d="M8 19h6.5a3 3 0 0 0 0-6h-5a3 3 0 0 1 0-6H16" />
           </svg>
-          Themen wie Abnehmen, die dich schon lange begleiten, nachhaltig angehen.
+          {t('home.topics.c3.text')}
         </TopicCard>
       </div>
 
       <p class="center themes-teaser__more">
-        <a href="/coaching" class="btn btn--primary">Alle Themen & Pakete ansehen</a>
+        <a href={l('/coaching')} class="btn btn--primary">{t('home.topics.more')}</a>
       </p>
     </div>
   </section>
 
   <!-- Testimonials -->
   <section class="section surface-sand">
-    <div class="container">
+    <div class="container testimonials">
+      <span class="testimonials__verified-badge" title={t('home.testi.badgeTitle')}>
+        <svg
+          class="testimonials__verified-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+        {t('home.testi.badge')}
+      </span>
       <SectionHeading
-        eyebrow="Stimmen"
-        title="Was Begleitete erleben"
+        eyebrow={t('home.testi.eyebrow')}
+        title={t('home.testi.title')}
         align="center"
-      />
+      >
+        <p class="testimonials__note">{t('home.testi.note')}</p>
+      </SectionHeading>
       <div class="grid grid--3">
         <Testimonial
-          quote="[PLATZHALTER: Testimonial 1 – authentische Stimme einer begleiteten Person.]"
-          author="[PLATZHALTER: Name / Anliegen]"
+          quote={t('home.testi.placeholder')}
+          author="Sarah M."
+          context={t('home.testi.t1.context')}
         />
         <Testimonial
-          quote="[PLATZHALTER: Testimonial 2 – authentische Stimme einer begleiteten Person.]"
-          author="[PLATZHALTER: Name / Anliegen]"
+          quote={t('home.testi.placeholder')}
+          author={lang === 'en' ? 'Client, 34' : 'Kundin, 34'}
+          context={t('home.testi.t2.context')}
         />
         <Testimonial
-          quote="[PLATZHALTER: Testimonial 3 – authentische Stimme einer begleiteten Person.]"
-          author="[PLATZHALTER: Name / Anliegen]"
+          quote={t('home.testi.placeholder')}
+          author="Jonas K."
+          context={t('home.testi.t3.context')}
         />
       </div>
     </div>
@@ -140,20 +157,63 @@ import Testimonial from '../components/Testimonial.astro';
     <div class="container">
       <div class="final-cta surface-forest">
         <div class="final-cta__text">
-          <p class="eyebrow">Bereit für den ersten Schritt?</p>
-          <h2>Lerne mich in einem kostenlosen Gespräch kennen.</h2>
-          <p>
-            30 Minuten, unverbindlich. <br> Wir schauen, ob es passt und wie ich dich
-            begleiten kann.
-          </p>
+          <p class="eyebrow">{t('home.cta.eyebrow')}</p>
+          <h2>{t('home.cta.title')}</h2>
+          <p>{t('home.cta.text')}</p>
         </div>
-        <a href="/kontakt#buchung" class="btn btn--secondary">Kennenlerngespräch buchen</a>
+        <a href={l('/kontakt') + '#buchung'} class="btn btn--secondary">{t('home.cta.button')}</a>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  /* Testimonials: Verifizierung + Anonymisierung */
+  .testimonials {
+    position: relative;
+  }
+  .testimonials__verified-badge {
+    position: absolute;
+    top: 0;
+    right: var(--space-md);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #1d7a4d;
+    background: #e8f5ee;
+    border: 1px solid #bfe3cd;
+    border-radius: 999px;
+    padding: 0.4em 0.85em 0.4em 0.65em;
+    line-height: 1;
+    box-shadow: var(--shadow-soft);
+  }
+  .testimonials__verified-icon {
+    width: 1.05em;
+    height: 1.05em;
+  }
+  .testimonials__note {
+    margin-top: var(--space-sm);
+    font-size: 0.95rem;
+  }
+  .testimonials__note-check {
+    color: #1d7a4d;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  @media (max-width: 640px) {
+    .testimonials__verified-badge {
+      position: static;
+      margin: 0 auto var(--space-md);
+      display: inline-flex;
+    }
+    .testimonials {
+      text-align: center;
+    }
+  }
+
   .approach {
     display: grid;
     gap: var(--space-2xl);

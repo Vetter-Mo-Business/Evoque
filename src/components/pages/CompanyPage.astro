@@ -1,0 +1,340 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations, localizePath, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const contactHref = localizePath('/kontakt', lang) + '#buchung';
+
+const pillars = ['1', '2', '3'] as const;
+const offers = ['1', '2', '3'] as const;
+const steps = ['1', '2', '3'] as const;
+---
+
+<BaseLayout title={t('company.meta.title')} description={t('company.meta.description')}>
+  <div class="corp">
+    <!-- Hero -->
+    <section class="corp-hero">
+      <div class="container corp-hero__inner">
+        <p class="corp-eyebrow corp-eyebrow--light">{t('company.hero.eyebrow')}</p>
+        <h1 class="corp-hero__title">{t('company.hero.title')}</h1>
+        <p class="corp-hero__text">{t('company.hero.text')}</p>
+        <div class="corp-hero__actions">
+          <a href={contactHref} class="corp-btn corp-btn--primary">{t('company.hero.cta')}</a>
+          <a href="#leistungen" class="corp-btn corp-btn--ghost">{t('company.hero.ctaSecondary')}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Werte / Pillars -->
+    <section class="corp-section">
+      <div class="container corp-pillars">
+        {
+          pillars.map((n) => (
+            <div class="corp-pillar">
+              <span class="corp-pillar__rule" aria-hidden="true" />
+              <h2 class="corp-pillar__title">{t(`company.pillars.${n}.title` as any)}</h2>
+              <p class="corp-pillar__text">{t(`company.pillars.${n}.text` as any)}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Leistungen -->
+    <section id="leistungen" class="corp-section corp-section--alt">
+      <div class="container">
+        <header class="corp-head">
+          <p class="corp-eyebrow">{t('company.offer.eyebrow')}</p>
+          <h2 class="corp-head__title">{t('company.offer.title')}</h2>
+          <p class="corp-head__lead">{t('company.offer.lead')}</p>
+        </header>
+        <div class="corp-grid">
+          {
+            offers.map((n) => (
+              <article class="corp-card">
+                <h3 class="corp-card__title">{t(`company.offer.${n}.title` as any)}</h3>
+                <p class="corp-card__text">{t(`company.offer.${n}.text` as any)}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Vorgehen -->
+    <section class="corp-section">
+      <div class="container">
+        <header class="corp-head">
+          <p class="corp-eyebrow">{t('company.approach.eyebrow')}</p>
+          <h2 class="corp-head__title">{t('company.approach.title')}</h2>
+        </header>
+        <ol class="corp-steps">
+          {
+            steps.map((n, i) => (
+              <li class="corp-step">
+                <span class="corp-step__num">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="corp-step__title">{t(`company.approach.${n}.title` as any)}</h3>
+                <p class="corp-step__text">{t(`company.approach.${n}.text` as any)}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="corp-section">
+      <div class="container">
+        <div class="corp-cta">
+          <div class="corp-cta__text">
+            <p class="corp-eyebrow corp-eyebrow--light">{t('company.cta.eyebrow')}</p>
+            <h2 class="corp-cta__title">{t('company.cta.title')}</h2>
+            <p class="corp-cta__lead">{t('company.cta.text')}</p>
+          </div>
+          <a href={contactHref} class="corp-btn corp-btn--light">{t('company.cta.button')}</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* =====================================================================
+     Corporate-Stil – bewusst sachlicher als der Rest der Seite:
+     Body-Schrift für Überschriften, kantigere Radien, klare Raster,
+     viel Weißraum. Nutzt ausschließlich die Markenfarben.
+     ===================================================================== */
+  .corp {
+    --corp-radius: 4px;
+    --corp-line: rgba(21, 44, 26, 0.12);
+  }
+  .corp :global(h1),
+  .corp :global(h2),
+  .corp :global(h3) {
+    font-family: var(--font-body);
+    letter-spacing: -0.01em;
+  }
+
+  .corp-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--calm-earth);
+    margin: 0 0 var(--space-sm);
+  }
+  .corp-eyebrow--light {
+    color: var(--sage-harmony);
+  }
+
+  /* ---------- Buttons (kantig, sachlich) ---------- */
+  .corp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85em 1.6em;
+    border-radius: var(--corp-radius);
+    font-weight: 600;
+    font-size: 0.98rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .corp-btn--primary {
+    background: var(--sage-harmony);
+    color: var(--forest-deep);
+  }
+  .corp-btn--primary:hover {
+    background: #c0cfc3;
+  }
+  .corp-btn--ghost {
+    border-color: rgba(243, 239, 233, 0.4);
+    color: var(--on-dark);
+  }
+  .corp-btn--ghost:hover {
+    border-color: var(--on-dark);
+  }
+  .corp-btn--light {
+    background: var(--on-dark);
+    color: var(--forest-deep);
+    flex-shrink: 0;
+  }
+  .corp-btn--light:hover {
+    background: #fff;
+  }
+
+  /* ---------- Hero (dunkel) ---------- */
+  .corp-hero {
+    background: var(--forest-deep);
+    color: var(--on-dark);
+  }
+  .corp-hero__inner {
+    padding-block: clamp(3.5rem, 9vw, 7rem);
+    max-width: 60ch;
+  }
+  .corp-hero__title {
+    font-size: clamp(2rem, 4.4vw, 3.1rem);
+    line-height: 1.1;
+    margin: 0 0 var(--space-lg);
+    color: #fff;
+  }
+  .corp-hero__text {
+    font-size: 1.12rem;
+    line-height: 1.65;
+    color: var(--sage-harmony);
+    margin: 0 0 var(--space-xl);
+  }
+  .corp-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  /* ---------- Sektion-Grundlayout ---------- */
+  .corp-section {
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+  }
+  .corp-section--alt {
+    background: var(--soft-sand);
+  }
+  .corp-head {
+    max-width: 56ch;
+    margin-bottom: var(--space-2xl);
+  }
+  .corp-head__title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    line-height: 1.15;
+    margin: 0 0 var(--space-sm);
+    color: var(--forest-deep);
+  }
+  .corp-head__lead {
+    margin: 0;
+    color: var(--calm-earth);
+    font-size: 1.05rem;
+  }
+
+  /* ---------- Pillars ---------- */
+  .corp-pillars {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  @media (min-width: 760px) {
+    .corp-pillars {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-2xl);
+    }
+  }
+  .corp-pillar__rule {
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: var(--sage-harmony);
+    margin-bottom: var(--space-md);
+  }
+  .corp-pillar__title {
+    font-size: 1.2rem;
+    margin: 0 0 var(--space-xs);
+    color: var(--forest-deep);
+  }
+  .corp-pillar__text {
+    margin: 0;
+    color: var(--calm-earth);
+    line-height: 1.6;
+  }
+
+  /* ---------- Leistungs-Karten ---------- */
+  .corp-grid {
+    display: grid;
+    gap: var(--space-lg);
+  }
+  @media (min-width: 760px) {
+    .corp-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .corp-card {
+    background: #fff;
+    border: 1px solid var(--corp-line);
+    border-radius: var(--corp-radius);
+    padding: var(--space-xl);
+    height: 100%;
+  }
+  .corp-card__title {
+    font-size: 1.15rem;
+    margin: 0 0 var(--space-sm);
+    color: var(--forest-deep);
+  }
+  .corp-card__text {
+    margin: 0;
+    color: var(--calm-earth);
+    line-height: 1.6;
+  }
+
+  /* ---------- Vorgehen / Steps ---------- */
+  .corp-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-xl);
+    counter-reset: step;
+  }
+  @media (min-width: 760px) {
+    .corp-steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-2xl);
+    }
+  }
+  .corp-step {
+    border-top: 1px solid var(--corp-line);
+    padding-top: var(--space-md);
+  }
+  .corp-step__num {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--sage-harmony);
+    margin-bottom: var(--space-sm);
+  }
+  .corp-step__title {
+    font-size: 1.15rem;
+    margin: 0 0 var(--space-xs);
+    color: var(--forest-deep);
+  }
+  .corp-step__text {
+    margin: 0;
+    color: var(--calm-earth);
+    line-height: 1.6;
+  }
+
+  /* ---------- Abschluss-CTA ---------- */
+  .corp-cta {
+    background: var(--forest-deep);
+    color: var(--on-dark);
+    border-radius: var(--corp-radius);
+    padding: clamp(2rem, 5vw, 3.5rem);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xl);
+  }
+  .corp-cta__text {
+    max-width: 46ch;
+  }
+  .corp-cta__title {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    margin: 0 0 var(--space-sm);
+    color: #fff;
+  }
+  .corp-cta__lead {
+    margin: 0;
+    color: var(--sage-harmony);
+    line-height: 1.6;
+  }
+</style>

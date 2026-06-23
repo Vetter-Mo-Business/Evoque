@@ -4,21 +4,158 @@ import SectionHeading from '../components/SectionHeading.astro';
 import TopicCard from '../components/TopicCard.astro';
 import ProcessJourney from '../components/ProcessJourney.astro';
 import DisclaimerBanner from '../components/DisclaimerBanner.astro';
+import { localizePath, type Lang } from '../i18n/ui';
+
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+const l = (p: string) => localizePath(p, lang);
+
+const content = {
+  de: {
+    metaTitle: 'Coaching',
+    metaDesc:
+      'Themen, Ablauf und Paketoptionen des Evoque-Coachings: von Prüfungsangst über Prokrastination bis zu langjährigen Themen.',
+    introEyebrow: 'Coaching',
+    introTitle: 'Eine Begleitung, die zu deinem Thema passt.',
+    introLead:
+      'Kein Verkauf einzelner Sitzungen, sondern eine echte Begleitung – so lange, wie dein Thema es braucht.',
+    topicsEyebrow: 'Themen & Anliegen',
+    topicsTitle: 'Womit Menschen zu mir kommen',
+    topicsLead: 'Häufige Anliegen – und Raum für dein persönliches Thema.',
+    carouselLabel: 'Themen, mit denen Menschen kommen',
+    prev: 'Vorheriges Thema',
+    next: 'Nächstes Thema',
+    topics: [
+      { title: 'Selbstorganisation', items: ['Prokrastination', 'Multitasking', 'Aufschieben', 'Zeitdruck'] },
+      { title: 'Stress & innere Ruhe', items: ['Prüfungsangst', 'Anspannung', 'Überforderung', 'Innere Unruhe'] },
+      { title: 'Selbstwert & Vertrauen', items: ['Selbstzweifel', 'Unsicherheit', 'Innerer Kritiker'] },
+      { title: 'Klarheit & Entscheidungen', items: ['Orientierung', 'Entscheidungen treffen', 'Eigener Weg'] },
+      { title: 'Langjährige Themen', items: ['Abnehmen', 'Gewohnheiten', 'Wiederkehrende Muster'] },
+    ],
+    placeholderTitle: 'Dein Thema',
+    placeholderItems: ['[Oberthema ergänzen]', '[Unterthema]', '[Unterthema]'],
+    uspEyebrow: 'Der Unterschied',
+    uspTitle: 'Warum echte Begleitung mehr bewirkt',
+    uspLead:
+      'Ob Gruppe oder lose Einzelsitzungen anderswo – vieles bleibt an der Oberfläche. Ich begleite dich psychologisch fundiert so lange, bis dein Ziel wirklich erreicht ist.',
+    groupTag: 'Gruppen-Coaching',
+    groupTitle: 'Tipps in der Gruppe',
+    groupText:
+      'Schnelle Tipps in einer überfüllten Gruppendynamik. Danach stehst du wieder allein mit deinem Thema da – Oberfläche statt Ursache.',
+    groupCons: [
+      'Persönliche Probleme in offener Runde',
+      'Schnelle Tipps statt echter Ursachenarbeit',
+      'Kaum individueller Bezug',
+      'Nach der Sitzung auf dich allein gestellt',
+    ],
+    evoqueTag: 'Coaching bei Evoque',
+    evoqueTitle: 'Begleitung mit Fundament',
+    evoqueText:
+      'Eine echte Begleitung, ganz auf dich zugeschnitten – psychologisch fundiert, weil ich es studiert habe. Ich bleibe an deiner Seite, bis du dein Ziel erreicht hast. An der Wurzel, nicht an der Oberfläche.',
+    evoquePros: [
+      'Psychologisch fundiert – studierter Hintergrund',
+      'Durchgehende Begleitung bis zum Ziel',
+      'An der Ursache arbeiten – nachhaltig',
+      'Dein verlässlicher Anker auf dem ganzen Weg',
+    ],
+    soloTag: 'Persönliches Coaching',
+    soloTitle: 'Einzelne Sitzungen',
+    soloText:
+      'Persönlicher als die Gruppe – aber oft lose Einzelsitzungen ohne roten Faden und ohne fundierten Hintergrund. Das alte Thema kehrt zurück.',
+    soloCons: [
+      'Einzelne Sitzungen statt durchgehender Begleitung',
+      'Selten psychologisch fundiert',
+      'Kein verlässlicher Anker danach',
+      'Das Thema kommt mit der Zeit zurück',
+    ],
+    expA: 'Was auf dich zukommt',
+    expAText:
+      'Ich bringe die Begleitung mit: einen klaren, fundierten Weg – und ich bleibe an deiner Seite, bis dein Ziel erreicht ist. Ich höre zu, frage nach, gebe Struktur und sorge dafür, dass du dranbleibst.',
+    expB: 'Was du mitbringst',
+    expBText:
+      'Was ich dir nicht abnehmen kann, ist die Motivation, dein Ziel wirklich zu erreichen. Sie entsteht in dir und lässt sich nicht von außen geben. Veränderung gelingt, wenn beides zusammenkommt: meine Begleitung und dein eigener Wille.',
+    therapyEyebrow: 'Wichtig zu wissen',
+    therapyTitle: 'Coaching – keine Therapie.',
+    therapyText:
+      'Ich begleite dich bei Problemen und Sorgen rund um deine Persönlichkeitsentwicklung. Geht es um therapeutische Anliegen, ist eine Psychotherapie oder Heilbehandlung der richtige Weg – das ersetzt mein Coaching ausdrücklich nicht.',
+  },
+  en: {
+    metaTitle: 'Coaching',
+    metaDesc:
+      'Topics, process and package options of Evoque coaching: from exam anxiety and procrastination to long-standing issues.',
+    introEyebrow: 'Coaching',
+    introTitle: 'Guidance that fits your topic.',
+    introLead:
+      'Not single sessions for sale, but real guidance – for as long as your topic needs.',
+    topicsEyebrow: 'Topics & concerns',
+    topicsTitle: 'What people come to me with',
+    topicsLead: 'Common concerns – and room for your personal topic.',
+    carouselLabel: 'Topics people come with',
+    prev: 'Previous topic',
+    next: 'Next topic',
+    topics: [
+      { title: 'Self-organisation', items: ['Procrastination', 'Multitasking', 'Putting things off', 'Time pressure'] },
+      { title: 'Stress & inner calm', items: ['Exam anxiety', 'Tension', 'Overwhelm', 'Inner restlessness'] },
+      { title: 'Self-worth & confidence', items: ['Self-doubt', 'Insecurity', 'Inner critic'] },
+      { title: 'Clarity & decisions', items: ['Orientation', 'Making decisions', 'Your own path'] },
+      { title: 'Long-standing issues', items: ['Weight loss', 'Habits', 'Recurring patterns'] },
+    ],
+    placeholderTitle: 'Your topic',
+    placeholderItems: ['[Add main topic]', '[Sub-topic]', '[Sub-topic]'],
+    uspEyebrow: 'The difference',
+    uspTitle: 'Why real guidance achieves more',
+    uspLead:
+      'Whether a group or loose individual sessions elsewhere – much stays on the surface. I support you on a psychologically grounded basis, until your goal is truly reached.',
+    groupTag: 'Group coaching',
+    groupTitle: 'Tips in a group',
+    groupText:
+      'Quick tips in a crowded group dynamic. Afterwards you are left alone with your topic again – surface instead of cause.',
+    groupCons: [
+      'Personal issues in an open round',
+      'Quick tips instead of real root-cause work',
+      'Hardly any individual focus',
+      'Left on your own after the session',
+    ],
+    evoqueTag: 'Coaching at Evoque',
+    evoqueTitle: 'Guidance with a foundation',
+    evoqueText:
+      'Real guidance, tailored entirely to you – psychologically grounded, because I studied it. I stay by your side until you have reached your goal. At the root, not on the surface.',
+    evoquePros: [
+      'Psychologically grounded – studied background',
+      'Continuous guidance until the goal',
+      'Working at the cause – sustainably',
+      'Your reliable anchor all the way',
+    ],
+    soloTag: 'Individual coaching',
+    soloTitle: 'Single sessions',
+    soloText:
+      'More personal than the group – but often loose single sessions without a common thread or grounded background. The old topic returns.',
+    soloCons: [
+      'Single sessions instead of continuous guidance',
+      'Rarely psychologically grounded',
+      'No reliable anchor afterwards',
+      'The topic comes back over time',
+    ],
+    expA: 'What to expect',
+    expAText:
+      'I bring the guidance: a clear, grounded path – and I stay by your side until your goal is reached. I listen, ask, give structure and make sure you stay on track.',
+    expB: 'What you bring',
+    expBText:
+      'What I cannot take off your shoulders is the motivation to truly reach your goal. It arises within you and cannot be given from outside. Change succeeds when both come together: my guidance and your own will.',
+    therapyEyebrow: 'Good to know',
+    therapyTitle: 'Coaching – not therapy.',
+    therapyText:
+      'I support you with problems and worries around your personal development. For therapeutic concerns, psychotherapy or medical treatment is the right path – my coaching explicitly does not replace it.',
+  },
+}[lang];
 ---
 
-<BaseLayout
-  title="Coaching"
-  description="Themen, Ablauf und Paketoptionen des Evoque-Coachings: von Prüfungsangst über Prokrastination bis zu langjährigen Themen."
->
+<BaseLayout title={content.metaTitle} description={content.metaDesc}>
   <!-- Intro -->
   <section class="section section--tight">
     <div class="container container--narrow center">
-      <p class="eyebrow">Coaching</p>
-      <h1>Eine Begleitung, die zu deinem Thema passt.</h1>
-      <p class="lead">
-        Kein Verkauf einzelner Sitzungen, sondern eine echte Begleitung – so lange,
-        wie dein Thema es braucht.
-      </p>
+      <p class="eyebrow">{content.introEyebrow}</p>
+      <h1>{content.introTitle}</h1>
+      <p class="lead">{content.introLead}</p>
     </div>
   </section>
 
@@ -26,10 +163,10 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
   <section class="section surface-sand">
     <div class="container">
       <SectionHeading
-        eyebrow="Themen & Anliegen"
-        title="Womit Menschen zu mir kommen"
+        eyebrow={content.topicsEyebrow}
+        title={content.topicsTitle}
       >
-        <p>Häufige Anliegen – und Raum für dein persönliches Thema.</p>
+        <p>{content.topicsLead}</p>
       </SectionHeading>
 
       <div
@@ -37,45 +174,23 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
         data-topic-slider
         role="group"
         aria-roledescription="Karussell"
-        aria-label="Themen, mit denen Menschen kommen"
+        aria-label={content.carouselLabel}
       >
         <div class="topic-slider__viewport" data-viewport>
           <div class="topic-slider__track" data-track>
+            {
+              content.topics.map((topic) => (
+                <div class="topic-slider__slide">
+                  <TopicCard title={topic.title} items={topic.items} />
+                </div>
+              ))
+            }
             <div class="topic-slider__slide">
-              <TopicCard title="Prüfungsangst">
-                Wieder ruhig, klar und handlungsfähig in Prüfungssituationen.
-              </TopicCard>
-            </div>
-            <div class="topic-slider__slide">
-              <TopicCard title="Prokrastination">
-                Aufschieben durchbrechen und verlässlich ins Tun kommen.
-              </TopicCard>
-            </div>
-            <div class="topic-slider__slide">
-              <TopicCard title="Langjährige Themen (z. B. Abnehmen)">
-                Themen, die dich seit Jahren begleiten, an der Wurzel angehen.
-              </TopicCard>
-            </div>
-            <div class="topic-slider__slide">
-              <TopicCard title="Selbstzweifel & Selbstwert">
-                Wieder Vertrauen in dich und deine Fähigkeiten aufbauen.
-              </TopicCard>
-            </div>
-            <div class="topic-slider__slide">
-              <TopicCard title="Stress & innere Unruhe">
-                Zur Ruhe kommen und gelassener mit Druck und Anspannung umgehen.
-              </TopicCard>
-            </div>
-            <div class="topic-slider__slide">
-              <TopicCard title="Klarheit & Entscheidungen">
-                Den eigenen Weg finden und Entscheidungen wieder sicher treffen.
-              </TopicCard>
-            </div>
-            <div class="topic-slider__slide">
-              <TopicCard title="Dein Thema" placeholder>
-                [PLATZHALTER: weitere Themen – hier weitere Anliegen ergänzen, mit
-                denen Malin arbeitet.]
-              </TopicCard>
+              <TopicCard
+                title={content.placeholderTitle}
+                placeholder
+                items={content.placeholderItems}
+              />
             </div>
           </div>
         </div>
@@ -85,7 +200,7 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
             type="button"
             class="topic-slider__nav"
             data-prev
-            aria-label="Vorheriges Thema"
+            aria-label={content.prev}
           >
             ‹
           </button>
@@ -94,7 +209,7 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
             type="button"
             class="topic-slider__nav"
             data-next
-            aria-label="Nächstes Thema"
+            aria-label={content.next}
           >
             ›
           </button>
@@ -110,43 +225,53 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
   <section class="section surface-sand">
     <div class="container">
       <SectionHeading
-        eyebrow="Der Unterschied"
-        title="Warum echte Begleitung mehr bewirkt"
+        eyebrow={content.uspEyebrow}
+        title={content.uspTitle}
         align="center"
       >
-        <p>
-          Viele setzen auf einzelne Sitzungen und schnelle Tipps. Ich begleite dich
-          anders – so lange, bis dein Ziel wirklich erreicht ist.
-        </p>
+        <p>{content.uspLead}</p>
       </SectionHeading>
-      <div class="grid grid--2 offer-grid">
+      <div class="grid grid--3 offer-grid">
         <article class="card offer-card offer-card--others">
-          <span class="offer-card__tag offer-card__tag--muted">Der übliche Weg</span>
-          <h3>Wie es oft läuft</h3>
-          <p class="text-muted">
-            Schnelle Tipps in einer überfüllten Gruppendynamik. <br> Und danach stehst du wieder allein
-            mit deinem Thema da. Oberfläche statt Ursache.
-          </p>
+          <span class="offer-card__tag offer-card__tag--muted">{content.groupTag}</span>
+          <h3>{content.groupTitle}</h3>
+          <p class="text-muted">{content.groupText}</p>
           <ul class="offer-list offer-list--cons">
-            <li>Persönliche Probleme in offener Runde</li>
-            <li>Schnelle Tipps statt echter Ursachenarbeit</li>
-            <li>Nach der Sitzung auf dich allein gestellt</li>
-            <li>Das alte Thema kommt immer wieder zurück</li>
+            {content.groupCons.map((item) => <li>{item}</li>)}
           </ul>
         </article>
         <article class="card offer-card offer-card--highlight">
-          <span class="offer-card__tag">So begleite ich dich</span>
-          <h3>Persönliche Begleitung bei Evoque</h3>
-          <p>
-            Eine echte Begleitung, ganz auf dich zugeschnitten. <br> Ich begleite dich persönlich, bis du dein Ziel erreicht hast. An der Wurzel, nicht an der Oberfläche.
-          </p>
+          <span class="offer-card__tag">{content.evoqueTag}</span>
+          <h3>{content.evoqueTitle}</h3>
+          <p>{content.evoqueText}</p>
           <ul class="offer-list">
-            <li>Durchgehende Begleitung bis zum Ziel</li>
-            <li>An der Ursache arbeiten – nachhaltig</li>
-            <li>Individuell auf dich abgestimmt</li>
-            <li>Dein verlässlicher Anker auf dem ganzen Weg</li>
+            {content.evoquePros.map((item) => <li>{item}</li>)}
           </ul>
         </article>
+        <article class="card offer-card offer-card--others">
+          <span class="offer-card__tag offer-card__tag--muted">{content.soloTag}</span>
+          <h3>{content.soloTitle}</h3>
+          <p class="text-muted">{content.soloText}</p>
+          <ul class="offer-list offer-list--cons">
+            {content.soloCons.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      </div>
+
+      <!-- Begleitung vs. Eigenverantwortung: zwei aufklappbare Boxen nebeneinander -->
+      <div class="expectations">
+        <details class="expectation">
+          <summary class="expectation__summary">{content.expA}</summary>
+          <div class="expectation__body">
+            <p>{content.expAText}</p>
+          </div>
+        </details>
+        <details class="expectation">
+          <summary class="expectation__summary">{content.expB}</summary>
+          <div class="expectation__body">
+            <p>{content.expBText}</p>
+          </div>
+        </details>
       </div>
     </div>
   </section>
@@ -155,16 +280,11 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
   <section class="section">
     <div class="container container--narrow">
       <SectionHeading
-        eyebrow="Wichtig zu wissen"
-        title="Coaching – keine Therapie."
+        eyebrow={content.therapyEyebrow}
+        title={content.therapyTitle}
         align="center"
       >
-        <p>
-          Ich begleite dich bei Problemen und Sorgen rund um deine
-          Persönlichkeitsentwicklung. Geht es um therapeutische Anliegen, ist eine
-          Psychotherapie oder Heilbehandlung der richtige Weg – das ersetzt mein
-          Coaching ausdrücklich nicht.
-        </p>
+        <p>{content.therapyText}</p>
       </SectionHeading>
       <DisclaimerBanner variant="strong" />
     </div>
@@ -173,7 +293,62 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
 
 <style>
   .offer-grid {
-    margin-top: var(--space-md);
+    margin-top: calc(var(--space-md) + 50px);
+  }
+
+  /* Zwei aufklappbare Boxen nebeneinander: Begleitung vs. Eigenverantwortung */
+  .expectations {
+    margin-top: var(--space-2xl);
+    display: grid;
+    gap: var(--space-lg);
+  }
+  @media (min-width: 720px) {
+    .expectations {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
+
+  /* Aufklapp-Box (auch für FAQ genutzt) */
+  .expectation {
+    background: #fff;
+    border: var(--border-soft);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+  }
+  .expectation__summary {
+    cursor: pointer;
+    list-style: none;
+    padding: var(--space-md) var(--space-lg);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--forest-deep);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+  .expectation__summary::-webkit-details-marker {
+    display: none;
+  }
+  .expectation__summary::after {
+    content: '+';
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--calm-earth);
+    flex-shrink: 0;
+  }
+  .expectation[open] .expectation__summary::after {
+    content: '–';
+  }
+  .expectation__body {
+    padding: 0 var(--space-lg) var(--space-lg);
+  }
+  .expectation__body p {
+    margin: 0;
+    color: var(--calm-earth);
+    line-height: 1.6;
   }
 
   /* ===== Themen-Slider ===== */
@@ -310,7 +485,7 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
     border: var(--border-soft);
   }
 
-  /* "Üblicher Weg": bewusst zurückgenommen, damit das eigene Angebot heraussticht */
+  /* Beide "anderen Wege" bewusst zurückgenommen, damit die eigene Lösung heraussticht */
   .offer-card--others {
     background: var(--bg);
     border: var(--border-soft);
@@ -318,6 +493,17 @@ import DisclaimerBanner from '../components/DisclaimerBanner.astro';
   }
   .offer-card--others h3 {
     color: var(--calm-earth);
+  }
+
+  /* Die eigene Lösung steht in der Mitte und sitzt leicht erhöht;
+     die beiden Außen-Karten bleiben tiefer auf Grundhöhe. */
+  @media (min-width: 720px) {
+    .offer-grid .offer-card {
+      transition: transform 0.25s ease;
+    }
+    .offer-grid .offer-card--highlight {
+      transform: translateY(-22px);
+    }
   }
 
   /* Eigenes Angebot: klar hervorgehoben */

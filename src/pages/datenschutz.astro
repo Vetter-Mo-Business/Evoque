@@ -1,47 +1,64 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
+const c = {
+  de: {
+    metaTitle: 'Datenschutz',
+    metaDesc: 'Datenschutzerklärung von Evoque – Yourself // Coaching & Strategy.',
+    eyebrow: 'Rechtliches',
+    title: 'Datenschutzerklärung',
+    intro: '[PLATZHALTER: Datenschutzerklärung – Einleitung: verantwortliche Stelle und Grundsätze des Umgangs mit personenbezogenen Daten.]',
+    h1: '1. Verantwortliche Stelle',
+    p1: '[PLATZHALTER: Name, Anschrift und Kontakt der verantwortlichen Stelle.]',
+    h2: '2. Erhebung und Verarbeitung von Daten',
+    p2: '[PLATZHALTER: Welche Daten werden bei Kontaktaufnahme und Buchung erhoben und zu welchem Zweck.]',
+    h3: '3. Externes Buchungstool',
+    p3: '[PLATZHALTER: Hinweis auf das eingebettete externe Buchungstool (z. B. Calendly / Cal.com / TidyCal) und dessen Datenverarbeitung.]',
+    h4: '4. Ihre Rechte',
+    p4: '[PLATZHALTER: Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch, Datenübertragbarkeit und Beschwerderecht bei der Aufsichtsbehörde.]',
+    note: 'Hinweis: Dieser Text ist ein Platzhalter und ersetzt keine Rechtsberatung. Die konkrete, DSGVO-konforme Datenschutzerklärung ist vor Veröffentlichung zu ergänzen.',
+  },
+  en: {
+    metaTitle: 'Privacy',
+    metaDesc: 'Privacy policy of Evoque – Yourself // Coaching & Strategy.',
+    eyebrow: 'Legal',
+    title: 'Privacy policy',
+    intro: '[PLACEHOLDER: privacy policy – introduction: data controller and principles for handling personal data.]',
+    h1: '1. Data controller',
+    p1: '[PLACEHOLDER: name, address and contact of the data controller.]',
+    h2: '2. Collection and processing of data',
+    p2: '[PLACEHOLDER: which data is collected on contact and booking, and for what purpose.]',
+    h3: '3. External booking tool',
+    p3: '[PLACEHOLDER: note on the embedded external booking tool (e.g. Calendly / Cal.com / TidyCal) and its data processing.]',
+    h4: '4. Your rights',
+    p4: '[PLACEHOLDER: access, rectification, erasure, restriction, objection, data portability and the right to complain to the supervisory authority.]',
+    note: 'Note: This text is a placeholder and does not replace legal advice. The specific GDPR-compliant privacy policy must be added before publication.',
+  },
+}[lang];
 ---
 
-<BaseLayout
-  title="Datenschutz"
-  description="Datenschutzerklärung von Evoque – Yourself // Coaching & Strategy."
->
+<BaseLayout title={c.metaTitle} description={c.metaDesc}>
   <section class="section">
     <div class="container container--narrow legal">
-      <p class="eyebrow">Rechtliches</p>
-      <h1>Datenschutzerklärung</h1>
+      <p class="eyebrow">{c.eyebrow}</p>
+      <h1>{c.title}</h1>
 
-      <p>
-        [PLATZHALTER: Datenschutzerklärung – Einleitung: verantwortliche Stelle und
-        Grundsätze des Umgangs mit personenbezogenen Daten.]
-      </p>
+      <p>{c.intro}</p>
 
-      <h2>1. Verantwortliche Stelle</h2>
-      <p>[PLATZHALTER: Name, Anschrift und Kontakt der verantwortlichen Stelle.]</p>
+      <h2>{c.h1}</h2>
+      <p>{c.p1}</p>
 
-      <h2>2. Erhebung und Verarbeitung von Daten</h2>
-      <p>
-        [PLATZHALTER: Welche Daten werden bei Kontaktaufnahme und Buchung erhoben und
-        zu welchem Zweck.]
-      </p>
+      <h2>{c.h2}</h2>
+      <p>{c.p2}</p>
 
-      <h2>3. Externes Buchungstool</h2>
-      <p>
-        [PLATZHALTER: Hinweis auf das eingebettete externe Buchungstool (z. B.
-        Calendly / Cal.com / TidyCal) und dessen Datenverarbeitung.]
-      </p>
+      <h2>{c.h3}</h2>
+      <p>{c.p3}</p>
 
-      <h2>4. Ihre Rechte</h2>
-      <p>
-        [PLATZHALTER: Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch,
-        Datenübertragbarkeit und Beschwerderecht bei der Aufsichtsbehörde.]
-      </p>
+      <h2>{c.h4}</h2>
+      <p>{c.p4}</p>
 
-      <p class="legal__note text-muted">
-        Hinweis: Dieser Text ist ein Platzhalter und ersetzt keine Rechtsberatung. Die
-        konkrete, DSGVO-konforme Datenschutzerklärung ist vor Veröffentlichung zu
-        ergänzen.
-      </p>
+      <p class="legal__note text-muted">{c.note}</p>
     </div>
   </section>
 </BaseLayout>

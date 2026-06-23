@@ -7,6 +7,21 @@ import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://evoque-yourself.example',
+  // Zweisprachigkeit: Deutsch unter "/", Englisch unter "/en/...".
+  // fallbackType "rewrite": noch nicht übersetzte /en-Seiten zeigen vorerst
+  // den deutschen Inhalt unter der /en-URL (kein 404), bis eine echte
+  // englische Seite (src/pages/en/...) den Fallback überschreibt.
+  i18n: {
+    locales: ['de', 'en'],
+    defaultLocale: 'de',
+    routing: {
+      prefixDefaultLocale: false,
+      fallbackType: 'rewrite',
+    },
+    fallback: {
+      en: 'de',
+    },
+  },
   // On-Demand-Rendering, damit das Passwort-Gate (Middleware) bei jeder
   // Anfrage greift und geschützte Seiten gar nicht erst ausgeliefert werden.
   output: 'server',

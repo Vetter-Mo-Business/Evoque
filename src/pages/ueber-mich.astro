@@ -5,16 +5,61 @@ import SectionHeading from '../components/SectionHeading.astro';
 import FlowerCorner from '../components/FlowerCorner.astro';
 import portraitImg from '../assets/about/DSC00751.jpg';
 import anchorImg from '../assets/about/DSC00842.jpg';
+import { type Lang } from '../i18n/ui';
+
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+
+const content = {
+  de: {
+    metaTitle: 'Über mich',
+    eyebrow: 'Über mich',
+    title: 'Wer dich begleitet.',
+    lead: '[PLATZHALTER: Bio-Text – persönliche Vorstellung: Wer sie ist, ihr Werdegang, ihre Haltung und warum sie Menschen als Coach begleitet.]',
+    bio: '[PLATZHALTER: Bio-Text – weiterer Absatz: Qualifikation, Erfahrung und was ihr in der Begleitung wichtig ist.]',
+    approachEyebrow: 'Der Ansatz',
+    approachTitle: 'Verstehen, woher es kommt, und verändern, wo du heute stehst.',
+    approachLead: 'Mein Weg führt vom Ursprung des Problems zur Veränderung im Hier und Jetzt.',
+    c1Title: '1 · Problemursprung',
+    c1Text: 'Wir klären, worum es wirklich geht: was, wann, wo, wie lange – und warum.',
+    c2Title: '2 · Vergangenheit verstehen',
+    c2Text: 'Wir schauen auf die Wurzeln des Themas, ohne dort stehen zu bleiben.',
+    c3Title: '3 · Im Hier und Jetzt verändern',
+    c3Text: 'Aus Verstehen wird Handeln – Schritt für Schritt, in deinem Tempo.',
+    anchorTitle: 'Ich bin dein Anker und Begleiterin.',
+    anchorText:
+      'Du gehst den Weg nicht allein. Ich bleibe an deiner Seite, konzentriere mich auf dich und sorge dafür, dass du dranbleibst – bis du dein Ziel erreichst!',
+    portraitAlt: 'Porträt von Malin, Coach bei Evoque',
+    anchorAlt: 'Malin – Porträt im Querformat',
+  },
+  en: {
+    metaTitle: 'About',
+    eyebrow: 'About',
+    title: 'Who guides you.',
+    lead: '[PLACEHOLDER: bio text – personal introduction: who she is, her background, her attitude and why she guides people as a coach.]',
+    bio: '[PLACEHOLDER: bio text – further paragraph: qualification, experience and what matters to her in the guidance.]',
+    approachEyebrow: 'The approach',
+    approachTitle: 'Understand where it comes from, and change where you stand today.',
+    approachLead: 'My path leads from the origin of the problem to change in the here and now.',
+    c1Title: '1 · Origin of the problem',
+    c1Text: 'We clarify what it is really about: what, when, where, how long – and why.',
+    c2Title: '2 · Understand the past',
+    c2Text: 'We look at the roots of the topic without staying there.',
+    c3Title: '3 · Change in the here and now',
+    c3Text: 'Understanding turns into action – step by step, at your own pace.',
+    anchorTitle: 'I am your anchor and guide.',
+    anchorText:
+      'You don’t walk the path alone. I stay by your side, focus on you and make sure you keep going – until you reach your goal!',
+    portraitAlt: 'Portrait of Malin, coach at Evoque',
+    anchorAlt: 'Malin – landscape portrait',
+  },
+}[lang];
 ---
 
-<BaseLayout
-  title="Über mich"
-  description=""
->
+<BaseLayout title={content.metaTitle} description="">
   <!-- Vorstellung -->
   <section class="section">
     <div class="container">
-      <p class="eyebrow">Über mich</p>
+      <p class="eyebrow">{content.eyebrow}</p>
       <div class="intro">
         <div class="intro__media">
           <span class="intro-flower intro-flower--tl" aria-hidden="true">
@@ -22,7 +67,7 @@ import anchorImg from '../assets/about/DSC00842.jpg';
           </span>
           <Image
             src={portraitImg}
-            alt="Porträt von Malin, Coach bei Evoque"
+            alt={content.portraitAlt}
             widths={[640, 960, 1200, 1600]}
             sizes="(min-width: 860px) 40vw, 90vw"
             quality={85}
@@ -34,15 +79,9 @@ import anchorImg from '../assets/about/DSC00842.jpg';
           </span>
         </div>
         <div class="intro__text">
-          <h1>Schön, dass du da bist.</h1>
-          <p class="lead">
-            [PLATZHALTER: Bio-Text – persönliche Vorstellung: Wer sie ist,
-            ihr Werdegang, ihre Haltung und warum sie Menschen als Coach begleitet.]
-          </p>
-          <p class="text-muted">
-            [PLATZHALTER: Bio-Text – weiterer Absatz: Qualifikation, Erfahrung und was
-            ihr in der Begleitung wichtig ist.]
-          </p>
+          <h1>{content.title}</h1>
+          <p class="lead">{content.lead}</p>
+          <p class="text-muted">{content.bio}</p>
         </div>
       </div>
     </div>
@@ -52,32 +91,24 @@ import anchorImg from '../assets/about/DSC00842.jpg';
   <section class="section surface-sand">
     <div class="container">
       <SectionHeading
-        eyebrow="Der Ansatz"
-        title="Verstehen, woher es kommt, und verändern, wo du heute stehst."
+        eyebrow={content.approachEyebrow}
+        title={content.approachTitle}
       >
-        <p>
-          Mein Weg führt vom Ursprung des Problems zur Veränderung im Hier und Jetzt.
-        </p>
+        <p>{content.approachLead}</p>
       </SectionHeading>
 
       <div class="grid grid--3 approach-cards">
         <article class="card">
-          <h3>1 · Problemursprung</h3>
-          <p class="text-muted">
-            Wir klären, worum es wirklich geht: was, wann, wo, wie lange – und warum.
-          </p>
+          <h3>{content.c1Title}</h3>
+          <p class="text-muted">{content.c1Text}</p>
         </article>
         <article class="card">
-          <h3>2 · Vergangenheit verstehen</h3>
-          <p class="text-muted">
-            Wir schauen auf die Wurzeln des Themas, ohne dort stehen zu bleiben.
-          </p>
+          <h3>{content.c2Title}</h3>
+          <p class="text-muted">{content.c2Text}</p>
         </article>
         <article class="card">
-          <h3>3 · Im Hier und Jetzt verändern</h3>
-          <p class="text-muted">
-            Aus Verstehen wird Handeln – Schritt für Schritt, in deinem Tempo.
-          </p>
+          <h3>{content.c3Title}</h3>
+          <p class="text-muted">{content.c3Text}</p>
         </article>
       </div>
 
@@ -85,7 +116,7 @@ import anchorImg from '../assets/about/DSC00842.jpg';
         <div class="anchor__images">
           <Image
             src={anchorImg}
-            alt="Malin – Porträt im Querformat"
+            alt={content.anchorAlt}
             widths={[768, 1200, 1600, 2048]}
             sizes="(min-width: 860px) 50vw, 90vw"
             quality={85}
@@ -93,11 +124,8 @@ import anchorImg from '../assets/about/DSC00842.jpg';
           />
         </div>
         <div class="anchor__text">
-          <h2>Ich bin dein Anker und Begleiterin.</h2>
-          <p>
-            Du gehst den Weg nicht allein. Ich bleibe an deiner Seite, konzentriere mich auf dich und sorge dafür, dass du dranbleibst <br> Bis du dein Ziel
-            erreichst!
-          </p>
+          <h2>{content.anchorTitle}</h2>
+          <p>{content.anchorText}</p>
         </div>
       </div>
     </div>
