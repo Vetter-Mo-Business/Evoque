@@ -1,12 +1,14 @@
 ---
 interface Props {
   quote: string;
-  /** Anonymisierter Autor, z. B. "Sarah M." oder "Kundin, 34". */
+  /** Anonymisierter Autor ohne Namen, z. B. "Kundin, 34". */
   author: string;
-  /** Optionaler Kontext, z. B. "Thema Abnehmen" oder "Begleitung 2025". */
-  context?: string;
+  /** Optionale Themenzeile, z. B. "Thema: Abnehmen". */
+  topic?: string;
+  /** Optionaler Begleitungszeitraum, z. B. "Begleitung: 2026". */
+  period?: string;
 }
-const { quote, author, context } = Astro.props;
+const { quote, author, topic, period } = Astro.props;
 ---
 
 <figure class="testimonial">
@@ -15,7 +17,8 @@ const { quote, author, context } = Astro.props;
   </blockquote>
   <figcaption class="testimonial__author">
     <span class="testimonial__author-name">{author}</span>
-    {context && <span class="testimonial__author-context">{context}</span>}
+    {topic && <span class="testimonial__author-context">{topic}</span>}
+    {period && <span class="testimonial__author-context">{period}</span>}
   </figcaption>
 </figure>
 

@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import TopicCard from '../components/TopicCard.astro';
 import ProcessJourney from '../components/ProcessJourney.astro';
-import DisclaimerBanner from '../components/DisclaimerBanner.astro';
 import { localizePath, type Lang } from '../i18n/ui';
 
 const lang = (Astro.currentLocale ?? 'de') as Lang;
@@ -13,79 +12,172 @@ const content = {
   de: {
     metaTitle: 'Coaching',
     metaDesc:
-      'Themen, Ablauf und Paketoptionen des Evoque-Coachings: von Prüfungsangst über Prokrastination bis zu langjährigen Themen.',
+      'Themen, Ablauf und Paketoptionen des EVOQUE-Coachings: von Prüfungsangst über Prokrastination bis zu langjährigen Themen.',
     introEyebrow: 'Coaching',
-    introTitle: 'Eine Begleitung, die zu deinem Thema passt.',
+    introTitle: 'Eine individuelle Begleitung für Dich zugeschnitten.',
     introLead:
-      'Kein Verkauf einzelner Sitzungen, sondern eine echte Begleitung – so lange, wie dein Thema es braucht.',
+      'Ich nehme mir Zeit, mich individuell auf Dich und Deine Herausforderungen einzustellen und mein Coaching Dir anzupassen.',
+    basicsEyebrow: 'Zum Einstieg',
+    basicsTitle: 'Coaching verstehen',
+    whatEyebrow: 'Kurz erklärt',
+    whatTitle: 'Was ist Coaching?',
+    whatText:
+      'Seriöses psychologisches Coaching richtet sich ausschließlich an gesunde Personen, um sie bei privaten oder beruflichen Herausforderungen zu begleiten. Innerhalb des Coachingsprozesses werden problematische Verhaltensweisen systematisch bearbeitet, die den Coachee stören und auf dem Weg zu dessen Zielen oder im Alltag einschränken. Im Coaching bei EVOQUE schauen wir uns gemeinsam die Wurzel des Problems an und erzeugen eine nachhaltige gesunde Verhaltensänderung mithilfe psychologisch fundierter und wissenschaftlicher Methoden.',
     topicsEyebrow: 'Themen & Anliegen',
     topicsTitle: 'Womit Menschen zu mir kommen',
-    topicsLead: 'Häufige Anliegen – und Raum für dein persönliches Thema.',
+    topicsLead: 'Häufige Anliegen – und Raum für Dein persönliches Thema.',
     carouselLabel: 'Themen, mit denen Menschen kommen',
     prev: 'Vorheriges Thema',
     next: 'Nächstes Thema',
     topics: [
-      { title: 'Selbstorganisation', items: ['Prokrastination', 'Multitasking', 'Aufschieben', 'Zeitdruck'] },
-      { title: 'Stress & innere Ruhe', items: ['Prüfungsangst', 'Anspannung', 'Überforderung', 'Innere Unruhe'] },
-      { title: 'Selbstwert & Vertrauen', items: ['Selbstzweifel', 'Unsicherheit', 'Innerer Kritiker'] },
-      { title: 'Klarheit & Entscheidungen', items: ['Orientierung', 'Entscheidungen treffen', 'Eigener Weg'] },
-      { title: 'Langjährige Themen', items: ['Abnehmen', 'Gewohnheiten', 'Wiederkehrende Muster'] },
+      {
+        title: 'Konzentrationsschwierigkeiten',
+        items: [
+          { term: 'Prokrastination', desc: 'Wieder ins Handeln kommen, statt Aufgaben immer weiter aufzuschieben.' },
+          { term: 'Fokus', desc: 'Die Aufmerksamkeit bündeln und länger konzentriert bei einer Sache bleiben.' },
+          { term: 'Ablenkungen', desc: 'Störquellen erkennen und dir bewusst konzentrierte Phasen schaffen.' },
+          { term: 'Multitasking', desc: 'Fokus auf eine Sache statt Verzetteln, konzentriert und effektiv arbeiten.' },
+        ],
+      },
+      {
+        title: 'Gewichtsunsicherheiten',
+        items: [
+          { term: 'Abnahme', desc: 'Die Ursachen hinter dem Essverhalten verstehen und nachhaltig abnehmen.' },
+          { term: 'Zunahme', desc: 'Auf gesunde Weise an Gewicht zulegen und ein gutes Körpergefühl entwickeln.' },
+          { term: 'Ernährung', desc: 'Ein entspanntes, bewusstes Verhältnis zum Essen entwickeln.' },
+        ],
+      },
+      {
+        title: 'Ängste',
+        items: [
+          { term: 'Prüfungsangst', desc: 'Wieder ruhig und fokussiert in Prüfungssituationen gehen.' },
+          { term: 'Vor Gruppen sprechen', desc: 'Vor großen Gruppen sprechen oder präsentieren, sicherer auftreten und die Anspannung lösen.' },
+          { term: 'Unsicherheiten', desc: 'Mehr Vertrauen in dich und dein Auftreten gewinnen.' },
+          { term: 'Selbstwert', desc: 'Den eigenen Wert erkennen und stabiler in dir selbst stehen.' },
+        ],
+      },
+      {
+        title: 'Beziehungen',
+        items: [
+          { term: 'Kommunikation', desc: 'Klarer und wertschätzender kommunizieren und dich verstanden fühlen.' },
+          { term: 'Familie', desc: 'Familiäre Muster verstehen und Beziehungen entlasten.' },
+          { term: 'Freundschaft', desc: 'Freundschaften bewusster und tragfähiger gestalten.' },
+          { term: 'Partnerschaften', desc: 'Die Partnerschaft bewusster und erfüllender gestalten.' },
+          { term: 'Konflikte & Dynamiken', desc: 'Komplexe, wiederkehrende Beziehungsmuster erkennen und Konflikte klärend lösen.' },
+        ],
+      },
+      {
+        title: 'Entscheidungen',
+        items: [
+          { term: 'Hilflosigkeit', desc: 'Aus dem Gefühl der Ausweglosigkeit wieder in die Handlungsfähigkeit kommen.' },
+          { term: 'Fehlende Klarheit', desc: 'Herausfinden, was du wirklich willst, und Klarheit gewinnen.' },
+          { term: 'Keine Ziele', desc: 'Eigene Ziele finden und einen Weg dorthin festlegen.' },
+        ],
+      },
+      {
+        title: 'Stress',
+        items: [
+          { term: 'Zeitmanagement', desc: 'Prioritäten setzen und den Tag ruhiger und strukturierter gestalten.' },
+          { term: 'Innere Unruhe', desc: 'Den ständigen inneren Antrieb beruhigen und Gelassenheit finden.' },
+          { term: 'Schlafstörungen', desc: 'Zur Ruhe kommen und wieder erholsamer schlafen.' },
+          { term: 'Keine Zeit zu haben', desc: 'Dem Gefühl der ständigen Zeitknappheit begegnen und wieder durchatmen.' },
+        ],
+      },
+      {
+        title: 'Beruflich',
+        items: [
+          { term: 'Leistungsdruck', desc: 'Mit hohen Erwartungen gelassener umgehen und den Druck senken.' },
+          { term: 'Zeitdruck', desc: 'Aufgaben und Termine ruhiger und strukturierter bewältigen.' },
+          { term: 'Burn-Out-Prävention', desc: 'Frühzeitig gegensteuern und deine Belastungsgrenzen schützen. Nur unterstützend geeignet, ersetzt keine ärztliche oder therapeutische Behandlung.' },
+        ],
+      },
+      {
+        title: 'Weitere Anliegen',
+        items: [
+          { term: 'Selbstdisziplin', desc: 'Dranbleiben und Vorhaben konsequent umsetzen.' },
+          { term: 'Antriebslosigkeit', desc: 'Neue Motivation finden und wieder ins Tun kommen.' },
+          { term: 'Chronisches Zuspätkommen', desc: 'Zeitstress und ständiges Zuspätkommen verstehen und verlässlicher werden.' },
+          'u. v. m.',
+        ],
+      },
     ],
     placeholderTitle: 'Dein Thema',
-    placeholderItems: ['[Oberthema ergänzen]', '[Unterthema]', '[Unterthema]'],
+    placeholderText:
+      'So individuell wie Menschen sind, so verschieden sind ihre Anliegen. Findest du dein Thema hier nicht, melde dich gerne und wir schauen gemeinsam nach deinem Weg zum Ziel.',
+    disclaimerText:
+      'Das Coaching stellt kein Training, keine Therapie und keine Heilbehandlung dar. Das Coaching ist daher nicht für klinisch relevante Themen geeignet. Auch stellt das Coaching keine reine Wissensvermittlung dar, Psychoedukation wird gezielt und praxisnah eingesetzt. Das Coaching dient primär der Zielerreichung und nachhaltigen Verhaltensänderung mithilfe psychologisch fundierter Methoden.',
     uspEyebrow: 'Der Unterschied',
-    uspTitle: 'Warum echte Begleitung mehr bewirkt',
+    uspTitle: 'Warum fundierte Methoden mehr bewirken',
     uspLead:
-      'Ob Gruppe oder lose Einzelsitzungen anderswo – vieles bleibt an der Oberfläche. Ich begleite dich psychologisch fundiert so lange, bis dein Ziel wirklich erreicht ist.',
+      'Ob Gruppensituationen oder unstrukturierte Einzelsitzungen – vieles bleibt oft oberflächlich. Ich begleite Dich psychologisch und wissenschaftlich fundiert, sodass Du Dein Ziel wirklich nachhaltig erreichst.',
     groupTag: 'Gruppen-Coaching',
     groupTitle: 'Tipps in der Gruppe',
     groupText:
-      'Schnelle Tipps in einer überfüllten Gruppendynamik. Danach stehst du wieder allein mit deinem Thema da – Oberfläche statt Ursache.',
+      'Schnelle Tipps in einer überfüllten Konstellation. Danach bist Du mit deinem Thema wieder auf Dich allein gestellt.',
     groupCons: [
       'Persönliche Probleme in offener Runde',
-      'Schnelle Tipps statt echter Ursachenarbeit',
+      'Dein Thema bekommt nicht den Raum, den es braucht',
       'Kaum individueller Bezug',
-      'Nach der Sitzung auf dich allein gestellt',
+      'Vergleich mit anderen kann Dich zusätzlich belasten',
+      'Nach der Sitzung auf Dich allein gestellt',
     ],
-    evoqueTag: 'Coaching bei Evoque',
+    evoqueTag: 'Coaching bei EVOQUE',
     evoqueTitle: 'Begleitung mit Fundament',
     evoqueText:
-      'Eine echte Begleitung, ganz auf dich zugeschnitten – psychologisch fundiert, weil ich es studiert habe. Ich bleibe an deiner Seite, bis du dein Ziel erreicht hast. An der Wurzel, nicht an der Oberfläche.',
+      'Echte Begleitung, ganzheitlich auf Dich zugeschnitten. Psychologisch fundiert, wissenschaftliche Methoden. Ich bleibe an Deiner Seite, bis Du Dein Ziel erreicht hast.',
     evoquePros: [
-      'Psychologisch fundiert – studierter Hintergrund',
-      'Durchgehende Begleitung bis zum Ziel',
-      'An der Ursache arbeiten – nachhaltig',
-      'Dein verlässlicher Anker auf dem ganzen Weg',
+      'Psychologisch fundierte und wissenschaftlich anerkannte Methoden',
+      'Durchgehende Begleitung bis an dein Ziel',
+      'Ursachenforschung und Problem an der Wurzel behandeln',
+      'Dein Thema erhält die Zeit und den Raum, den es verdient',
+      'Individuell auf dich abgestimmt durch Vor- und Nachbereitung',
     ],
-    soloTag: 'Persönliches Coaching',
+    evoqueHighlightLabel: 'Regelmäßige Supervision',
+    evoqueHighlightText:
+      'Um die Qualität des Coachings zu gewährleisten.',
+    soloTag: 'Gewöhnliches 1:1 Coaching',
     soloTitle: 'Einzelne Sitzungen',
     soloText:
-      'Persönlicher als die Gruppe – aber oft lose Einzelsitzungen ohne roten Faden und ohne fundierten Hintergrund. Das alte Thema kehrt zurück.',
+      'Lose Einzelsitzungen ohne Struktur, ohne roten Faden, ohne fundierten Hintergrund. Das Thema kehrt häufig schnell wieder zurück.',
     soloCons: [
-      'Einzelne Sitzungen statt durchgehender Begleitung',
-      'Selten psychologisch fundiert',
-      'Kein verlässlicher Anker danach',
-      'Das Thema kommt mit der Zeit zurück',
+      'Schnelle, oberflächliche Tipps statt echter Ursachenarbeit',
+      'Einzelsitzungen statt tiefgehender Begleitung',
+      'Selten psychologisch und wissenschaftlich fundiert',
+      'Kein verlässlicher Anker nach Abschluss des Coachings',
+      'Themen kommen häufig mit der Zeit zurück',
     ],
-    expA: 'Was auf dich zukommt',
-    expAText:
-      'Ich bringe die Begleitung mit: einen klaren, fundierten Weg – und ich bleibe an deiner Seite, bis dein Ziel erreicht ist. Ich höre zu, frage nach, gebe Struktur und sorge dafür, dass du dranbleibst.',
-    expB: 'Was du mitbringst',
-    expBText:
-      'Was ich dir nicht abnehmen kann, ist die Motivation, dein Ziel wirklich zu erreichen. Sie entsteht in dir und lässt sich nicht von außen geben. Veränderung gelingt, wenn beides zusammenkommt: meine Begleitung und dein eigener Wille.',
+    importantTitle: 'Was mir wichtig ist',
+    importantText:
+      'Im Coaching bin ich deine Begleitung auf deinem Weg zum Ziel. Wir gestalten zusammen einen Zielplan, der für dich realistisch und erreichbar ist. Für eine erfolgreiche Zusammenarbeit ist mein Wunsch an dich, dass du den klaren Willen mitbringst, etwas an deiner bisherigen Situation zu verändern.',
     therapyEyebrow: 'Wichtig zu wissen',
-    therapyTitle: 'Coaching – keine Therapie.',
-    therapyText:
-      'Ich begleite dich bei Problemen und Sorgen rund um deine Persönlichkeitsentwicklung. Geht es um therapeutische Anliegen, ist eine Psychotherapie oder Heilbehandlung der richtige Weg – das ersetzt mein Coaching ausdrücklich nicht.',
+    therapyTitle: 'Coaching gleicht keiner Therapie.',
+    therapyQuestion: 'Wie grenzt sich Coaching von Psychotherapie ab?',
+    therapyAnswer:
+      'Coaching ist ausdrücklich nicht zur Behandlung oder Heilung von psychotherapeutischen Erkrankungen geeignet. Coaching ergründet nicht in einer psychotherapeutischen Tiefe die Vergangenheit eines Problemverhaltens. Im Coaching geht es darum, die Verhaltenskonsequenzen im Hier & Jetzt zu verändern und in positive, dem Coachee nützliche Verhaltensmuster zu verändern. Ein Coaching kann parallel zu einer Psychotherapie unterstützend eingesetzt werden, dies wird individuell nach Situation abgeklärt. Falls Du vor Beginn oder während des Coachingsprozesses eine relevante psychotherapeutische Erkrankung diagnostiziert bekommen solltest, bitte ich dich, dies mir unverzüglich mitzuteilen. Falls sich im Verlaufe des Coachings solche Tendenzen zeigen sollten, wirst Du entsprechend darauf hingewiesen.',
+    therapyNoteLabel: 'Wichtiger Hinweis',
+    therapyNote:
+      'EVOQUE stellt keine Therapie oder Heilbehandlung bei therapeutischen Anliegen dar.',
+    faqPrompt: 'Noch Fragen offen?',
+    faqCta: 'Häufige Fragen ansehen',
+    approachEyebrow: 'Der Ansatz',
+    approachTitle: 'Mehr über den Ansatz',
+    approachText:
+      'Gerade bei langjährigen Themen haben sich oft Muster und störende Verhaltensweisen über Jahre festgesetzt. Daher ist wichtig, sich der Ursache einer Thematik zu widmen, bevor es an die Lösung des Problems geht. Daher ist es zentral, sich ausreichend Zeit für einen Coachingprozess zu nehmen, um Themen in der Tiefe zu behandeln und somit eine nachhaltige Verhaltensänderung zu erzeugen. Bei EVOQUE wird Wert darauf gelegt, Problematiken systematisch anzugehen. Klienten sollen ihr eigenes Verhalten zunächst verstehen und reflektieren. Diese Methode erfordert Zeit und Übung, wirkt jedoch deutlich effektiver als simple Tipps.',
   },
   en: {
     metaTitle: 'Coaching',
     metaDesc:
-      'Topics, process and package options of Evoque coaching: from exam anxiety and procrastination to long-standing issues.',
+      'Topics, process and package options of EVOQUE coaching: from exam anxiety and procrastination to long-standing issues.',
     introEyebrow: 'Coaching',
     introTitle: 'Guidance that fits your topic.',
     introLead:
       'Not single sessions for sale, but real guidance – for as long as your topic needs.',
+    basicsEyebrow: 'Getting started',
+    basicsTitle: 'Understanding coaching',
+    whatEyebrow: 'In brief',
+    whatTitle: 'What is coaching?',
+    whatText:
+      'Serious psychological coaching is aimed exclusively at healthy people, to support them with private or professional challenges. Within the coaching process, problematic behaviours that trouble the coachee and limit them on the way to their goals or in everyday life are worked through systematically. In coaching at EVOQUE, we look together at the root of the problem and create a lasting, healthy change in behaviour with the help of psychologically grounded and scientific methods.',
     topicsEyebrow: 'Topics & concerns',
     topicsTitle: 'What people come to me with',
     topicsLead: 'Common concerns – and room for your personal topic.',
@@ -93,58 +185,139 @@ const content = {
     prev: 'Previous topic',
     next: 'Next topic',
     topics: [
-      { title: 'Self-organisation', items: ['Procrastination', 'Multitasking', 'Putting things off', 'Time pressure'] },
-      { title: 'Stress & inner calm', items: ['Exam anxiety', 'Tension', 'Overwhelm', 'Inner restlessness'] },
-      { title: 'Self-worth & confidence', items: ['Self-doubt', 'Insecurity', 'Inner critic'] },
-      { title: 'Clarity & decisions', items: ['Orientation', 'Making decisions', 'Your own path'] },
-      { title: 'Long-standing issues', items: ['Weight loss', 'Habits', 'Recurring patterns'] },
+      {
+        title: 'Concentration difficulties',
+        items: [
+          { term: 'Procrastination', desc: 'Get into action instead of putting tasks off again and again.' },
+          { term: 'Focus', desc: 'Bundle your attention and stay concentrated on one thing for longer.' },
+          { term: 'Distractions', desc: 'Recognise sources of distraction and create focused phases on purpose.' },
+          { term: 'Multitasking', desc: 'Focus on one thing at a time, working with clarity and effect.' },
+        ],
+      },
+      {
+        title: 'Weight concerns',
+        items: [
+          { term: 'Losing weight', desc: 'Understand the causes behind eating habits and lose weight sustainably.' },
+          { term: 'Gaining weight', desc: 'Put on weight in a healthy way and develop a good sense of your body.' },
+          { term: 'Nutrition', desc: 'Develop a relaxed, conscious relationship with food.' },
+        ],
+      },
+      {
+        title: 'Fears & anxiety',
+        items: [
+          { term: 'Exam anxiety', desc: 'Stay calm and focused in exam situations again.' },
+          { term: 'Speaking in front of groups', desc: 'Speaking or presenting in front of large groups, appearing more confident and releasing the tension.' },
+          { term: 'Insecurities', desc: 'Gain more trust in yourself and how you come across.' },
+          { term: 'Self-worth', desc: 'Recognise your own worth and stand more firmly in yourself.' },
+        ],
+      },
+      {
+        title: 'Relationships',
+        items: [
+          { term: 'Communication', desc: 'Communicate more clearly and appreciatively and feel understood.' },
+          { term: 'Family', desc: 'Understand family patterns and ease your relationships.' },
+          { term: 'Friendship', desc: 'Shape friendships more consciously and resiliently.' },
+          { term: 'Partnerships', desc: 'Shape your partnership more consciously and fulfillingly.' },
+          { term: 'Conflicts & dynamics', desc: 'Recognise complex, recurring relationship patterns and resolve conflicts constructively.' },
+        ],
+      },
+      {
+        title: 'Decisions',
+        items: [
+          { term: 'Helplessness', desc: 'Move from a sense of being stuck back into taking action.' },
+          { term: 'Lack of clarity', desc: 'Find out what you really want and gain clarity.' },
+          { term: 'No goals', desc: 'Find your own goals and set a path towards them.' },
+        ],
+      },
+      {
+        title: 'Stress',
+        items: [
+          { term: 'Time management', desc: 'Set priorities and shape your day more calmly and clearly.' },
+          { term: 'Inner restlessness', desc: 'Calm the constant inner drive and find composure.' },
+          { term: 'Sleep problems', desc: 'Come to rest and sleep more restfully again.' },
+          { term: 'Having no time', desc: 'Meet the feeling of constant time pressure and breathe again.' },
+        ],
+      },
+      {
+        title: 'Work & career',
+        items: [
+          { term: 'Performance pressure', desc: 'Deal more calmly with high expectations and lower the pressure.' },
+          { term: 'Time pressure', desc: 'Handle tasks and deadlines more calmly and in a structured way.' },
+          { term: 'Burn-out prevention', desc: 'Counteract early and protect your limits. Only suitable as supportive guidance, it does not replace medical or therapeutic treatment.' },
+        ],
+      },
+      {
+        title: 'Other concerns',
+        items: [
+          { term: 'Self-discipline', desc: 'Stay on track and follow through on your plans consistently.' },
+          { term: 'Lack of drive', desc: 'Find new motivation and get back into action.' },
+          { term: 'Chronic lateness', desc: 'Understand time stress and constant lateness and become more reliable.' },
+          'and more',
+        ],
+      },
     ],
     placeholderTitle: 'Your topic',
-    placeholderItems: ['[Add main topic]', '[Sub-topic]', '[Sub-topic]'],
+    placeholderText:
+      'As individual as people are, so different are their concerns. If your topic is not here, just reach out and we will look at your path together.',
+    disclaimerText:
+      'Coaching is not training, therapy or medical treatment. It is therefore not suitable for clinically relevant topics. Coaching is also not purely the transfer of knowledge. Psychoeducation is used in a targeted and practical way. Coaching primarily serves goal achievement and lasting behaviour change with the help of psychologically grounded methods.',
     uspEyebrow: 'The difference',
-    uspTitle: 'Why real guidance achieves more',
+    uspTitle: 'Why grounded methods achieve more',
     uspLead:
-      'Whether a group or loose individual sessions elsewhere – much stays on the surface. I support you on a psychologically grounded basis, until your goal is truly reached.',
+      'Whether group settings or unstructured individual sessions – much often stays on the surface. I support you on a psychologically and scientifically grounded basis, so that you truly reach your goal for good.',
     groupTag: 'Group coaching',
     groupTitle: 'Tips in a group',
     groupText:
-      'Quick tips in a crowded group dynamic. Afterwards you are left alone with your topic again – surface instead of cause.',
+      'Quick tips in a crowded setting. Afterwards you are left alone with your topic again.',
     groupCons: [
       'Personal issues in an open round',
-      'Quick tips instead of real root-cause work',
+      'Your topic does not get the space it needs',
       'Hardly any individual focus',
+      'Comparison with others can add to your burden',
       'Left on your own after the session',
     ],
-    evoqueTag: 'Coaching at Evoque',
+    evoqueTag: 'Coaching at EVOQUE',
     evoqueTitle: 'Guidance with a foundation',
     evoqueText:
-      'Real guidance, tailored entirely to you – psychologically grounded, because I studied it. I stay by your side until you have reached your goal. At the root, not on the surface.',
+      'Real guidance, tailored holistically to you. Psychologically grounded, scientific methods. I stay by your side until you have reached your goal.',
     evoquePros: [
-      'Psychologically grounded – studied background',
-      'Continuous guidance until the goal',
-      'Working at the cause – sustainably',
-      'Your reliable anchor all the way',
+      'Psychologically grounded and scientifically recognised methods',
+      'Continuous guidance all the way to your goal',
+      'Root-cause work – treating the problem at its source',
+      'Your topic gets the time and space it deserves',
+      'Individually tailored to you through preparation and follow-up',
     ],
-    soloTag: 'Individual coaching',
+    evoqueHighlightLabel: 'Regular supervision',
+    evoqueHighlightText:
+      'To ensure the quality of the coaching.',
+    soloTag: 'Ordinary 1:1 coaching',
     soloTitle: 'Single sessions',
     soloText:
-      'More personal than the group – but often loose single sessions without a common thread or grounded background. The old topic returns.',
+      'Loose single sessions without structure, without a common thread, without a grounded background. The topic often returns quickly.',
     soloCons: [
-      'Single sessions instead of continuous guidance',
-      'Rarely psychologically grounded',
-      'No reliable anchor afterwards',
-      'The topic comes back over time',
+      'Quick, superficial tips instead of real root-cause work',
+      'Single sessions instead of in-depth guidance',
+      'Rarely psychologically and scientifically grounded',
+      'No reliable anchor after the coaching ends',
+      'Topics often come back over time',
     ],
-    expA: 'What to expect',
-    expAText:
-      'I bring the guidance: a clear, grounded path – and I stay by your side until your goal is reached. I listen, ask, give structure and make sure you stay on track.',
-    expB: 'What you bring',
-    expBText:
-      'What I cannot take off your shoulders is the motivation to truly reach your goal. It arises within you and cannot be given from outside. Change succeeds when both come together: my guidance and your own will.',
+    importantTitle: 'What matters to me',
+    importantText:
+      'In coaching I am your companion on your way to your goal. Together we create a goal plan that is realistic and achievable for you. For our work to succeed, my wish is that you bring a clear will to change something about your current situation.',
     therapyEyebrow: 'Good to know',
     therapyTitle: 'Coaching – not therapy.',
-    therapyText:
-      'I support you with problems and worries around your personal development. For therapeutic concerns, psychotherapy or medical treatment is the right path – my coaching explicitly does not replace it.',
+    therapyQuestion: 'How does coaching differ from psychotherapy?',
+    therapyAnswer:
+      'Coaching is explicitly not suitable for the treatment or cure of psychotherapeutic conditions. Coaching does not explore the past of a problematic behaviour to a psychotherapeutic depth. Coaching is about changing the behavioural consequences in the here and now and shaping them into positive behavioural patterns that are useful to the coachee. Coaching can be used as a supportive measure alongside psychotherapy; this is clarified individually according to the situation. Should you be diagnosed with a relevant psychotherapeutic condition before or during the coaching process, I ask you to inform me without delay. Should such tendencies emerge over the course of the coaching, you will be advised accordingly.',
+    therapyNoteLabel: 'Important note',
+    therapyNote:
+      'EVOQUE does not constitute therapy or medical treatment for therapeutic concerns.',
+    faqPrompt: 'Still have questions?',
+    faqCta: 'View the FAQ',
+    approachEyebrow: 'The approach',
+    approachTitle: 'More about the approach',
+    approachText:
+      'Especially with long-standing issues, patterns and disruptive behaviours have often become entrenched over years. That is why it is important to address the cause of a topic before moving on to solving the problem. It is therefore central to allow enough time for a coaching process, in order to work through topics in depth and thus create a lasting change in behaviour. At EVOQUE, great importance is placed on tackling issues systematically. Clients should first understand and reflect on their own behaviour. This method takes time and practice, yet it is considerably more effective than simple tips.',
   },
 }[lang];
 ---
@@ -159,8 +332,33 @@ const content = {
     </div>
   </section>
 
+  <!-- Grundlagen: "Was ist Coaching?" & "Mehr über den Ansatz" nebeneinander -->
+  <section class="section section--tight" id="ansatz">
+    <div class="container container--narrow">
+      <SectionHeading
+        eyebrow={content.basicsEyebrow}
+        title={content.basicsTitle}
+        align="center"
+      />
+      <div class="expectations basics-details">
+        <details class="expectation">
+          <summary class="expectation__summary">{content.whatTitle}</summary>
+          <div class="expectation__body">
+            <p>{content.whatText}</p>
+          </div>
+        </details>
+        <details class="expectation" id="ansatz-details">
+          <summary class="expectation__summary">{content.approachTitle}</summary>
+          <div class="expectation__body">
+            <p>{content.approachText}</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
   <!-- Themen / Anliegen -->
-  <section class="section surface-sand">
+  <section class="section surface-sand" id="themen">
     <div class="container">
       <SectionHeading
         eyebrow={content.topicsEyebrow}
@@ -186,11 +384,9 @@ const content = {
               ))
             }
             <div class="topic-slider__slide">
-              <TopicCard
-                title={content.placeholderTitle}
-                placeholder
-                items={content.placeholderItems}
-              />
+              <TopicCard title={content.placeholderTitle} placeholder>
+                {content.placeholderText}
+              </TopicCard>
             </div>
           </div>
         </div>
@@ -215,11 +411,28 @@ const content = {
           </button>
         </div>
       </div>
+
+      <p class="topics-disclaimer">
+        <span class="topics-disclaimer__label">Disclaimer</span>
+        {content.disclaimerText}
+      </p>
     </div>
   </section>
 
   <!-- Ablauf-Prozess: gepinnte Scroll-Animation -->
   <ProcessJourney />
+
+  <!-- Persönliche Note: "Was mir wichtig ist" – direkt unter dem Ablauf -->
+  <section class="section important-section">
+    <div class="container">
+      <div class="important">
+        <div class="important__note">
+          <h3 class="important__title">{content.importantTitle}</h3>
+          <p>{content.importantText}</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- USP: Der Unterschied zur üblichen Herangehensweise -->
   <section class="section surface-sand">
@@ -247,6 +460,10 @@ const content = {
           <ul class="offer-list">
             {content.evoquePros.map((item) => <li>{item}</li>)}
           </ul>
+          <div class="offer-highlight">
+            <span class="offer-highlight__label">{content.evoqueHighlightLabel}</span>
+            <p>{content.evoqueHighlightText}</p>
+          </div>
         </article>
         <article class="card offer-card offer-card--others">
           <span class="offer-card__tag offer-card__tag--muted">{content.soloTag}</span>
@@ -257,36 +474,33 @@ const content = {
           </ul>
         </article>
       </div>
-
-      <!-- Begleitung vs. Eigenverantwortung: zwei aufklappbare Boxen nebeneinander -->
-      <div class="expectations">
-        <details class="expectation">
-          <summary class="expectation__summary">{content.expA}</summary>
-          <div class="expectation__body">
-            <p>{content.expAText}</p>
-          </div>
-        </details>
-        <details class="expectation">
-          <summary class="expectation__summary">{content.expB}</summary>
-          <div class="expectation__body">
-            <p>{content.expBText}</p>
-          </div>
-        </details>
-      </div>
     </div>
   </section>
 
-  <!-- Abgrenzung Coaching vs. Therapie -->
-  <section class="section">
-    <div class="container container--narrow">
+  <!-- Abgrenzung zur Psychotherapie: Dropdown-Frage + Hinweis -->
+  <section class="section" id="psychotherapie">
+    <div class="container">
       <SectionHeading
         eyebrow={content.therapyEyebrow}
         title={content.therapyTitle}
         align="center"
-      >
-        <p>{content.therapyText}</p>
-      </SectionHeading>
-      <DisclaimerBanner variant="strong" />
+      />
+      <div class="therapy">
+        <details class="expectation therapy__details" id="psychotherapie-details">
+          <summary class="expectation__summary">{content.therapyQuestion}</summary>
+          <div class="expectation__body">
+            <p>{content.therapyAnswer}</p>
+          </div>
+        </details>
+        <p class="therapy-note">
+          <span class="therapy-note__label">{content.therapyNoteLabel}</span>
+          {content.therapyNote}
+        </p>
+        <p class="faq-cta">
+          <span class="faq-cta__prompt">{content.faqPrompt}</span>
+          <a href={`${l('/preise')}#faq`} class="btn btn--primary">{content.faqCta}</a>
+        </p>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -294,6 +508,15 @@ const content = {
 <style>
   .offer-grid {
     margin-top: calc(var(--space-md) + 50px);
+    /* Karten auf ihre eigene Inhaltshöhe statt auf gemeinsame Maximalhöhe,
+       damit unter den kürzeren Außenkarten kein leerer Raum entsteht. */
+    align-items: start;
+  }
+
+  /* Grundlagen-Boxen ("Was ist Coaching?" & "Mehr über den Ansatz"):
+     etwas Abstand zur Überschrift darüber */
+  .basics-details {
+    margin-top: var(--space-lg);
   }
 
   /* Zwei aufklappbare Boxen nebeneinander: Begleitung vs. Eigenverantwortung */
@@ -307,6 +530,98 @@ const content = {
       grid-template-columns: 1fr 1fr;
       align-items: start;
     }
+  }
+
+  /* "Was mir wichtig ist": persönlicher Abschluss des USP-Bereichs.
+     Verschobener Ablauf-Untertitel als Lead + hervorgehobene Notiz. */
+  /* Dezenter Coaching-Disclaimer am Seitenende: bewusst zurückhaltend
+     (kleine, gedämpfte Schrift, feine Trennlinie). */
+  .topics-disclaimer {
+    max-width: 760px;
+    margin: var(--space-xl) auto 0;
+    padding-top: var(--space-lg);
+    border-top: var(--border-soft);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--calm-earth);
+    text-align: center;
+  }
+  .topics-disclaimer__label {
+    display: block;
+    margin-bottom: var(--space-2xs, 0.25rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--forest-deep);
+    opacity: 0.75;
+  }
+
+  .important {
+    max-width: 720px;
+    margin-inline: auto;
+    text-align: center;
+  }
+  /* "Was mir wichtig ist": wie der Disclaimer gehalten, nur etwas prominenter
+     – mit Trennstrich zwischen Überschrift und Text. */
+  .important__note {
+    text-align: center;
+  }
+  .important__title {
+    margin: 0 0 var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: var(--border-soft);
+    color: var(--forest-deep);
+    font-size: 1.3rem;
+  }
+  .important__note p {
+    margin: 0;
+    color: var(--forest-deep);
+    line-height: 1.65;
+    font-size: 1rem;
+  }
+
+  /* Abgrenzung zur Psychotherapie: Dropdown-Frage + Hinweis darunter */
+  .therapy {
+    max-width: 760px;
+    margin-inline: auto;
+  }
+  .therapy__details {
+    margin-top: var(--space-lg);
+  }
+  /* Dezenter FAQ-Verweis unter dem Psychotherapie-Hinweis */
+  .faq-cta {
+    margin-top: var(--space-xl);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+  .faq-cta__prompt {
+    color: var(--calm-earth);
+    font-size: 0.95rem;
+  }
+  /* Hinweis unter dem Dropdown – gehalten wie der Disclaimer/Note am Seitenende */
+  .therapy-note {
+    max-width: 720px;
+    margin: var(--space-lg) auto 0;
+    padding-top: var(--space-lg);
+    border-top: var(--border-soft);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--forest-deep);
+    text-align: center;
+  }
+  .therapy-note__label {
+    display: block;
+    margin-bottom: var(--space-2xs, 0.25rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--forest-deep);
+    opacity: 0.75;
   }
 
   /* Aufklapp-Box (auch für FAQ genutzt) */
@@ -459,7 +774,7 @@ const content = {
   }
 
   .offer-card {
-    height: 100%;
+    height: auto;
   }
   .offer-card h3 {
     margin-bottom: var(--space-sm);
@@ -538,6 +853,36 @@ const content = {
   .offer-list--cons li::before {
     content: '✕';
     color: var(--calm-earth);
+  }
+
+  /* Supervision: besonders hervorgehobener Qualitäts-Hinweis in der EVOQUE-Karte.
+     Aufbau wie "Was mir wichtig ist": Titel oben, Trennstrich, Satz darunter. */
+  .offer-highlight {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    background: #fff;
+    border: 1px solid rgba(21, 44, 26, 0.25);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+  }
+  .offer-highlight__label {
+    display: block;
+    margin: 0 0 var(--space-sm);
+    padding-bottom: var(--space-sm);
+    border-bottom: var(--border-soft);
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--forest-deep);
+  }
+  .offer-highlight p {
+    margin: 0;
+    color: var(--forest-deep);
+    line-height: 1.6;
+    font-size: 0.95rem;
   }
 
 </style>
@@ -686,4 +1031,22 @@ const content = {
     goTo(0);
     play();
   }
+
+  // Von anderen Seiten verlinkte Dropdowns per Hash öffnen und hinscrollen
+  const hashTargets: Record<string, { details: string; scroll: string }> = {
+    '#ansatz': { details: '#ansatz-details', scroll: '#ansatz' },
+    '#psychotherapie': {
+      details: '#psychotherapie-details',
+      scroll: '#psychotherapie',
+    },
+  };
+  function openDetailsFromHash() {
+    const target = hashTargets[location.hash];
+    if (!target) return;
+    const details = document.querySelector<HTMLDetailsElement>(target.details);
+    if (details) details.open = true;
+    document.querySelector(target.scroll)?.scrollIntoView({ behavior: 'smooth' });
+  }
+  openDetailsFromHash();
+  window.addEventListener('hashchange', openDetailsFromHash);
 </script>

@@ -1,5 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TopicCard from '../TopicCard.astro';
+import portraitImg from '../../assets/about/DSC00751.jpg';
+import qrImg from '../../assets/about/QR_Malin.jpeg';
 import { useTranslations, localizePath, type Lang } from '../../i18n/ui';
 
 interface Props {
@@ -8,10 +12,111 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const contactHref = localizePath('/kontakt', lang) + '#buchung';
+const faqHref = localizePath('/preise', lang) + '#faq';
 
 const pillars = ['1', '2', '3'] as const;
-const offers = ['1', '2', '3'] as const;
+const offers = ['1', '2', '3', '4'] as const;
 const steps = ['1', '2', '3'] as const;
+
+// "Weitere mögliche Themen" – Karten-Slider analog zur Coaching-Seite.
+// Bewusst hier als Liste lokalisiert (statt flacher i18n-Schlüssel).
+// Der grüne Banner oben in jeder Karte bleibt frei für ein späteres Bild.
+const topicsContent =
+  lang === 'en'
+    ? {
+        eyebrow: 'More topics',
+        title: 'Further possible topics',
+        lead: 'The possibilities are endless – get in touch!',
+        prev: 'Previous topic',
+        next: 'Next topic',
+        items: [
+          {
+            title: 'Team dynamics',
+            text: 'Recognise recurring patterns within the team and shape collaboration consciously – for a way of working together that holds.',
+          },
+          {
+            title: 'Health management (prevention, intervention)',
+            text: 'Spot strain early and counteract it deliberately – from preventive measures to concrete support when it really matters.',
+          },
+          {
+            title: 'Performance pressure',
+            text: 'Deal more calmly with high expectations and enable performance without constantly operating at the limit.',
+          },
+          {
+            title: 'Disagreements',
+            text: 'Resolve conflicts constructively and use differing perspectives as an opportunity for better solutions.',
+          },
+          {
+            title: 'Leadership dynamics',
+            text: 'Reflect on roles, responsibility and leadership behaviour – for clear, appreciative and effective leadership.',
+          },
+          {
+            title: 'Autonomy vs. control',
+            text: 'Find the balance between self-responsibility and steering that builds trust and secures results.',
+          },
+        ],
+      }
+    : {
+        eyebrow: 'Weitere Themen',
+        title: 'Weitere mögliche Themen',
+        lead: 'Die Möglichkeiten sind grenzenlos – sprechen Sie mich an!',
+        prev: 'Vorheriges Thema',
+        next: 'Nächstes Thema',
+        items: [
+          {
+            title: 'Mitarbeiterdynamiken',
+            text: 'Wiederkehrende Muster im Team erkennen und die Zusammenarbeit bewusst gestalten – für ein Miteinander, das trägt.',
+          },
+          {
+            title: 'Gesundheitsmanagement (Prävention, Intervention)',
+            text: 'Belastungen früh erkennen und gezielt gegensteuern – von vorbeugenden Maßnahmen bis zur konkreten Begleitung im Ernstfall.',
+          },
+          {
+            title: 'Leistungsdruck',
+            text: 'Mit hohen Erwartungen gelassener umgehen und Leistung ermöglichen, ohne dauerhaft an die Belastungsgrenze zu gehen.',
+          },
+          {
+            title: 'Meinungsverschiedenheiten',
+            text: 'Konflikte konstruktiv klären und unterschiedliche Sichtweisen als Chance für bessere Lösungen nutzen.',
+          },
+          {
+            title: 'Führungsdynamiken',
+            text: 'Rollen, Verantwortung und Führungsverhalten reflektieren – für klare, wertschätzende und wirksame Führung.',
+          },
+          {
+            title: 'Autonomie vs. Kontrolle',
+            text: 'Die Balance zwischen Eigenverantwortung und Steuerung finden, die Vertrauen schafft und Ergebnisse sichert.',
+          },
+        ],
+      };
+
+// Direktkontakt-Block – inhaltlich identisch zur Kontaktseite ("Kontaktiere
+// mich direkt"), hier auf dunkelgrüner Fläche am Seitenende.
+const directContent =
+  lang === 'en'
+    ? {
+        title: 'Contact me directly',
+        email: 'Email',
+        emailNote: '[PLACEHOLDER: confirm final email address]',
+        instagram: 'Instagram',
+        instagramHandle: '@evoqueyourself',
+        portraitAlt: 'Malin – EVOQUE',
+        cardAlt: 'QR code to the EVOQUE Instagram profile',
+        faqPrompt: 'Still have open questions?',
+        faqCta: 'To the FAQ',
+      }
+    : {
+        title: 'Kontaktiere mich direkt',
+        email: 'E-Mail',
+        emailNote: '[PLATZHALTER: finale E-Mail-Adresse bestätigen]',
+        instagram: 'Instagram',
+        instagramHandle: '@evoqueyourself',
+        portraitAlt: 'Malin – EVOQUE',
+        cardAlt: 'QR-Code zum EVOQUE Instagram-Profil',
+        faqPrompt: 'Noch Fragen offen?',
+        faqCta: "Zu den FAQ's",
+      };
+const instagramUrl = 'https://www.instagram.com/evoqueyourself';
 ---
 
 <BaseLayout title={t('company.meta.title')} description={t('company.meta.description')}>
@@ -65,8 +170,59 @@ const steps = ['1', '2', '3'] as const;
       </div>
     </section>
 
+    <!-- Weitere mögliche Themen (Karten-Slider) -->
+    <section class="corp-section corp-topics" id="themen">
+      <div class="container">
+        <header class="corp-head">
+          <p class="corp-eyebrow">{topicsContent.eyebrow}</p>
+          <h2 class="corp-head__title">{topicsContent.title}</h2>
+          <p class="corp-head__lead">{topicsContent.lead}</p>
+        </header>
+
+        <div
+          class="topic-slider"
+          data-topic-slider
+          role="group"
+          aria-roledescription="Karussell"
+          aria-label={topicsContent.title}
+        >
+          <div class="topic-slider__viewport" data-viewport>
+            <div class="topic-slider__track" data-track>
+              {
+                topicsContent.items.map((topic) => (
+                  <div class="topic-slider__slide">
+                    <TopicCard title={topic.title}>{topic.text}</TopicCard>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="topic-slider__controls">
+            <button
+              type="button"
+              class="topic-slider__nav"
+              data-prev
+              aria-label={topicsContent.prev}
+            >
+              ‹
+            </button>
+            <div class="topic-slider__dots" data-dots aria-hidden="true"></div>
+            <button
+              type="button"
+              class="topic-slider__nav"
+              data-next
+              aria-label={topicsContent.next}
+            >
+              ›
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Vorgehen -->
-    <section class="corp-section">
+    <section class="corp-section corp-section--alt">
       <div class="container">
         <header class="corp-head">
           <p class="corp-eyebrow">{t('company.approach.eyebrow')}</p>
@@ -86,16 +242,61 @@ const steps = ['1', '2', '3'] as const;
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="corp-section">
+    <!-- Direktkontakt (helles Grün wie der Start-CTA-Button unten) -->
+    <section class="corp-section corp-contact">
       <div class="container">
-        <div class="corp-cta">
-          <div class="corp-cta__text">
-            <p class="corp-eyebrow corp-eyebrow--light">{t('company.cta.eyebrow')}</p>
-            <h2 class="corp-cta__title">{t('company.cta.title')}</h2>
-            <p class="corp-cta__lead">{t('company.cta.text')}</p>
+        <h2 class="corp-contact__title">{directContent.title}</h2>
+
+        <div class="contact-box">
+          <div class="contact-direct">
+            <article class="card contact-person">
+              <div class="contact-person__avatar">
+                <Image
+                  src={portraitImg}
+                  alt={directContent.portraitAlt}
+                  widths={[300, 480]}
+                  sizes="150px"
+                  quality={85}
+                  loading="lazy"
+                />
+              </div>
+              <dl class="contact-list">
+                <div>
+                  <dt>{directContent.email}</dt>
+                  <dd>
+                    <a href="mailto:evoqueyourself.coaching@gmail.com"
+                      >evoqueyourself.coaching@gmail.com</a
+                    >
+                    <span class="contact-note">{directContent.emailNote}</span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>{directContent.instagram}</dt>
+                  <dd>
+                    <a href={instagramUrl} target="_blank" rel="noopener"
+                      >{directContent.instagramHandle}</a
+                    >
+                  </dd>
+                </div>
+              </dl>
+            </article>
+
+            <div class="contact-card-visual">
+              <Image
+                src={qrImg}
+                alt={directContent.cardAlt}
+                widths={[300, 480, 600]}
+                sizes="(max-width: 760px) 80vw, 400px"
+                quality={85}
+                loading="lazy"
+              />
+            </div>
           </div>
-          <a href={contactHref} class="corp-btn corp-btn--light">{t('company.cta.button')}</a>
+
+          <p class="contact-faq">
+            <span class="contact-faq__prompt">{directContent.faqPrompt}</span>
+            <a href={faqHref} class="btn btn--primary">{directContent.faqCta}</a>
+          </p>
         </div>
       </div>
     </section>
@@ -157,14 +358,6 @@ const steps = ['1', '2', '3'] as const;
   }
   .corp-btn--ghost:hover {
     border-color: var(--on-dark);
-  }
-  .corp-btn--light {
-    background: var(--on-dark);
-    color: var(--forest-deep);
-    flex-shrink: 0;
-  }
-  .corp-btn--light:hover {
-    background: #fff;
   }
 
   /* ---------- Hero (dunkel) ---------- */
@@ -253,7 +446,7 @@ const steps = ['1', '2', '3'] as const;
   }
   @media (min-width: 760px) {
     .corp-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
   .corp-card {
@@ -312,29 +505,374 @@ const steps = ['1', '2', '3'] as const;
     line-height: 1.6;
   }
 
-  /* ---------- Abschluss-CTA ---------- */
-  .corp-cta {
+  /* ===== Weitere Themen: Karten-Slider (wie Coaching-Seite) ===== */
+  .topic-slider {
+    margin-top: var(--space-md);
+  }
+  .topic-slider__viewport {
+    position: relative;
+    overflow: hidden;
+  }
+  /* Fade rechts: deutet an, dass noch eine weitere Karte folgt.
+     Ausblenden zur Sektionsfarbe (--bg). */
+  .topic-slider__viewport::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 14%;
+    max-width: 120px;
+    background: linear-gradient(to right, rgba(247, 245, 241, 0), var(--bg));
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+    z-index: 2;
+  }
+  .topic-slider.is-end .topic-slider__viewport::after {
+    opacity: 0;
+  }
+  .topic-slider__track {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: stretch;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  /* Mobil: 1 Karte + Andeutung der nächsten */
+  .topic-slider__slide {
+    flex: 0 0 82%;
+    min-width: 0;
+  }
+  /* Tablet: 2 Karten + Andeutung */
+  @media (min-width: 560px) {
+    .topic-slider__slide {
+      flex-basis: 46%;
+    }
+  }
+  /* Desktop: 3 Karten + die vierte rechts angedeutet */
+  @media (min-width: 900px) {
+    .topic-slider__slide {
+      flex-basis: 30%;
+    }
+  }
+
+  .topic-slider__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+  .topic-slider__nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 999px;
     background: var(--forest-deep);
     color: var(--on-dark);
-    border-radius: var(--corp-radius);
-    padding: clamp(2rem, 5vw, 3.5rem);
+    font-size: 1.6rem;
+    line-height: 1;
+    padding-bottom: 0.12em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease,
+      opacity 0.2s ease;
+  }
+  .topic-slider__nav:hover {
+    background: #0e2113;
+    transform: translateY(-2px);
+  }
+  .topic-slider__dots {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  .topic-slider__dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: rgba(21, 44, 26, 0.22);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  .topic-slider__dot:hover {
+    background: rgba(21, 44, 26, 0.4);
+  }
+  .topic-slider__dot[aria-current='true'] {
+    background: var(--forest-deep);
+    transform: scale(1.25);
+  }
+
+  /* ===== Direktkontakt (weiße Sektion, grüne Daten-Box) ===== */
+  .corp-contact {
+    background: #fff;
+    color: var(--forest-deep);
+  }
+  .corp-contact__title {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+    color: var(--forest-deep);
+  }
+
+  /* Große Box rund um den Direktkontakt-Bereich – in Sage-Grün */
+  .contact-box {
+    max-width: 720px;
+    margin-inline: auto;
+    background: var(--sage-harmony);
+    border: var(--border-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: var(--space-lg);
+  }
+
+  /* FAQ-Verweis unter beiden Karten (in der grünen Box), Text links,
+     Button rechts – auf schmalen Bildschirmen bricht er um. */
+  .contact-faq {
+    margin: var(--space-lg) 0 0;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-xl);
+    justify-content: center;
+    gap: var(--space-md);
+    text-align: center;
   }
-  .corp-cta__text {
-    max-width: 46ch;
+  .contact-faq__prompt {
+    color: var(--forest-deep);
+    font-size: 0.95rem;
+    font-weight: 600;
   }
-  .corp-cta__title {
-    font-size: clamp(1.5rem, 3vw, 2.1rem);
-    margin: 0 0 var(--space-sm);
-    color: #fff;
+
+  /* Zwei Spalten: links Personen-Karte, rechts QR-Code */
+  .contact-direct {
+    display: grid;
+    gap: var(--space-lg);
+    align-items: center;
   }
-  .corp-cta__lead {
+  @media (min-width: 760px) {
+    .contact-direct {
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+  }
+
+  /* Linke Karte mit Foto-Kreis oben */
+  .contact-person {
+    text-align: center;
+    display: grid;
+    gap: var(--space-md);
+    justify-items: center;
+  }
+  .contact-person__avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 3px solid var(--sage-harmony);
+    box-shadow: var(--shadow-soft);
+  }
+  .contact-person__avatar :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .contact-list {
     margin: 0;
-    color: var(--sage-harmony);
-    line-height: 1.6;
+    display: grid;
+    gap: var(--space-md);
+    justify-items: center;
+    text-align: center;
+  }
+  .contact-list dt {
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--calm-earth);
+    margin-bottom: var(--space-2xs);
+  }
+  .contact-list dd {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--forest-deep);
+  }
+  .contact-list a {
+    color: var(--forest-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .contact-note {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--calm-earth);
+  }
+
+  /* QR-Seite als eigene weiße Karte – gleiche Optik wie die Personen-Karte,
+     damit beide Spalten gleich hoch wirken. Der QR bleibt quadratisch
+     (nicht gequetscht) und sitzt mittig. Gleiche Höhe kommt aus dem
+     align-items: stretch des Rasters. */
+  .contact-card-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    border: var(--border-soft);
+    padding: var(--space-lg);
+  }
+  .contact-card-visual :global(img) {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    border-radius: var(--radius);
+    display: block;
   }
 </style>
+
+<script>
+  // Themen-Slider: läuft automatisch von links nach rechts, kann aber per
+  // Pfeilen, Punkten und Wischgeste manuell bedient werden. (analog Coaching)
+  const slider = document.querySelector<HTMLElement>('[data-topic-slider]');
+  if (slider) {
+    const viewport = slider.querySelector<HTMLElement>('[data-viewport]')!;
+    const track = slider.querySelector<HTMLElement>('[data-track]')!;
+    const slides = Array.from(track.children) as HTMLElement[];
+    const prevBtn = slider.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const nextBtn = slider.querySelector<HTMLButtonElement>('[data-next]')!;
+    const dotsWrap = slider.querySelector<HTMLElement>('[data-dots]')!;
+
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    const AUTOPLAY_MS = 2800;
+    const RESUME_MS = 10000;
+
+    let index = 0;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    let resumeTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const dots = slides.map((_, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'topic-slider__dot';
+      dot.setAttribute('aria-label', `Thema ${i + 1} anzeigen`);
+      dot.addEventListener('click', () => {
+        goTo(i);
+        scheduleResume();
+      });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    function maxOffset() {
+      return Math.max(0, track.scrollWidth - viewport.clientWidth);
+    }
+
+    function lastIndex() {
+      const max = maxOffset();
+      for (let i = 0; i < slides.length; i++) {
+        if (slides[i].offsetLeft >= max - 1) return i;
+      }
+      return slides.length - 1;
+    }
+
+    function goTo(i: number) {
+      const last = lastIndex();
+      if (i > last) i = 0;
+      if (i < 0) i = last;
+      index = i;
+      const max = maxOffset();
+      const x = Math.min(slides[i].offsetLeft, max);
+      track.style.transform = `translateX(${-x}px)`;
+      dots.forEach((d, di) =>
+        d.setAttribute('aria-current', di === index ? 'true' : 'false')
+      );
+      slider!.classList.toggle('is-end', x >= max - 1);
+    }
+
+    function next() {
+      goTo(index + 1);
+    }
+    function prev() {
+      goTo(index - 1);
+    }
+
+    function play() {
+      if (resumeTimer) {
+        clearTimeout(resumeTimer);
+        resumeTimer = undefined;
+      }
+      if (reduceMotion || timer) return;
+      timer = setInterval(next, AUTOPLAY_MS);
+    }
+    function stop() {
+      if (timer) {
+        clearInterval(timer);
+        timer = undefined;
+      }
+    }
+    function scheduleResume() {
+      stop();
+      if (resumeTimer) clearTimeout(resumeTimer);
+      if (reduceMotion) return;
+      resumeTimer = setTimeout(play, RESUME_MS);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      next();
+      scheduleResume();
+    });
+    prevBtn.addEventListener('click', () => {
+      prev();
+      scheduleResume();
+    });
+
+    slider.addEventListener('mouseenter', stop);
+    slider.addEventListener('mouseleave', scheduleResume);
+    slider.addEventListener('focusin', stop);
+    slider.addEventListener('focusout', scheduleResume);
+
+    let startX = 0;
+    let dragging = false;
+    viewport.addEventListener(
+      'touchstart',
+      (e) => {
+        startX = e.touches[0].clientX;
+        dragging = true;
+        stop();
+      },
+      { passive: true }
+    );
+    viewport.addEventListener(
+      'touchend',
+      (e) => {
+        if (!dragging) return;
+        dragging = false;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) {
+          dx < 0 ? next() : prev();
+        }
+        scheduleResume();
+      },
+      { passive: true }
+    );
+
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => goTo(index), 150);
+    });
+
+    goTo(0);
+    play();
+  }
+</script>

@@ -13,8 +13,7 @@ const l = (p: string) => localizePath(p, lang);
 
 <BaseLayout title={t('home.meta.title')} description={t('home.meta.description')}>
   <Hero
-    video="/images/Animation/Hero_Video-2.mp4"
-    title="Become your best you"
+    subtitle="become your best you"
     ctaHref={l('/kontakt') + '#buchung'}
     ctaLabel={t('home.hero.cta')}
     secondaryHref={l('/coaching')}
@@ -32,7 +31,7 @@ const l = (p: string) => localizePath(p, lang);
           >
             <p>{t('home.approach.text')}</p>
           </SectionHeading>
-          <a href={l('/ueber-mich')} class="btn btn--primary">{t('home.approach.more')}</a>
+          <a href={`${l('/coaching')}#ansatz`} class="btn btn--primary">{t('home.approach.more')}</a>
         </div>
         <ol class="approach__steps">
           <li>
@@ -73,15 +72,6 @@ const l = (p: string) => localizePath(p, lang);
       </SectionHeading>
 
       <div class="grid grid--3">
-        <TopicCard title={t('home.topics.c1.title')}>
-          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
-            <path d="M14 3v4h4" />
-            <path d="M9 12h6" />
-            <path d="M9 16h4" />
-          </svg>
-          {t('home.topics.c1.text')}
-        </TopicCard>
         <TopicCard title={t('home.topics.c2.title')}>
           <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="13" r="8" />
@@ -91,18 +81,24 @@ const l = (p: string) => localizePath(p, lang);
           </svg>
           {t('home.topics.c2.text')}
         </TopicCard>
-        <TopicCard title={t('home.topics.c3.title')}>
+        <TopicCard title={t('home.topics.c4.title')}>
           <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="6" cy="19" r="2" />
-            <circle cx="18" cy="5" r="2" />
-            <path d="M8 19h6.5a3 3 0 0 0 0-6h-5a3 3 0 0 1 0-6H16" />
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
           </svg>
-          {t('home.topics.c3.text')}
+          {t('home.topics.c4.text')}
+        </TopicCard>
+        <TopicCard title={t('home.topics.c5.title')}>
+          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v18" />
+            <path d="M12 5h6l2 2.5L18 10h-6" />
+            <path d="M12 12H6l-2 2.5L6 17h6" />
+          </svg>
+          {t('home.topics.c5.text')}
         </TopicCard>
       </div>
 
       <p class="center themes-teaser__more">
-        <a href={l('/coaching')} class="btn btn--primary">{t('home.topics.more')}</a>
+        <a href={`${l('/coaching')}#themen`} class="btn btn--primary">{t('home.topics.more')}</a>
       </p>
     </div>
   </section>
@@ -135,18 +131,21 @@ const l = (p: string) => localizePath(p, lang);
       <div class="grid grid--3">
         <Testimonial
           quote={t('home.testi.placeholder')}
-          author="Sarah M."
-          context={t('home.testi.t1.context')}
+          author={t('home.testi.t1.author')}
+          topic={t('home.testi.t1.topic')}
+          period={t('home.testi.t1.period')}
         />
         <Testimonial
           quote={t('home.testi.placeholder')}
-          author={lang === 'en' ? 'Client, 34' : 'Kundin, 34'}
-          context={t('home.testi.t2.context')}
+          author={t('home.testi.t2.author')}
+          topic={t('home.testi.t2.topic')}
+          period={t('home.testi.t2.period')}
         />
         <Testimonial
           quote={t('home.testi.placeholder')}
-          author="Jonas K."
-          context={t('home.testi.t3.context')}
+          author={t('home.testi.t3.author')}
+          topic={t('home.testi.t3.topic')}
+          period={t('home.testi.t3.period')}
         />
       </div>
     </div>
@@ -161,7 +160,13 @@ const l = (p: string) => localizePath(p, lang);
           <h2>{t('home.cta.title')}</h2>
           <p>{t('home.cta.text')}</p>
         </div>
-        <a href={l('/kontakt') + '#buchung'} class="btn btn--secondary">{t('home.cta.button')}</a>
+        <div class="final-cta__actions">
+          <a href={l('/kontakt') + '#buchung'} class="btn btn--secondary">{t('home.cta.button')}</a>
+          <p class="final-cta__faq">
+            <strong>{t('home.cta.faqPrompt')}</strong> {t('home.cta.faqText')}
+            <a href={l('/preise') + '#faq'} class="final-cta__faq-link">{t('home.cta.faqLink')}</a>
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -288,5 +293,32 @@ const l = (p: string) => localizePath(p, lang);
   }
   .final-cta__text p:last-child {
     margin-bottom: 0;
+  }
+  /* Button + FAQ-Hinweis rechts als kleine Spalte */
+  .final-cta__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+    max-width: 30ch;
+  }
+  .final-cta__faq {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--sage-harmony);
+  }
+  .final-cta__faq strong {
+    color: var(--on-dark);
+    font-weight: 600;
+  }
+  .final-cta__faq-link {
+    color: var(--on-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+  }
+  .final-cta__faq-link:hover {
+    color: var(--sage-harmony);
   }
 </style>

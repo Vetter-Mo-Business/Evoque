@@ -7,52 +7,56 @@ interface Step {
   top: string;
 }
 
-const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
-
-// DOM-Reihenfolge = logische Lesereihenfolge 01 → 05.
-// top = cy/760: node-1 cy=648 → 85.263% (unten) … node-5 cy=168 → 22.105% (oben).
-const tops = ['85.263%', '69.474%', '53.684%', '37.895%', '22.105%'];
-
-const head = {
-  de: {
-    eyebrow: 'Der Ablauf',
-    title: 'Dein Weg zum Ziel',
-    text: 'Ein klarer, begleiteter Weg – vom ersten Kennenlernen bis zu deinem Ziel. Schritt für Schritt, in deinem Tempo.',
+// DOM-Reihenfolge = logische Lesereihenfolge 01 → 06.
+// top = cy/760: node-1 cy=725 → 95.395% (unten) … node-6 cy=120 → 15.789% (oben).
+// Knoten über fast die gesamte Stielhöhe verteilt: oberster Punkt nah an
+// der Überschrift, unterster knapp über dem Boden – maximaler Box-Abstand.
+const steps: Step[] = [
+  {
+    num: '01',
+    title: 'Kennenlerngespräch',
+    text: 'Wir schauen, wo dein Problem auftritt. Zunächst klären wir wie, wann und warum das Verhalten besteht.',
+    top: '95.395%',
   },
-  en: {
-    eyebrow: 'The process',
-    title: 'Your path to the goal',
-    text: 'A clear, guided path – from the first meeting to your goal. Step by step, at your own pace.',
+  {
+    num: '02',
+    title: 'Ursachenforschung',
+    text: 'Wir schauen uns an, wo das Verhalten entstanden sein könnte. Verständnis ist die zentrale Basis für Veränderung.',
+    top: '79.474%',
   },
-}[lang];
-
-const stepsByLang: Record<'de' | 'en', { num: string; title: string; text: string }[]> = {
-  de: [
-    { num: '01', title: 'Kennenlerngespräch', text: 'Problem klären: was, wann, wo, wie lange – und warum.' },
-    { num: '02', title: 'Ursachenforschung', text: 'Blick in die Vergangenheit – wir verstehen den Ursprung des Themas.' },
-    { num: '03', title: 'Ziele festlegen', text: 'Wir bestimmen dein Ziel und den Weg dorthin.' },
-    { num: '04', title: 'Erste Übungen', text: 'Veränderung im Hier und Jetzt – wir kommen ins Tun.' },
-    { num: '05', title: 'Reflexion', text: 'Wir schärfen nach und passen an – der Prozess ist nicht statisch.' },
-  ],
-  en: [
-    { num: '01', title: 'Intro call', text: 'Clarify the problem: what, when, where, how long – and why.' },
-    { num: '02', title: 'Finding the cause', text: 'A look into the past – we understand where the topic originates.' },
-    { num: '03', title: 'Set goals', text: 'We define your goal and the path towards it.' },
-    { num: '04', title: 'First exercises', text: 'Change in the here and now – we get into action.' },
-    { num: '05', title: 'Reflection', text: 'We refine and adjust – the process is not static.' },
-  ],
-};
-
-const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
+  {
+    num: '03',
+    title: 'Ziele festlegen',
+    text: 'Wir bestimmen Dein Ziel und den Weg dorthin.',
+    top: '63.553%',
+  },
+  {
+    num: '04',
+    title: 'Praxisnahe Anwendung',
+    text: 'Wir wenden erste praktische Übungen an, um Deine alten Muster Schritt für Schritt in positive Verhaltenskonsequenzen umzuwandeln.',
+    top: '47.632%',
+  },
+  {
+    num: '05',
+    title: 'Reflexion',
+    text: 'Veränderung ist ein stetiger Prozess. Wir reflektieren gemeinsam und schärfen an den Stellen nach, wo es noch nicht funktioniert.',
+    top: '31.711%',
+  },
+  {
+    num: '06',
+    title: 'Nachhaltige Zielerreichung',
+    text: 'Idealerweise hast Du am Ende unseres Coachings bereits Dein Ziel erreicht. Wenn nicht, hast Du auf dem Weg alle Werkzeuge mitnehmen können, dich nun selbständig auszuprobieren.',
+    top: '15.789%',
+  },
+];
 ---
 
 <section class="journey" data-journey>
   <div class="journey__pin" data-pin>
     <!-- Kopf: zentriert oben, bleibt während des Pins sichtbar -->
     <div class="container journey__head">
-      <p class="eyebrow">{head.eyebrow}</p>
-      <h2>{head.title}</h2>
-      <p>{head.text}</p>
+      <p class="eyebrow">Der Ablauf</p>
+      <h2>Dein Weg zum Ziel</h2>
     </div>
 
     <div class="container journey__cols">
@@ -70,59 +74,131 @@ const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <!-- Stiel = wachsender Strahl (unten y=748 → oben y=28) -->
+            <!-- Wurzeln / Der Anfang: die Pflanze bricht unten aus der Erde.
+                 Statisch sichtbar – der Startpunkt des Weges. -->
+            <g class="roots">
+              <path class="root" d="M120,748 C114,752 106,754 98,759"></path>
+              <path class="root" d="M120,748 C110,751 104,752 99,753"></path>
+              <path class="root" d="M120,749 C120,753 119,757 120,760"></path>
+              <path class="root" d="M120,748 C126,752 134,754 142,759"></path>
+              <path class="root" d="M120,748 C130,751 136,752 141,753"></path>
+            </g>
+
+            <!-- Stiel = wachsender, organisch geschwungener Strahl
+                 (unten y=748 → oben y=60). y fällt monoton, damit die
+                 Skript-Suche fracAtY sauber funktioniert. -->
             <path
               id="stem"
-              d="M120,748 C116,652 124,564 120,470 C116,382 124,300 120,210 C117,158 122,108 120,60"
+              d="M120,748 C111,725 111,702 120,679 C129,656 129,633 120,610 C111,587 111,564 120,541 C129,518 129,495 120,472 C111,449 111,426 120,403 C129,380 129,357 120,334 C111,311 111,288 120,265 C129,242 129,219 120,196 C113,173 113,150 120,127 C122,104 121,82 120,60"
             ></path>
 
-            <g class="leaf" data-y="704">
-              <path
-                transform="translate(120,704) rotate(-140) scale(0.95)"
-                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            <!-- Weg-Bewuchs: abwechselnd Blätter UND kleine Blüten, links und
+                 rechts verteilt. Die kleinen Blüten stehen für die kleinen
+                 Erfolge unterwegs; die große Blüte oben ist das Highlight.
+                 Alle tragen die Klasse "leaf" + data-y, damit die bestehende
+                 Wachstums-Animation sie ohne Skript-Änderung mit einblendet. -->
+
+            <!-- unten: Blatt links (gut sichtbar, aber klein – wächst nach oben) -->
+            <g class="leaf" data-y="714">
+              <path transform="translate(113,714) rotate(-147) scale(0.85)"
+                d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <g class="leaf" data-y="606">
-              <path
-                transform="translate(120,606) rotate(-40) scale(0.9)"
-                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            <!-- kleine Blüte rechts -->
+            <g class="leaf bud bud--orange" data-y="645">
+              <g transform="translate(135,645) scale(0.92)">
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(72)"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(144)"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(216)"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(288)"></ellipse>
+                <circle class="bud__center" cx="0" cy="0" r="3.8"></circle>
+              </g>
             </g>
-            <g class="leaf" data-y="508">
-              <path
-                transform="translate(120,508) rotate(-140) scale(0.85)"
-                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            <!-- Blatt links -->
+            <g class="leaf" data-y="576">
+              <path transform="translate(113,576) rotate(-145) scale(1)"
+                d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <g class="leaf" data-y="408">
-              <path
-                transform="translate(120,408) rotate(-40) scale(0.8)"
-                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            <!-- Blatt rechts -->
+            <g class="leaf" data-y="507">
+              <path transform="translate(127,507) rotate(-37) scale(1.1)"
+                d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <g class="leaf" data-y="308">
-              <path
-                transform="translate(120,308) rotate(-140) scale(0.74)"
-                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            <!-- kleine Blüte links -->
+            <g class="leaf bud bud--rose" data-y="438">
+              <g transform="translate(104,438) scale(1.24)">
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(72)"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(144)"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(216)"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(288)"></ellipse>
+                <circle class="bud__center" cx="0" cy="0" r="3.6"></circle>
+              </g>
             </g>
-            <g class="leaf" data-y="214">
-              <path
-                transform="translate(120,214) rotate(-40) scale(0.68)"
-                d="M0,0 C11,-9 28,-10 40,-3 C28,5 11,8 0,0 Z"></path>
+            <!-- Blatt rechts -->
+            <g class="leaf" data-y="369">
+              <path transform="translate(127,369) rotate(-36) scale(1.3)"
+                d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <!-- Krone: Knospe erblüht oben am Stiel zur Blume -->
-            <g class="bloom" data-bloom>
-              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(0 120 60)"></ellipse>
-              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(60 120 60)"></ellipse>
-              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(120 120 60)"></ellipse>
-              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(180 120 60)"></ellipse>
-              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(240 120 60)"></ellipse>
-              <ellipse class="bloom__petal" cx="120" cy="38" rx="10.5" ry="21" transform="rotate(300 120 60)"></ellipse>
-              <circle class="bloom__center" cx="120" cy="60" r="9"></circle>
+            <!-- Blatt links -->
+            <g class="leaf" data-y="300">
+              <path transform="translate(113,300) rotate(-145) scale(1.4)"
+                d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
+            </g>
+            <!-- kleine Blüte rechts (nach oben größer & schöner) -->
+            <g class="leaf bud bud--sun" data-y="231">
+              <g transform="translate(136,231) scale(1.45)">
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(72)"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(144)"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(216)"></ellipse>
+                <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9" transform="rotate(288)"></ellipse>
+                <circle class="bud__center" cx="0" cy="0" r="3.4"></circle>
+              </g>
+            </g>
+            <!-- oben: das größte, schönste Blatt links, kurz vor dem Ziel -->
+            <g class="leaf" data-y="164">
+              <path transform="translate(117,166) rotate(-150) scale(1.5)"
+                d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
+            </g>
+            <!-- kleines Akzent-Blatt rechts, tuckt sich seitlich unter die
+                 Krone (nach außen gerichtet, verdeckt die Blüte nicht) -->
+            <g class="leaf" data-y="110">
+              <path transform="translate(126,112) rotate(-22) scale(0.78)"
+                d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
 
-            <!-- Knoten: node-1 unten (01) … node-5 oben (05) -->
-            <circle id="node-1" class="node" cx="120" cy="648" r="6.5"></circle>
-            <circle id="node-2" class="node" cx="120" cy="528" r="6.5"></circle>
-            <circle id="node-3" class="node" cx="120" cy="408" r="6.5"></circle>
-            <circle id="node-4" class="node" cx="120" cy="288" r="6.5"></circle>
-            <circle id="node-5" class="node" cx="120" cy="168" r="6.5"></circle>
+            <!-- Krone: volle, gefüllte Blüte, die den Weg oben krönt.
+                 Äußerer + innerer Blütenkranz + warmer Kern mit Highlight. -->
+            <g class="bloom" data-bloom>
+              <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(0 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(45 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(90 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(135 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(180 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(225 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(270 120 60)"></ellipse>
+              <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(315 120 60)"></ellipse>
+              <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(22.5 120 60)"></ellipse>
+              <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(67.5 120 60)"></ellipse>
+              <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(112.5 120 60)"></ellipse>
+              <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(157.5 120 60)"></ellipse>
+              <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(202.5 120 60)"></ellipse>
+              <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(247.5 120 60)"></ellipse>
+              <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(292.5 120 60)"></ellipse>
+              <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(337.5 120 60)"></ellipse>
+              <!-- Gelber Kern der Ziel-Blüte -->
+              <circle class="bloom__center" cx="120" cy="60" r="10.5"></circle>
+              <circle class="bloom__coredot" cx="120" cy="60" r="4.6"></circle>
+            </g>
+
+            <!-- Knoten: node-1 unten (01) … node-6 oben (06) -->
+            <circle id="node-1" class="node" cx="120" cy="725" r="6.5"></circle>
+            <circle id="node-2" class="node" cx="120" cy="604" r="6.5"></circle>
+            <circle id="node-3" class="node" cx="120" cy="483" r="6.5"></circle>
+            <circle id="node-4" class="node" cx="120" cy="362" r="6.5"></circle>
+            <circle id="node-5" class="node" cx="120" cy="241" r="6.5"></circle>
+            <circle id="node-6" class="node" cx="120" cy="120" r="6.5"></circle>
           </g>
         </svg>
       </div>
@@ -154,25 +230,43 @@ const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
 
 <style>
   .journey {
-    /* obere Sektionsgrenze 10px nachgezogen (passend zur tieferen Überschrift) */
-    margin-top: calc(var(--space-md) + 10px);
-    /* Höhe der Pflanze = Höhe der Boxen-Spalte (identischer Wert!) */
-    --plant-h: min(62vh, 600px);
+    /* Reiner weißer Hintergrund: lenkt den Fokus ganz auf die Lebensblume.
+       Kein oberer Außenabstand -> kein schmaler leerer Streifen zwischen der
+       Themen-Sektion und der weißen Ablauf-Sektion. */
+    background: #fff;
+    margin-top: 0;
+
+    /* ============ HIER EINSTELLEN ============
+       Vertikaler Puffer für Kopf + Abstände + unteren Puffer. Kopf +
+       Pflanze + alle 6 Boxen passen zusammen in EINE Bildschirmhöhe.
+       Die Pflanze ist oben verankert: oberster Punkt sitzt nah an der
+       Überschrift, der freie Rest bleibt als Puffer unten.
+       GRÖSSER  = mehr Puffer unten (falls der 1. Punkt gedrückt wirkt).
+       KLEINER  = Pflanze höher, Punkte weiter auseinander.
+       Sinnvoller Bereich ca. 160–260px. */
+    --journey-reserve: 200px;
+    /* ========================================= */
+
+    /* Höhe der Pflanze = Höhe der Boxen-Spalte (identischer Wert!). */
+    --plant-h: min(100vh - var(--journey-reserve), 820px);
   }
   .journey__pin {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: var(--space-xl);
-    padding-block: var(--space-xl);
+    /* Oben verankert: Kopf sitzt oben, Pflanze wächst nach unten,
+       der Restplatz bleibt als Puffer unter dem 1. Punkt. */
+    justify-content: flex-start;
+    gap: var(--space-md);
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-md);
   }
 
   /* Kopf zentriert oben */
   .journey__head {
     text-align: center;
     max-width: 60ch;
-    margin-top: 50px; /* Überschrift 10px tiefer */
+    margin-top: 0;
   }
   .journey__head h2 {
     margin-bottom: var(--space-sm);
@@ -198,31 +292,85 @@ const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
   .journey__plant {
     display: flex;
     justify-content: center;
+    /* Immer im Vordergrund: die Blüte oben darf NIE von einer Box verdeckt
+       werden. */
+    position: relative;
+    z-index: 2;
   }
   .journey__plant .plant {
     height: var(--plant-h);
     width: auto;
+    /* nichts abschneiden – große Blätter/Blüten dürfen über den Rahmen
+       hinausragen und bleiben im Vordergrund. */
+    overflow: visible;
   }
-  /* Farben strikt aus visual.md */
+  /* Dekorative, auf die "Lebensblume" beschränkte Farben. Bewusst warm/erdig,
+     damit es bunt & niedlich wirkt und trotzdem zur Marke passt. */
+  .journey__plant {
+    --stem-green: #3f6f3c;
+    --leaf-green: #6fa06a;
+    --bloom-sun: #e6b45a;
+    --bloom-rose: #d98c7d;
+  }
   .journey__plant .plant__ink {
     stroke: var(--forest-deep);
   }
-  .journey__plant .leaf {
-    fill: var(--sage-harmony);
+  /* Grüner, lebendiger Stängel = "Der Weg" */
+  .journey__plant #stem {
+    stroke: var(--stem-green);
+    stroke-width: 4.2;
   }
+  /* Wurzeln = "Der Anfang" (die Pflanze bricht aus der Erde) */
+  .journey__plant .root {
+    fill: none;
+    stroke: var(--earth-deep);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .journey__plant .leaf {
+    fill: var(--leaf-green);
+  }
+  /* Kleine, BUNTE Blüten entlang des Weges (die kleinen Erfolge unterwegs) */
+  .journey__plant .bud__petal {
+    fill: var(--soft-sand);
+    stroke: var(--forest-deep);
+    stroke-width: 1.2;
+  }
+  .journey__plant .bud__center {
+    fill: var(--accent-pilot);
+    stroke: none;
+  }
+  .journey__plant .bud--orange .bud__petal { fill: var(--accent-pilot); }
+  .journey__plant .bud--orange .bud__center { fill: var(--accent-pilot-soft); }
+  .journey__plant .bud--rose .bud__petal { fill: var(--bloom-rose); }
+  .journey__plant .bud--rose .bud__center { fill: var(--bloom-sun); }
+  .journey__plant .bud--sun .bud__petal { fill: var(--bloom-sun); }
+  .journey__plant .bud--sun .bud__center { fill: var(--accent-pilot); }
   .journey__plant .node {
     fill: var(--forest-deep);
     stroke: none;
     transform-box: fill-box;
     transform-origin: center;
   }
-  /* Krone / Blüte */
+  /* Krone / große Ziel-Blüte = "Das Ziel": farbenfroh */
   .journey__plant .bloom__petal {
-    fill: var(--soft-sand);
+    fill: var(--accent-pilot);
     stroke: var(--forest-deep);
     stroke-width: 1.5;
   }
+  /* Innerer Blütenkranz: sonnengelb, füllt die Lücken und gibt Tiefe. */
+  .journey__plant .bloom__petal--inner {
+    fill: var(--bloom-sun);
+    stroke: var(--forest-deep);
+    stroke-width: 1.2;
+  }
+  /* Gelber Kern der Ziel-Blüte */
   .journey__plant .bloom__center {
+    fill: var(--bloom-sun);
+    stroke: var(--forest-deep);
+    stroke-width: 1.3;
+  }
+  .journey__plant .bloom__coredot {
     fill: var(--accent-pilot);
     stroke: none;
   }
@@ -234,6 +382,9 @@ const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
     padding: 0;
     display: grid;
     gap: var(--space-md);
+    /* liegt unter der Pflanze, damit die Ziel-Blüte immer vorn bleibt */
+    position: relative;
+    z-index: 1;
   }
   .journey__step {
     margin: 0;
@@ -248,14 +399,14 @@ const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 44px;
-    height: 44px;
-    padding-inline: 0.45em;
+    min-width: 38px;
+    height: 38px;
+    padding-inline: 0.4em;
     border-radius: 999px;
     background: var(--forest-deep);
     color: var(--on-dark);
     font-family: var(--font-heading);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     white-space: nowrap;
   }
@@ -263,17 +414,17 @@ const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
     background: #fff;
     border-radius: var(--radius);
     border: var(--border-soft);
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-xs) var(--space-md);
     box-shadow: var(--shadow-soft);
   }
   .journey__body h3 {
-    font-size: 1.02rem;
+    font-size: 0.95rem;
     margin-bottom: 2px;
   }
   .journey__body p {
     margin: 0;
-    font-size: 0.85rem;
-    line-height: 1.45;
+    font-size: 0.8rem;
+    line-height: 1.35;
     color: var(--calm-earth);
   }
 
@@ -327,7 +478,7 @@ const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
     const steps = root.querySelector<HTMLElement>('[data-steps]')!;
     const stem = root.querySelector<SVGPathElement>('#stem')!;
     const leaves = gsap.utils.toArray<SVGGElement>('.leaf', root);
-    const nodes = [1, 2, 3, 4, 5].map(
+    const nodes = [1, 2, 3, 4, 5, 6].map(
       (n) => root.querySelector<SVGCircleElement>('#node-' + n)!
     );
     const boxes = gsap.utils.toArray<HTMLElement>('[data-step]', root);
@@ -367,8 +518,10 @@ const steps: Step[] = stepsByLang[lang].map((s, i) => ({ ...s, top: tops[i] }));
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
+            // Lock etwas höher: Pin rastet ein, wenn die Sektion noch ~48px
+            // unter dem oberen Rand steht → kleiner Freiraum über "Der Ablauf".
             trigger: pin,
-            start: 'top top',
+            start: 'top top+=60',
             end: () => '+=' + window.innerHeight * 3,
             pin: true,
             scrub: true,

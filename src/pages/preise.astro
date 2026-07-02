@@ -2,112 +2,175 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import PricingCard from '../components/PricingCard.astro';
-import { localizePath, type Lang } from '../i18n/ui';
 
-const lang = (Astro.currentLocale ?? 'de') as Lang;
-const ctaHref = localizePath('/kontakt', lang) + '#buchung';
+const pilot = {
+  title: 'Pilotphase',
+  note: 'Aktuell gültig · nur für begrenzte Zeit und Plätze',
+  features: [
+    '8 Sitzungen á 60 Minuten',
+    'Exklusiver, vergünstigter Einführungspreis',
+    'Begrenzte Plätze',
+    'Mitgestaltung und Erweiterung des Angebots',
+    'Intensive Betreuung',
+  ],
+};
 
-const content = {
-  de: {
-    metaTitle: 'Preise',
-    metaDesc:
-      'Die Paketoptionen des Evoque-Coachings – mit vergünstigter Pilotphase. Konkrete Preise gern auf Nachfrage.',
-    introEyebrow: 'Investition',
-    introTitle: 'Deine Paketoptionen',
-    introLead:
-      'Kein Verkauf einzelner Sitzungen, sondern eine echte Begleitung. Wähle den Umfang, der zu deinem Weg passt. Konkrete Preise gern auf Nachfrage.',
-    note: 'Alle Pakete beinhalten ein kostenloses 30-minütiges Kennenlerngespräch vorab.',
-    faqEyebrow: 'Häufige Fragen',
-    faqTitle: 'Gut zu wissen, bevor wir starten',
-    packages: [
-      {
-        name: 'Pilot Starter',
-        badge: 'Pilotphase',
-        highlight: true,
-        ctaLabel: 'Jetzt Sichern!',
-        features: ['8 Sitzungen × 60 Min.', '+ 30 Min. kostenloses Gespräch', 'Exklusiver, vergünstigter Einführungspreis', 'Begrenzte Plätze'],
-      },
-      {
-        name: 'Starter Paket',
-        ctaLabel: 'Auf Nachfrage',
-        features: ['10 Sitzungen × 60 Min.', '+ 30 Min. kostenloses Gespräch', 'Für fokussierte Themen', '3 Monate gültig'],
-      },
-      {
-        name: 'Deep Dive',
-        ctaLabel: 'Auf Nachfrage',
-        features: ['20 Sitzungen × 60 Min.', '+ 30 Min. kostenloses Gespräch', 'Tiefgehende Entwicklung', '6 Monate gültig'],
-      },
-    ],
-    faq: [
-      { q: 'Wie lange dauert eine Begleitung?', a: 'Das richtet sich nach deinem Thema – jüngere Themen gehen schneller, tiefer verwurzelte brauchen länger. Ich verkaufe keine einzelnen Sitzungen, sondern begleite dich so lange, bis dein Ziel erreicht ist.' },
-      { q: 'Findet das Coaching online oder vor Ort statt?', a: 'Beides ist möglich. Viele Begleitungen laufen flexibel online; wenn ein persönliches Treffen sinnvoll ist, finden wir einen Weg. Wir klären das im Kennenlerngespräch.' },
-      { q: 'Woran erkenne ich, ob Coaching das Richtige für mich ist?', a: 'Coaching passt, wenn du bei Problemen und Sorgen rund um deine Persönlichkeitsentwicklung weiterkommen möchtest. Geht es um therapeutische Anliegen, ist eine Psychotherapie der richtige Weg – mein Coaching ersetzt diese ausdrücklich nicht.' },
-      { q: 'Was kostet die Begleitung?', a: 'Der Umfang richtet sich nach Schwere und Dauer deines Themas. Die Paketoptionen besprechen wir transparent im kostenlosen Kennenlerngespräch – ohne Druck.' },
-      { q: 'Wie fange ich an?', a: 'Mit einem kostenlosen, unverbindlichen Kennenlerngespräch. Dort schauen wir gemeinsam, ob es passt und wie ich dich begleiten kann.' },
+const packages = [
+  {
+    name: 'Foundation',
+    perSession: '1 Sitzung á 60 Minuten',
+    ctaLabel: 'Auf Nachfrage',
+    ctaHref: '/kontakt#buchung',
+    features: [
+      '12 Sitzungen',
+      '3 Monate Begleitung',
+      'Kurzer Zeitraum, optimal für kleine Herausforderungen',
+      'Kurzfristige Begleitung',
+      'Optimal zum Kennenlernen',
+      'Ideal integrierbar in Deinen Alltag',
     ],
   },
-  en: {
-    metaTitle: 'Pricing',
-    metaDesc:
-      'The package options of Evoque coaching – with a discounted pilot phase. Specific prices gladly on request.',
-    introEyebrow: 'Investment',
-    introTitle: 'Your package options',
-    introLead:
-      'Not single sessions for sale, but real guidance. Choose the scope that fits your path. Specific prices gladly on request.',
-    note: 'All packages include a free 30-minute intro call beforehand.',
-    faqEyebrow: 'Frequently asked',
-    faqTitle: 'Good to know before we start',
-    packages: [
-      {
-        name: 'Pilot Starter',
-        badge: 'Pilot phase',
-        highlight: true,
-        ctaLabel: 'Secure now!',
-        features: ['8 sessions × 60 min.', '+ 30 min. free call', 'Exclusive, discounted introductory price', 'Limited spots'],
-      },
-      {
-        name: 'Starter Package',
-        ctaLabel: 'On request',
-        features: ['10 sessions × 60 min.', '+ 30 min. free call', 'For focused topics', 'Valid for 3 months'],
-      },
-      {
-        name: 'Deep Dive',
-        ctaLabel: 'On request',
-        features: ['20 sessions × 60 min.', '+ 30 min. free call', 'In-depth development', 'Valid for 6 months'],
-      },
-    ],
-    faq: [
-      { q: 'How long does guidance take?', a: 'It depends on your topic – more recent topics go faster, deeply rooted ones take longer. I don’t sell single sessions; I support you until your goal is reached.' },
-      { q: 'Does coaching take place online or in person?', a: 'Both are possible. Many sessions run flexibly online; if an in-person meeting makes sense, we find a way. We clarify this in the intro call.' },
-      { q: 'How do I know whether coaching is right for me?', a: 'Coaching fits if you want to move forward with problems and worries around your personal development. For therapeutic concerns, psychotherapy is the right path – my coaching explicitly does not replace it.' },
-      { q: 'What does the guidance cost?', a: 'The scope depends on the severity and duration of your topic. We discuss the package options transparently in the free intro call – without pressure.' },
-      { q: 'How do I start?', a: 'With a free, no-obligation intro call. There we look together at whether it fits and how I can support you.' },
+  {
+    name: 'Momentum',
+    perSession: '1 Sitzung á 60 Minuten',
+    badge: 'Beliebteste Wahl',
+    highlight: true,
+    ctaLabel: 'Auf Nachfrage',
+    ctaHref: '/kontakt#buchung',
+    features: [
+      '25 Sitzungen',
+      '6 Monate Begleitung',
+      'Ideal geeignet für Themen, die in der Wurzel gelöst werden',
     ],
   },
-}[lang];
+  {
+    name: 'Transformation',
+    perSession: '1 Sitzung á 60 Minuten',
+    ctaLabel: 'Auf Nachfrage',
+    ctaHref: '/kontakt#buchung',
+    features: [
+      '40 Sitzungen',
+      '1 Jahr Begleitung',
+      'Themen in der Ursache beheben, Verhaltenskonsequenzen langfristig etablieren',
+      'Tiefgehende Thematiken',
+      'Nachhaltige Verhaltensänderung',
+    ],
+  },
+];
+
+// FAQ – wo möglich mit Link auf die passende Seite/Sektion.
+// Einige Antworten werden bewusst von anderen Seiten übernommen ("von oben").
+const faq = [
+  {
+    q: 'Was ist Coaching?',
+    a: 'Seriöses psychologisches Coaching richtet sich ausschließlich an gesunde Personen, um sie bei privaten oder beruflichen Herausforderungen zu begleiten. Innerhalb des Coachingprozesses werden problematische Verhaltensweisen systematisch bearbeitet, die den Coachee stören und auf dem Weg zu dessen Zielen oder im Alltag einschränken. Im Coaching bei EVOQUE schauen wir uns gemeinsam die Wurzel des Problems an und erzeugen eine nachhaltige gesunde Verhaltensänderung mithilfe psychologisch fundierter und wissenschaftlicher Methoden.',
+    link: { href: '/coaching#ansatz', label: 'Mehr zum Coaching' },
+  },
+  {
+    q: 'Wofür steht EVOQUE?',
+    a: '[PLATZHALTER: Bedeutung des Namens EVOQUE – bitte noch mitteilen.]',
+  },
+  {
+    q: 'Wie lange dauert ein Coachingprozess?',
+    a: 'Du kannst zwischen verschiedenen Paketoptionen wählen. Du hast die Wahl zwischen 12, 25 und 40 Sitzungen. Grundsätzlich kannst Du davon ausgehen, dass 12 Sitzungen in etwa 3 Monate dauern, 25 Sitzungen etwa 6 Monate und 40 Sitzungen in etwa 1 Jahr, da es im Prozess auch Sitzungspausen zur eigenen Reflexion und zum Üben der Techniken geben wird. Welche Dauer für Dein individuelles Thema geeignet ist, können wir gemeinsam im Erstgespräch ergründen. Es gibt leichtere und tiefergehende Themen, die sich im zeitlichen Umfang unterscheiden. Falls Du unsicher bist, kannst Du auch zum Kennenlernen mit dem kleinsten Paket (12 Sitzungen) starten. Deine Sitzungsanzahl können wir bei Bedarf individuell erhöhen.',
+    link: { href: '#pakete', label: 'Zu den Paketen' },
+  },
+  {
+    q: 'Findet das Coaching online oder vor Ort statt?',
+    a: 'Beides ist möglich! Viele Coachingprozesse laufen flexibel online, während auch einzelne persönliche Treffen sinnvoll sind. Das besprechen wir im Kennenlerngespräch. Wir schauen gemeinsam, was für Dich am besten in Deinen Alltag integrierbar ist.',
+    link: { href: '/kontakt#buchung', label: 'Kennenlerngespräch vereinbaren' },
+  },
+  {
+    q: 'Was kostet ein Coaching bei EVOQUE?',
+    a: 'Der Preis richtet sich nach dem zeitlichen Umfang. Grundsätzlich werden größere Pakete pro Sitzung günstiger, da die zeitliche Vor- und Nachbereitung sinkt, je besser ich Klienten kennenlerne. Preise werden auf Anfrage gerne zugesendet, spätestens jedoch im Erstgespräch transparent besprochen.',
+    link: { href: '/kontakt#buchung', label: 'Preise anfragen' },
+  },
+  {
+    q: 'Was beinhaltet der Preis alles?',
+    a: 'Es gibt Festpreise für die Pakete. Diese umfassen Vor- sowie Nachbereitung der Sitzungen, die Coaching-Sessions des jeweiligen Pakets und alle Zwischen- sowie Ergebnisberichte. Die Supervision ist Teil des Coachings, wird dem Coachee jedoch nicht in Rechnung gestellt. Der Preis wird vor Beginn transparent besprochen – es gibt keine unerwarteten Kosten.',
+    link: { href: '#pakete', label: 'Zu den Paketen' },
+  },
+  {
+    q: 'Woran erkenne ich, ob Coaching das Richtige für mich ist?',
+    a: 'Coaching ist grundsätzlich bei jedem Problem geeignet, das nicht psychotherapeutisch relevant ist. Im Coaching lernst Du Techniken und Werkzeuge zur Zielerreichung und wie Du selbständig an Deinem Verhalten arbeiten kannst. Diese Techniken sind besonders wertvoll, wenn Du schon lange versuchst, ein Verhalten zu verändern oder ein Ziel zu erreichen, und bisher noch nicht erfolgreich warst. Auch bei kurzfristigen Problemen ist Unterstützung hilfreich, um das Problem nicht zu einer tiefgehenden Verhaltensweise werden zu lassen. Je früher eine schlechte Gewohnheit bearbeitet wird, desto einfacher ist es, sie in eine positive umzuwandeln. Zögere also nicht, Dir Unterstützung zu suchen, wenn Du sie benötigst!',
+    link: { href: '/coaching#themen', label: 'Themen & Anliegen ansehen' },
+  },
+  {
+    q: 'Was ist, wenn ich das Coaching abbrechen möchte?',
+    a: 'Wenn Du frühzeitig merken solltest, dass die Zusammenarbeit sich für Dich nicht richtig anfühlt, bitte ich Dich, dies unverzüglich anzusprechen.',
+  },
+  {
+    q: 'Kann ich das Coaching auch auf Englisch in Anspruch nehmen?',
+    a: 'Ja! Das Coaching ist sowohl auf Deutsch als auch auf Englisch verfügbar.',
+  },
+  {
+    q: 'Erhalte ich nach Abschluss des Coachings einen Ergebnisbericht zu meinem Fortschritt?',
+    a: 'Ja! Du erhältst einen umfassenden Überblick über all Deine Fortschritte, Deine Entwicklungsschritte und Deine Lernschritte im Rahmen des Coachings. Auf Wunsch kann dem Arbeitgeber eine Bescheinigung über das abgeschlossene Coaching ausgestellt werden.',
+  },
+  {
+    q: 'Was ist, wenn mein Thema nach Abschluss des Coachings noch besteht?',
+    a: 'Zunächst ermuntere ich Dich, selbständig die erlernten Tools und Techniken zu erproben. Nachhaltige Veränderung ist ein stetiger Prozess und kann nicht von heute auf morgen erzielt werden. Wenn Du Dir nach einigen Wochen weitere Unterstützung wünschst, kannst Du das Coaching jederzeit erneut in Anspruch nehmen – mit demselben oder anderen Themen!',
+    link: { href: '/kontakt#buchung', label: 'Erneut Kontakt aufnehmen' },
+  },
+  {
+    q: 'Wie grenzt sich Psychotherapie von Coaching ab?',
+    a: 'Coaching ist ausdrücklich nicht zur Behandlung oder Heilung von psychotherapeutischen Erkrankungen geeignet. Coaching ergründet nicht in einer psychotherapeutischen Tiefe die Vergangenheit eines Problemverhaltens. Im Coaching geht es darum, die Verhaltenskonsequenzen im Hier & Jetzt in positive, dem Coachee nützliche Verhaltensmuster zu verändern. Ein Coaching kann parallel zu einer Psychotherapie unterstützend eingesetzt werden – dies wird individuell nach Situation abgeklärt.',
+    link: { href: '/coaching#psychotherapie', label: 'Mehr zur Abgrenzung' },
+  },
+  {
+    q: 'Wie fange ich an?',
+    a: 'Mit einem kostenlosen, unverbindlichen Kennenlerngespräch. Dort schauen wir gemeinsam, ob es passt und wie ich Dich begleiten kann.',
+    link: { href: '/kontakt#buchung', label: 'Kennenlerngespräch buchen' },
+  },
+];
 ---
 
-<BaseLayout title={content.metaTitle} description={content.metaDesc}>
+<BaseLayout
+  title="Preise"
+  description="Die Paketoptionen des Evoque-Coachings – Foundation, Momentum und Transformation. Konkrete Preise gern auf Nachfrage."
+>
   <!-- Intro -->
   <section class="section section--tight">
     <div class="container container--narrow center">
-      <p class="eyebrow">{content.introEyebrow}</p>
-      <h1>{content.introTitle}</h1>
-      <p class="lead">{content.introLead}</p>
+      <p class="eyebrow">Deine Investition in Dich selbst</p>
+      <h1>Dein Weg</h1>
+      <p class="lead">
+         Ich nehme mir Zeit, mich individuell auf Dich und Deine Herausforderungen einzustellen und mein Coaching Dir anzupassen. Diese Methode benötigt Zeit, weshalb du die Wahl zwischen verschiedenen Paketen hast. Einzelsitzungen nur nach individueller Absprache möglich.
+      </p>
     </div>
   </section>
 
   <!-- Pakete -->
-  <section class="section pakete">
+  <section class="section">
     <div class="container">
-      <div class="grid grid--3 pricing-grid">
+      <!-- Pilotphase – aktuelles, limitiertes Angebot quer über den Paketen -->
+      <div class="pilot-banner">
+        <div class="pilot-banner__head">
+          <span class="badge badge--pilot">Aktuell</span>
+          <h2 class="pilot-banner__title">{pilot.title}</h2>
+          <p class="pilot-banner__note">{pilot.note}</p>
+        </div>
+        <ul class="pilot-banner__features">
+          {
+            pilot.features.map((f) => (
+              <li>
+                <span class="pilot-banner__check" aria-hidden="true">✓</span>
+                <span>{f}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="grid grid--3 pricing-grid" id="pakete">
         {
-          content.packages.map((p) => (
+          packages.map((p) => (
             <PricingCard
               name={p.name}
+              perSession={p.perSession}
               features={p.features}
               ctaLabel={p.ctaLabel}
-              ctaHref={ctaHref}
+              ctaHref={p.ctaHref}
               badge={p.badge}
               highlight={p.highlight}
             />
@@ -115,25 +178,33 @@ const content = {
         }
       </div>
 
-      <p class="center pricing-note text-muted">{content.note}</p>
+      <p class="center pricing-note text-muted">
+        Alle Pakete beinhalten ein kostenloses 30-minütiges Kennenlerngespräch vorab.
+      </p>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="section faq-section">
+  <section class="section surface-sand" id="faq">
     <div class="container container--narrow">
       <SectionHeading
-        eyebrow={content.faqEyebrow}
-        title={content.faqTitle}
+        eyebrow="Häufige Fragen"
+        title="Gut zu wissen, bevor wir starten"
         align="center"
       />
       <div class="faq">
         {
-          content.faq.map((item) => (
-            <details class="expectation">
-              <summary class="expectation__summary">{item.q}</summary>
-              <div class="expectation__body">
+          faq.map((item) => (
+            <details class="faq-item">
+              <summary class="faq-item__summary">{item.q}</summary>
+              <div class="faq-item__body">
                 <p>{item.a}</p>
+                {item.link && (
+                  <a href={item.link.href} class="faq-item__link">
+                    {item.link.label}
+                    <span aria-hidden="true"> →</span>
+                  </a>
+                )}
               </div>
             </details>
           ))
@@ -144,11 +215,64 @@ const content = {
 </BaseLayout>
 
 <style>
-  /* Pakete-Block (Karten + Hinweiszeile) nach oben rücken.
-     Größerer Wert = weiter nach oben. */
-  .pakete {
-    --pakete-offset-y: 2.5rem;
-    margin-top: calc(-1 * var(--pakete-offset-y));
+  /* Pilotphase-Band: quer über den Paketen, in Dunkelgrün abgesetzt */
+  .pilot-banner {
+    display: grid;
+    gap: var(--space-lg) var(--space-2xl);
+    align-items: center;
+    background: var(--forest-deep);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 18px 50px rgba(21, 44, 26, 0.22);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-md);
+  }
+  @media (min-width: 860px) {
+    .pilot-banner {
+      grid-template-columns: minmax(200px, 0.8fr) 2fr;
+    }
+  }
+  .pilot-banner__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+  .pilot-banner__title {
+    margin: 0;
+    color: #fff;
+  }
+  .pilot-banner__note {
+    margin: 0;
+    color: var(--sage-harmony);
+    font-size: 0.95rem;
+  }
+  .pilot-banner__features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+  }
+  .pilot-banner__features li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    line-height: 1.4;
+  }
+  .pilot-banner__check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4em;
+    height: 1.4em;
+    flex-shrink: 0;
+    border-radius: 999px;
+    background: var(--sage-harmony);
+    color: var(--forest-deep);
+    font-size: 0.75rem;
+    font-weight: 700;
   }
 
   .pricing-grid {
@@ -158,54 +282,62 @@ const content = {
     margin-top: var(--space-xl);
   }
 
-  /* FAQ: weißer Abschnitt, Fragen gestapelt (Layout wie zuvor) */
-  .faq-section {
-    background: #fff;
-  }
+  /* ===== FAQ – Aufklapp-Boxen in der Farbe der Preis-Sektion (var(--bg)) ===== */
   .faq {
-    margin-top: var(--space-lg);
+    margin-top: var(--space-xl);
     display: grid;
     gap: var(--space-md);
   }
-
-  /* Aufklapp-Box */
-  .expectation {
+  .faq-item {
     background: var(--bg);
     border: var(--border-soft);
     border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
     overflow: hidden;
   }
-  .expectation__summary {
+  .faq-item__summary {
     cursor: pointer;
     list-style: none;
     padding: var(--space-md) var(--space-lg);
     font-family: var(--font-heading);
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: var(--forest-deep);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-md);
   }
-  .expectation__summary::-webkit-details-marker {
+  .faq-item__summary::-webkit-details-marker {
     display: none;
   }
-  .expectation__summary::after {
+  .faq-item__summary::after {
     content: '+';
     font-size: 1.5rem;
     line-height: 1;
     color: var(--calm-earth);
     flex-shrink: 0;
   }
-  .expectation[open] .expectation__summary::after {
+  .faq-item[open] .faq-item__summary::after {
     content: '–';
   }
-  .expectation__body {
+  .faq-item__body {
     padding: 0 var(--space-lg) var(--space-lg);
   }
-  .expectation__body p {
+  .faq-item__body p {
     margin: 0;
     color: var(--calm-earth);
-    line-height: 1.6;
+    line-height: 1.65;
+  }
+  .faq-item__link {
+    display: inline-block;
+    margin-top: var(--space-md);
+    font-weight: 600;
+    color: var(--forest-deep);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+  .faq-item__link:hover {
+    color: var(--accent-pilot);
   }
 </style>

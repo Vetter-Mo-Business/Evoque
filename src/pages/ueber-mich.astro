@@ -1,10 +1,10 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
 import FlowerCorner from '../components/FlowerCorner.astro';
 import portraitImg from '../assets/about/DSC00751.jpg';
 import anchorImg from '../assets/about/DSC00842.jpg';
+import logoImg from '../assets/about/Hero_Logo.svg';
 import { type Lang } from '../i18n/ui';
 
 const lang = (Astro.currentLocale ?? 'de') as Lang;
@@ -13,44 +13,34 @@ const content = {
   de: {
     metaTitle: 'Über mich',
     eyebrow: 'Über mich',
-    title: 'Wer dich begleitet.',
-    lead: '[PLATZHALTER: Bio-Text – persönliche Vorstellung: Wer sie ist, ihr Werdegang, ihre Haltung und warum sie Menschen als Coach begleitet.]',
-    bio: '[PLATZHALTER: Bio-Text – weiterer Absatz: Qualifikation, Erfahrung und was ihr in der Begleitung wichtig ist.]',
-    approachEyebrow: 'Der Ansatz',
-    approachTitle: 'Verstehen, woher es kommt, und verändern, wo du heute stehst.',
-    approachLead: 'Mein Weg führt vom Ursprung des Problems zur Veränderung im Hier und Jetzt.',
-    c1Title: '1 · Problemursprung',
-    c1Text: 'Wir klären, worum es wirklich geht: was, wann, wo, wie lange – und warum.',
-    c2Title: '2 · Vergangenheit verstehen',
-    c2Text: 'Wir schauen auf die Wurzeln des Themas, ohne dort stehen zu bleiben.',
-    c3Title: '3 · Im Hier und Jetzt verändern',
-    c3Text: 'Aus Verstehen wird Handeln – Schritt für Schritt, in deinem Tempo.',
-    anchorTitle: 'Ich bin dein Anker und Begleiterin.',
+    title: 'Wer Dich begleitet.',
+    lead: 'Ich bin Malin Langer, Wirtschaftspsychologin (B.Sc.) und als Coach selbstständig tätig. Aktuell vertiefe ich mein Wissen im Masterstudium Human Decision Science (M.Sc.) mit dem Schwerpunkt auf menschliches Verhalten und Entscheidungsprozesse.',
+    bio: 'In meiner Arbeit als Coach verbinde ich fundiertes psychologisches Wissen aus meinem Studium mit evidenzbasierten Methoden und meiner praktischen Coaching-Erfahrung. Auf dieser Grundlage begleite ich Dich in Deiner persönlichen und beruflichen Entwicklung. Mich begeistert es, Menschen auf ihrem Weg zu unterstützen, ihre Ziele zu erreichen, Herausforderungen zu bewältigen und ihr Potenzial zu entfalten. Dabei ist mir besonders wichtig, einen strukturierten und gleichzeitig wertfreien Rahmen zu schaffen: Du bringst die Themen mit, die Dich bewegen, und ich übernehme die methodische Führung. Ich lege besonderen Wert darauf, Dir einen Raum zu bieten, in dem Du Dich reflektieren, neue Perspektiven entwickeln und Deinen eigenen Weg klarer sehen kannst.',
+    valuesTitle: 'Was mir im Coaching wichtig ist',
+    valuesText: 'Ich arbeite nach ethischen Richtlinien und mit einem hohen Anspruch an Vertraulichkeit und Datenschutz. Mein Ziel ist es, Dich dabei zu unterstützen, Deine Ziele möglichst effizient und zugleich nachhaltig zu erreichen. Deswegen werde ich Dich während und nach dem Coachingprozess stets ermutigen, Dich selbst mit den erlernten Techniken vertraut zu machen und diese zu üben. Mein Ziel ist es nicht, Dich möglichst lange an mich zu binden, sondern Dich so zu begleiten, dass Du Deine Herausforderungen eigenständig bewältigen und Deine Ziele langfristig erreichen kannst. Um die Qualität meiner Arbeit kontinuierlich zu sichern und eigene blinde Flecken sichtbar zu machen, nutze ich regelmäßig Supervisionen.',
+    anchorEyebrow: 'Veränderung beginnt hier',
+    anchorTitle: 'Ich bin Dein Anker und Deine Begleiterin.',
     anchorText:
-      'Du gehst den Weg nicht allein. Ich bleibe an deiner Seite, konzentriere mich auf dich und sorge dafür, dass du dranbleibst – bis du dein Ziel erreichst!',
-    portraitAlt: 'Porträt von Malin, Coach bei Evoque',
+      'Du gehst den Weg nicht allein. Ich bleibe an Deiner Seite, konzentriere mich auf Dich und stelle sicher, dass Du Dein Ziel erreichst.',
+    portraitAlt: 'Porträt von Malin, Coach bei EVOQUE',
     anchorAlt: 'Malin – Porträt im Querformat',
+    logoAlt: 'EVOQUE Logo',
   },
   en: {
     metaTitle: 'About',
     eyebrow: 'About',
     title: 'Who guides you.',
-    lead: '[PLACEHOLDER: bio text – personal introduction: who she is, her background, her attitude and why she guides people as a coach.]',
-    bio: '[PLACEHOLDER: bio text – further paragraph: qualification, experience and what matters to her in the guidance.]',
-    approachEyebrow: 'The approach',
-    approachTitle: 'Understand where it comes from, and change where you stand today.',
-    approachLead: 'My path leads from the origin of the problem to change in the here and now.',
-    c1Title: '1 · Origin of the problem',
-    c1Text: 'We clarify what it is really about: what, when, where, how long – and why.',
-    c2Title: '2 · Understand the past',
-    c2Text: 'We look at the roots of the topic without staying there.',
-    c3Title: '3 · Change in the here and now',
-    c3Text: 'Understanding turns into action – step by step, at your own pace.',
+    lead: 'I am Malin Langer, business psychologist (B.Sc.) and self-employed as a coach. I am currently deepening my knowledge in the master’s programme Human Decision Science (M.Sc.), focusing on human behaviour and decision-making processes.',
+    bio: 'In my work as a coach I combine sound psychological knowledge from my studies with evidence-based methods and my practical coaching experience. On this foundation I support you in your personal and professional development. I love helping people on their way to reach their goals, overcome challenges and unfold their potential. It is especially important to me to create a structured yet non-judgemental space: you bring the topics that move you, and I take the lead on the method. I place great value on offering you a space in which you can reflect, develop new perspectives and see your own path more clearly.',
+    valuesTitle: 'What matters to me in coaching',
+    valuesText: 'I work according to ethical guidelines and with a high standard of confidentiality and data protection. My goal is to support you in reaching your goals as efficiently and, at the same time, as sustainably as possible. That is why, during and after the coaching process, I will always encourage you to familiarise yourself with the techniques you have learned and to practise them. My aim is not to keep you dependent on me for as long as possible, but to guide you in a way that lets you master your challenges independently and reach your goals in the long term. To continuously ensure the quality of my work and to reveal my own blind spots, I regularly use supervision.',
+    anchorEyebrow: 'Change starts here',
     anchorTitle: 'I am your anchor and guide.',
     anchorText:
       'You don’t walk the path alone. I stay by your side, focus on you and make sure you keep going – until you reach your goal!',
-    portraitAlt: 'Portrait of Malin, coach at Evoque',
+    portraitAlt: 'Portrait of Malin, coach at EVOQUE',
     anchorAlt: 'Malin – landscape portrait',
+    logoAlt: 'EVOQUE logo',
   },
 }[lang];
 ---
@@ -84,34 +74,24 @@ const content = {
           <p class="text-muted">{content.bio}</p>
         </div>
       </div>
+
+      <!-- Was mir im Coaching wichtig ist – gespiegelt: Text links, Logo rechts -->
+      <div class="values">
+        <div class="values__text">
+          <h2 class="values-title">{content.valuesTitle}</h2>
+          <p class="text-muted">{content.valuesText}</p>
+        </div>
+        <div class="values__media">
+          <img src={logoImg.src} alt={content.logoAlt} loading="lazy" />
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Der Ansatz -->
   <section class="section surface-sand">
     <div class="container">
-      <SectionHeading
-        eyebrow={content.approachEyebrow}
-        title={content.approachTitle}
-      >
-        <p>{content.approachLead}</p>
-      </SectionHeading>
-
-      <div class="grid grid--3 approach-cards">
-        <article class="card">
-          <h3>{content.c1Title}</h3>
-          <p class="text-muted">{content.c1Text}</p>
-        </article>
-        <article class="card">
-          <h3>{content.c2Title}</h3>
-          <p class="text-muted">{content.c2Text}</p>
-        </article>
-        <article class="card">
-          <h3>{content.c3Title}</h3>
-          <p class="text-muted">{content.c3Text}</p>
-        </article>
-      </div>
-
+      <p class="eyebrow">{content.anchorEyebrow}</p>
       <div class="anchor">
         <div class="anchor__images">
           <Image
@@ -146,6 +126,31 @@ const content = {
       grid-template-columns: 0.85fr 1.15fr;
     }
   }
+  /* Werte-Block: gespiegelt zur Intro (Text links, Logo rechts) */
+  .values {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: center;
+    margin-top: var(--space-2xl);
+  }
+  @media (min-width: 860px) {
+    .values {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+  }
+  .values-title {
+    margin-top: 0;
+    margin-bottom: var(--space-xs);
+    font-size: 1.2rem;
+  }
+  .values__text p {
+    margin-bottom: 0;
+  }
+  .values__media img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
   .intro__media {
     position: relative;
   }
@@ -173,16 +178,6 @@ const content = {
     right: -20px;
     bottom: -20px;
     transform: rotate(180deg);
-  }
-
-  .approach-cards {
-    margin-bottom: var(--space-2xl);
-  }
-  .approach-cards .card h3 {
-    margin-bottom: var(--space-xs);
-  }
-  .approach-cards .card p {
-    margin: 0;
   }
 
   .anchor {

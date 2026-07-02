@@ -1,25 +1,64 @@
 ---
+interface TopicItem {
+  /** Sichtbarer Begriff auf dem Chip */
+  term: string;
+  /** Kurze Erklärung, die beim Anklicken oben im Banner erscheint */
+  desc?: string;
+}
 interface Props {
   title: string;
-  /** Unterthemen (Detailbegriffe) zum Oberthema – als Chips dargestellt. */
-  items?: string[];
+  /** Unterthemen (Detailbegriffe) zum Oberthema – als anklickbare Chips.
+      Als einfacher String (nur Begriff) ODER Objekt { term, desc }. */
+  items?: (string | TopicItem)[];
+  /** Hinweistext unter den Chips, solange nichts ausgewählt ist. */
+  hint?: string;
   placeholder?: boolean;
 }
-const { title, items, placeholder = false } = Astro.props;
-const hasItems = items && items.length > 0;
+const { title, items, hint, placeholder = false } = Astro.props;
+// Strings und Objekte gleich behandeln: alles auf { term, desc } normalisieren.
+const normItems: TopicItem[] = (items ?? []).map((item) =>
+  typeof item === 'string' ? { term: item } : item,
+);
+const hasItems = normItems.length > 0;
 ---
 
 <article class={`topic-card ${placeholder ? 'topic-card--placeholder' : ''}`}>
-  <div class="topic-card__media" aria-hidden="true"><slot name="icon" /></div>
+  <div class="topic-card__media">
+    <div class="topic-card__icon" aria-hidden="true"><slot name="icon" /></div>
+    {
+      hasItems && (
+        <p class="topic-card__overlay" data-topic-detail aria-live="polite" />
+      )
+    }
+  </div>
   <div class="topic-card__body">
     <h3 class="topic-card__title">{title}</h3>
     {
       hasItems ? (
-        <ul class="topic-card__list">
-          {items!.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
+        <>
+          <ul class="topic-card__list">
+            {normItems.map((item) =>
+              item.desc ? (
+                <li>
+                  <button
+                    type="button"
+                    class="topic-chip"
+                    data-topic-chip
+                    data-desc={item.desc}
+                    aria-expanded="false"
+                  >
+                    {item.term}
+                  </button>
+                </li>
+              ) : (
+                <li>
+                  <span class="topic-chip topic-chip--static">{item.term}</span>
+                </li>
+              )
+            )}
+          </ul>
+          {hint && <p class="topic-card__hint">{hint}</p>}
+        </>
       ) : (
         <p class="topic-card__text"><slot /></p>
       )
@@ -49,16 +88,21 @@ const hasItems = items && items.length > 0;
     border-style: dashed;
   }
 
-  /* Bild-Banner über die ganze Kartenbreite, ganz oben */
+  /* Grüner Banner oben – zeigt Icon/Bild und (bei Klick) die Erklärung */
   .topic-card__media {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
     width: 100%;
     height: var(--topic-media-height);
     background: var(--sage-harmony);
     color: var(--forest-deep);
     overflow: hidden;
+  }
+  .topic-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
   }
   /* Echtes Bild füllt den Banner komplett aus */
   .topic-card__media :global(img) {
@@ -73,21 +117,63 @@ const hasItems = items && items.length > 0;
     height: 56px;
   }
 
+  /* Erklärungs-Overlay: liegt über dem Icon/Bild, oben im grünen Bereich */
+  .topic-card__overlay {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-md);
+    background: var(--forest-deep);
+    color: var(--on-dark);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    overflow: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease;
+  }
+  .topic-card__media.is-active .topic-card__overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+
   .topic-card__body {
     padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
   .topic-card__title {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
     /* Feste Höhe für zwei Titelzeilen, damit die Unterthemen in allen
        Karten bündig auf gleicher Höhe beginnen (kein Versatz bei
        längeren Oberthemen). */
     line-height: 1.25;
     min-height: 2.5em;
+    /* Lange Einzelwörter (z. B. "Konzentrationsschwierigkeiten") auch
+       auf schmalen Karten sauber umbrechen statt abschneiden. */
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
   }
   .topic-card__text {
     margin: 0;
     color: var(--calm-earth);
+    line-height: 1.6;
   }
+  /* Platzhalter-Text ("Dein Thema") mittig im Kartenkörper, damit unten
+     kein einseitiger Leerraum entsteht, wenn die Karte gestreckt wird. */
+  .topic-card--placeholder .topic-card__body {
+    justify-content: center;
+  }
+  .topic-card--placeholder .topic-card__title {
+    min-height: 0;
+  }
+
   /* Unterthemen als Chips unter dem Oberthema */
   .topic-card__list {
     list-style: none;
@@ -98,15 +184,75 @@ const hasItems = items && items.length > 0;
     gap: var(--space-xs);
   }
   .topic-card__list li {
+    display: flex;
+  }
+
+  /* Chip = anklickbarer Button; bewusst eckiger (kleiner Radius) */
+  .topic-chip {
+    font-family: var(--font-body);
     font-size: 0.85rem;
-    line-height: 1;
+    line-height: 1.15;
     color: var(--forest-deep);
     background: var(--bg);
     border: var(--border-soft);
-    border-radius: 999px;
-    padding: 0.45em 0.85em;
+    border-radius: var(--radius-sm);
+    padding: 0.5em 0.8em;
+    cursor: pointer;
+    transition: background-color 0.18s ease, border-color 0.18s ease,
+      color 0.18s ease, transform 0.12s ease;
   }
-  .topic-card--placeholder .topic-card__list li {
+  button.topic-chip:hover {
+    background: var(--sage-harmony);
+    border-color: var(--sage-harmony);
+    transform: translateY(-1px);
+  }
+  /* Aktiver (aufgeklappter) Chip: klar hervorgehoben */
+  .topic-chip[aria-expanded='true'] {
+    background: var(--forest-deep);
+    border-color: var(--forest-deep);
+    color: var(--on-dark);
+  }
+  /* Nicht klickbarer Chip (z. B. "u. v. m.") */
+  .topic-chip--static {
+    cursor: default;
+    color: var(--calm-earth);
     background: transparent;
   }
+
+  /* Kleiner Hinweis unter den Chips */
+  .topic-card__hint {
+    margin: var(--space-md) 0 0;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: var(--calm-earth);
+  }
 </style>
+
+<script>
+  // Unterthemen-Chips: Klick zeigt eine kurze Erklärung oben im grünen
+  // Banner der jeweiligen Karte. Erneuter Klick auf denselben Chip
+  // blendet sie wieder aus (zurück zum Icon/Bild).
+  const cards = document.querySelectorAll<HTMLElement>('.topic-card');
+  cards.forEach((card) => {
+    const media = card.querySelector<HTMLElement>('.topic-card__media');
+    const detail = card.querySelector<HTMLElement>('[data-topic-detail]');
+    if (!media || !detail) return;
+    const chips = card.querySelectorAll<HTMLButtonElement>('[data-topic-chip]');
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const wasActive = chip.getAttribute('aria-expanded') === 'true';
+        chips.forEach((c) => c.setAttribute('aria-expanded', 'false'));
+
+        if (wasActive) {
+          media.classList.remove('is-active');
+          detail.textContent = '';
+        } else {
+          chip.setAttribute('aria-expanded', 'true');
+          detail.textContent = chip.dataset.desc ?? '';
+          media.classList.add('is-active');
+        }
+      });
+    });
+  });
+</script>

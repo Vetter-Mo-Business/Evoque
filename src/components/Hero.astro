@@ -1,8 +1,11 @@
 ---
+import heroLogo from '../assets/about/Hero_Logo.svg';
+import heroVideo from '../assets/about/Teil1-2.mp4?url';
+import heroGif from '../assets/about/Teil2.gif?url';
+
 interface Props {
-  video?: string;
   poster?: string;
-  title?: string;
+  subtitle?: string;
   ctaHref?: string;
   ctaLabel?: string;
   secondaryHref?: string;
@@ -10,9 +13,8 @@ interface Props {
 }
 
 const {
-  video = '/images/Animation/Hero_Video-2.mp4',
   poster,
-  title = 'Become your\nbest you',
+  subtitle = 'become your best you',
   ctaHref,
   ctaLabel,
   secondaryHref,
@@ -22,20 +24,39 @@ const {
 
 <section class="hero">
   <div class="hero__stage">
+    <!-- Zwei Media-Ebenen: Das Video (Teil1-2) spielt EINMAL die Intro-
+         Animation. Wenn es fertig ist, wird sanft (ohne harten Schnitt) auf
+         das GIF (Teil2) übergeblendet, das die ruhige Blätter-Bewegung von
+         sich aus endlos loopt. Das GIF liegt voll deckend UNTEN, das Video
+         blendet OBEN aus -> es wird nie dunkler. -->
+    <img
+      class="hero__media hero__gif"
+      data-src={heroGif}
+      alt=""
+      aria-hidden="true"
+      decoding="async"
+    />
     <video
-      class="hero__video"
-      src={video}
+      class="hero__media hero__video"
+      src={heroVideo}
       poster={poster}
-      autoplay
       muted
       playsinline
       preload="auto"
-      data-loop-tail="6"
+      data-fade="1"
     ></video>
 
     <div class="hero__overlay">
       <div class="hero__content">
-        <h1 class="hero__title" set:html={title.replace(/\n/g, '<br />')} />
+        <div class="hero__headline">
+          <img
+            class="hero__logo"
+            src={heroLogo.src}
+            alt="EVOQUE yourself"
+            decoding="async"
+          />
+          {subtitle && <p class="hero__subtitle">{subtitle}</p>}
+        </div>
         {
           (ctaHref && ctaLabel) || (secondaryHref && secondaryLabel) ? (
             <div class="hero__actions">
@@ -62,7 +83,7 @@ const {
     /* =================================================================
        HIER ANPASSEN
        Alle Werte skalieren mit der Videobreite (cqw = 1% der Videobreite).
-       Dadurch bleibt der Text auf JEDEM Bildschirm gleich groß im
+       Dadurch bleibt der Inhalt auf JEDEM Bildschirm gleich groß im
        Verhältnis zum Blumenkranz – also immer mittig innerhalb davon.
        ================================================================= */
 
@@ -76,30 +97,39 @@ const {
        Standard: erster Bildschirm abzüglich Navbar-Höhe (76px). */
     --hero-height: calc(100svh - 76px);
 
-    /* Schriftgröße der Überschrift "Become your best you".
+    /* Breite des Logos "EVOQUE yourself" (oben).
        clamp(min, fließend, max): mittlerer Wert in cqw steuert die Größe.
-       Der min-Wert ist klein, damit die Schrift beim Verkleinern des
+       Der min-Wert ist klein, damit das Logo beim Verkleinern des
        Bildschirms wirklich weiter mitschrumpft. */
-    --hero-text-size: clamp(0.85rem, 6.2cqw, 4.4rem);
+    --hero-logo-width: clamp(8rem, 50cqw, 50rem);
 
-    /* Textfarbe der Überschrift (Dunkelgrün) */
+    /* Schriftgröße der Unterzeile "become your best you" (kleiner). */
+    --hero-subtitle-size: clamp(0.5rem, 2.4cqw, 1.5rem);
+
+    /* Textfarbe der Unterzeile (Dunkelgrün) */
     --hero-text-color: var(--forest-deep);
 
-    /* Breite des Textblocks – hält den Text innerhalb des Blumenkranzes.
+    /* Breite des Textblocks – hält den Inhalt innerhalb des Blumenkranzes.
        Greift, sobald der Text umbricht (kleine Bildschirme). */
     --hero-content-width: 60cqw;
 
-    /* Abstand zwischen Überschrift und Buttons (Buttons höher/tiefer) */
-    --hero-actions-gap: 6cqw;
+    /* Abstand zwischen Überschrift-Block und Buttons (Buttons höher/tiefer) */
+    --hero-actions-gap: 5cqw;
+
+    /* Abstand zwischen Logo und der Unterzeile (negativ erlaubt).
+       Das Logo-SVG ist bereits eng um den Text beschnitten. Mit diesem Wert
+       kann die Unterzeile (und mit ihr die Buttons) fein justiert werden:
+       negativ = näher/höher an "yourself", positiv = tiefer. */
+    --hero-headline-gap: 0.5cqw;
 
     /* Größe der Buttons (Schrift) – skaliert ebenfalls mit dem Video.
        Kleiner min-Wert, damit die Buttons mitschrumpfen. */
     --hero-btn-size: clamp(0.55rem, 1.9cqw, 1.1rem);
 
-    /* Horizontale Verschiebung von Text + Buttons (− links / + rechts) */
+    /* Horizontale Verschiebung von Inhalt (− links / + rechts) */
     --hero-text-x: 0px;
 
-    /* Vertikale Verschiebung von Text + Buttons (− nach oben / + nach unten).
+    /* Vertikale Verschiebung von Inhalt (− nach oben / + nach unten).
        In cqw, damit sie proportional zum Video bleibt. Hier nachjustieren,
        um alles minimal höher/tiefer zu rücken. */
     --hero-text-y: 3cqw;
@@ -124,7 +154,7 @@ const {
     container-type: inline-size;
   }
 
-  .hero__video {
+  .hero__media {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -132,9 +162,22 @@ const {
     object-fit: cover;
     object-position: center;
     display: block;
+    /* Opacity wird per JS für die Überblendung gesteuert. */
+    will-change: opacity;
   }
 
-  /* Zentrierte Text-Ebene über dem Video */
+  /* Startzustand: Video oben sichtbar, GIF darunter (wird beim Ende
+     eingeblendet, während das Video ausblendet). */
+  .hero__gif {
+    z-index: 0;
+    opacity: 0;
+  }
+  .hero__video {
+    z-index: 1;
+    opacity: 1;
+  }
+
+  /* Zentrierte Inhalts-Ebene über dem Video */
   .hero__overlay {
     position: absolute;
     inset: 0;
@@ -147,8 +190,6 @@ const {
   }
 
   .hero__content {
-    /* Im Normalfall keine Breitenbegrenzung: der einzeilige Titel wird so
-       von Flexbox sauber exakt in die Mitte gesetzt (Buttons rücken mit). */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -157,14 +198,30 @@ const {
     text-align: center;
   }
 
-  .hero__title {
-    margin: 0;
-    color: var(--hero-text-color);
-    font-size: var(--hero-text-size);
-    line-height: 1.05;
-    /* Standard (breites Video): einzeilig */
-    white-space: nowrap;
+  .hero__headline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero__logo {
+    display: block;
+    width: var(--hero-logo-width);
+    height: auto;
     /* sanfter heller Schein für Lesbarkeit auf dem Video */
+    filter: drop-shadow(0 0.3cqw 2cqw rgba(255, 255, 255, 0.55));
+  }
+
+  .hero__subtitle {
+    /* margin-top statt flex-gap: darf negativ sein, damit die Unterzeile
+       dicht unter "yourself" gezogen werden kann. */
+    margin: var(--hero-headline-gap) 0 0;
+    color: var(--hero-text-color);
+    font-size: var(--hero-subtitle-size);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    white-space: nowrap;
     text-shadow: 0 0.3cqw 2cqw rgba(255, 255, 255, 0.55);
   }
 
@@ -175,14 +232,14 @@ const {
     justify-content: center;
   }
 
-  /* Wird das Video (= der Kranz) schmal, bricht der Text auf 2 Zeilen
-     um und die Buttons stehen untereinander – alles bleibt mittig. */
+  /* Wird das Video (= der Kranz) schmal, bricht der Inhalt um und die
+     Buttons stehen untereinander – alles bleibt mittig. */
   @container (max-width: 680px) {
     .hero__content {
-      /* erst beim Umbruch begrenzen, damit der Text im Kranz bleibt */
+      /* erst beim Umbruch begrenzen, damit der Inhalt im Kranz bleibt */
       max-width: var(--hero-content-width);
     }
-    .hero__title {
+    .hero__subtitle {
       white-space: normal;
     }
     .hero__actions {
@@ -213,34 +270,71 @@ const {
 </style>
 
 <script>
-  // Endlos weiterlaufen, OHNE Neustart von vorne:
-  // Das Video spielt einmal komplett. Danach springt es nur noch an den
-  // Anfang der letzten Sekunden zurück, sodass sich die Blumen ruhig
-  // weiterbewegen – ohne "Video zu Ende"-Gefühl.
-  document.querySelectorAll<HTMLVideoElement>('.hero__video').forEach((v) => {
-    const tail = parseFloat(v.dataset.loopTail || '6'); // letzte Sekunden
-    v.loop = false;
+  // Ablauf: Das Video (Teil1-2) spielt EINMAL die Intro-Animation. Sobald es
+  // zu Ende ist, wird sanft (ohne harten Schnitt) auf das GIF (Teil2)
+  // übergeblendet, das die ruhige Blätter-Bewegung von sich aus endlos loopt.
+  //
+  // Kein Abdunkeln: Das GIF liegt voll deckend UNTEN und wird zuerst sichtbar
+  // gemacht, danach blendet nur das Video OBEN aus. Das Bild ist dadurch immer
+  // vollständig gedeckt.
+  document.querySelectorAll<HTMLElement>('.hero').forEach((hero) => {
+    const video = hero.querySelector<HTMLVideoElement>('.hero__video');
+    const gif = hero.querySelector<HTMLImageElement>('.hero__gif');
+    if (!video || !gif) return;
 
-    // Autoplay zuverlässig anstoßen. Auf einer frisch deployten Domain
-    // ist die Autoplay-Richtlinie strenger als lokal – darum erzwingen wir
-    // den stummen Zustand und versuchen das Abspielen mehrfach.
-    v.muted = true;
-    v.defaultMuted = true;
-    v.setAttribute('muted', '');
+    const gifUrl = gif.dataset.src || '';
 
-    const tryPlay = () => {
-      const p = v.play();
+    video.muted = true;
+    video.defaultMuted = true;
+    video.setAttribute('muted', '');
+    video.loop = false;
+
+    // GIF vorab in den Cache laden, damit der Wechsel verzögerungsfrei ist.
+    if (gifUrl) new Image().src = gifUrl;
+
+    const safePlay = () => {
+      const p = video.play();
       if (p) p.catch(() => {});
     };
 
-    tryPlay();
-    v.addEventListener('loadeddata', tryPlay, { once: true });
-    v.addEventListener('canplay', tryPlay, { once: true });
+    let switched = false;
+    const showGif = () => {
+      if (switched) return;
+      switched = true;
 
-    // Letzter Fallback: sollte der Browser den Start blockieren, startet
-    // das Video bei der ersten Interaktion des Besuchers.
+      // GIF frisch laden -> startet garantiert bei Frame 0 (= letzter
+      // Video-Frame). DIREKTER Wechsel ohne Überblendung, aber erst wenn das
+      // GIF fertig dekodiert ist. Bis dahin bleibt das Video auf seinem
+      // eingefrorenen letzten Frame stehen -> keine Lücke, kein Abdunkeln.
+      gif.src = gifUrl;
+
+      const reveal = () => {
+        gif.style.transition = 'none';
+        video.style.transition = 'none';
+        gif.style.opacity = '1';
+        video.style.opacity = '0';
+      };
+
+      if (typeof gif.decode === 'function') {
+        gif.decode().then(reveal).catch(reveal);
+      } else if (gif.complete) {
+        reveal();
+      } else {
+        gif.addEventListener('load', reveal, { once: true });
+      }
+    };
+
+    video.addEventListener('ended', showGif);
+
+    // Autoplay zuverlässig anstoßen (frisch deployte Domain ist strenger).
+    safePlay();
+    video.addEventListener('loadeddata', safePlay, { once: true });
+    video.addEventListener('canplay', safePlay, { once: true });
+
+    // Letzter Fallback: sollte der Browser den Start blockieren, startet das
+    // Video bei der ersten Interaktion des Besuchers.
     const onInteract = () => {
-      tryPlay();
+      if (!switched) safePlay();
       window.removeEventListener('pointerdown', onInteract);
       window.removeEventListener('touchstart', onInteract);
       window.removeEventListener('scroll', onInteract);
@@ -248,11 +342,5 @@ const {
     window.addEventListener('pointerdown', onInteract, { passive: true });
     window.addEventListener('touchstart', onInteract, { passive: true });
     window.addEventListener('scroll', onInteract, { passive: true });
-
-    v.addEventListener('ended', () => {
-      const start = Math.max(0, (v.duration || tail) - tail);
-      v.currentTime = start;
-      tryPlay();
-    });
   });
 </script>
