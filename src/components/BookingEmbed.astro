@@ -15,14 +15,22 @@
 // Solange calLink leer ist, wird ein Platzhalter angezeigt.
 
 interface Props {
-  /** Cal.com-Link im Format "benutzername/event-typ". Leer = Platzhalter. */
+  /** Cal.com-Link im Format "benutzername/event-typ" (oder nur "benutzername"). Leer = Platzhalter. */
   calLink?: string;
   /** Markenfarbe des eingebetteten Kalenders. */
   brandColor?: string;
+  /**
+   * Cal-Region/Instanz. Standard = cal.com. Fuer die EU-Region den Wert
+   * "cal.eu" setzen (Links, die auf https://cal.eu/... liegen).
+   */
+  calOrigin?: 'cal.com' | 'cal.eu';
 }
 
-const { calLink = '', brandColor = '#152c1a' } = Astro.props;
+const { calLink = '', brandColor = '#152c1a', calOrigin = 'cal.com' } = Astro.props;
 const isConfigured = calLink.trim().length > 0;
+// Region -> Origin + Embed-Skript. cal.eu nutzt die EU-Instanz von Cal.com.
+const origin = `https://${calOrigin}`;
+const embedScript = `https://app.${calOrigin}/embed/embed.js`;
 const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
 const ph = {
   de: {
@@ -52,7 +60,7 @@ const ph = {
 </div>
 
 {isConfigured && (
-  <script define:vars={{ calLink, brandColor }}>
+  <script define:vars={{ calLink, brandColor, origin, embedScript }}>
     (function (C, A, L) {
       let p = function (a, ar) { a.q.push(ar); };
       let d = C.document;
@@ -80,9 +88,9 @@ const ph = {
         }
         p(cal, ar);
       };
-    })(window, 'https://app.cal.com/embed/embed.js', 'init');
+    })(window, embedScript, 'init');
 
-    Cal('init', { origin: 'https://cal.com' });
+    Cal('init', { origin: origin });
     Cal('inline', {
       elementOrSelector: '#cal-inline',
       calLink: calLink,
