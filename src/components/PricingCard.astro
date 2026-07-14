@@ -3,6 +3,8 @@ interface Props {
   name: string;
   price?: string;
   perSession?: string;
+  sessions?: string;
+  duration?: string;
   features: string[];
   ctaLabel: string;
   ctaHref: string;
@@ -14,6 +16,8 @@ const {
   name,
   price,
   perSession,
+  sessions,
+  duration,
   features,
   ctaLabel,
   ctaHref,
@@ -38,6 +42,15 @@ const {
     )
   }
   {perSession && <p class="pricing-card__per">{perSession}</p>}
+
+  {
+    (sessions || duration) && (
+      <p class="pricing-card__stats">
+        {sessions && <span class="pricing-card__sessions">{sessions}</span>}
+        {duration && <span class="pricing-card__duration">{duration}</span>}
+      </p>
+    )
+  }
 
   <ul class="pricing-card__features">
     {
@@ -79,8 +92,11 @@ const {
   }
   .pricing-card__badge {
     position: absolute;
-    top: var(--space-lg);
-    right: var(--space-lg);
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    box-shadow: var(--shadow-soft);
   }
   .pricing-card__name {
     margin-bottom: var(--space-md);
@@ -101,7 +117,30 @@ const {
   .pricing-card__per {
     color: var(--calm-earth);
     font-size: 0.95rem;
+    margin: 0 0 var(--space-md);
+  }
+  /* Sitzungsanzahl (und Dauer) prominent hervorgehoben: soll sofort ins
+     Auge fallen. */
+  .pricing-card__stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
     margin: 0 0 var(--space-lg);
+    padding: var(--space-md) 0;
+    border-top: var(--border-soft);
+    border-bottom: var(--border-soft);
+  }
+  .pricing-card__sessions {
+    font-family: var(--font-heading);
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--forest-deep);
+  }
+  .pricing-card__duration {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--calm-earth);
   }
   .pricing-card__features {
     list-style: none;

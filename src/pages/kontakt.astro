@@ -4,15 +4,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import BookingEmbed from '../components/BookingEmbed.astro';
 import portraitImg from '../assets/about/DSC00751.jpg';
-import qrImg from '../assets/about/QR_Malin.jpeg';
 import { localizePath, type Lang } from '../i18n/ui';
 
-// Cal-Buchungslink im Format "benutzername/event-typ" (oder nur "benutzername").
-// Leer lassen -> Platzhalter wird angezeigt.
-// CAL_ORIGIN = 'cal.eu' fuer Links, die auf https://cal.eu/... liegen (EU-Region).
+// Cal.com-Buchungslink im Format "benutzername/event-typ" eintragen.
+// Beispiel: 'malin-evoque/kennenlernen'. Leer lassen -> Platzhalter wird angezeigt.
 // Einrichtungs-Anleitung steht in src/components/BookingEmbed.astro.
 const CAL_LINK = 'malin-langer-g1yec0/30min';
-const CAL_ORIGIN = 'cal.com' as const;
 
 const lang = (Astro.currentLocale ?? 'de') as Lang;
 const l = (p: string) => localizePath(p, lang);
@@ -21,24 +18,21 @@ const content = {
     metaTitle: 'Kontakt & Buchung',
     metaDesc: 'Buche Dein kostenloses Kennenlerngespräch oder nimm direkt Kontakt zu EVOQUE auf.',
     introEyebrow: 'Kontakt & Buchung',
-    introTitle: 'Lerne mich kennen. / Lass uns kennenlernen.',
+    introTitle: 'Lass uns kennenlernen.',
     introLead:
-      'Buche dein kostenloses Kennenlerngespräch oder kontaktiere mich per Mail. Ich freue mich, von dir zu hören!',
+      'Buche dein kostenloses Kennenlerngespräch oder kontaktiere mich gerne. Ich freue mich, von dir zu hören!',
     bookEyebrow: 'Online buchen',
     bookTitle: 'Termin direkt sichern',
-    directTitle: 'Kontaktiere mich gerne direkt',
+    directTitle: 'Kontaktiere mich direkt',
     email: 'E-Mail',
     emailNote: '[PLATZHALTER: finale E-Mail-Adresse bestätigen]',
-    instagram: 'Instagram',
-    instagramHandle: '@evoqueyourself',
+    phone: 'Telefon',
+    phoneValue: '[PLATZHALTER: Telefonnummer]',
     portraitAlt: 'Malin – EVOQUE',
-    cardAlt: 'QR-Code zum EVOQUE Instagram-Profil',
+    cardAlt: 'Visitenkarte von EVOQUE – Vorderseite',
+    igTitle: 'EVOQUE auf Instagram',
     faqPrompt: 'Noch offene Fragen vor dem Gespräch?',
     faqCta: 'Häufige Fragen ansehen',
-    igTitle: 'EVOQUE auf Instagram',
-    variant2: 'Option 2 – Karte links, Instagram-Feed statt QR-Code',
-    variant3: 'Option 3 – nur Instagram-Feed in der Box (keine Karte links)',
-    variant4: 'Option 4 – ausbalanciertes Layout (Karte + Feed optimiert)',
   },
   en: {
     metaTitle: 'Contact & Booking',
@@ -52,20 +46,15 @@ const content = {
     directTitle: 'Contact me directly',
     email: 'Email',
     emailNote: '[PLACEHOLDER: confirm final email address]',
-    instagram: 'Instagram',
-    instagramHandle: '@evoqueyourself',
+    phone: 'Phone',
+    phoneValue: '[PLACEHOLDER: phone number]',
     portraitAlt: 'Malin – EVOQUE',
-    cardAlt: 'QR code to the EVOQUE Instagram profile',
+    cardAlt: 'EVOQUE business card – front',
+    igTitle: 'EVOQUE on Instagram',
     faqPrompt: 'Still have questions before the call?',
     faqCta: 'View the FAQ',
-    igTitle: 'EVOQUE on Instagram',
-    variant2: 'Option 2 – card left, Instagram feed instead of QR code',
-    variant3: 'Option 3 – Instagram feed only in the box (no card on the left)',
-    variant4: 'Option 4 – balanced layout (card + feed optimised)',
   },
 }[lang];
-const instagramUrl = 'https://www.instagram.com/evoqueyourself';
-const instagramEmbedUrl = `${instagramUrl}/embed`;
 ---
 
 <BaseLayout title={content.metaTitle} description={content.metaDesc}>
@@ -83,7 +72,7 @@ const instagramEmbedUrl = `${instagramUrl}/embed`;
     <div class="container">
       <div class="booking-wrap">
         <SectionHeading eyebrow={content.bookEyebrow} title={content.bookTitle} />
-        <BookingEmbed calLink={CAL_LINK} calOrigin={CAL_ORIGIN} />
+        <BookingEmbed calLink={CAL_LINK} />
       </div>
     </div>
   </section>
@@ -117,263 +106,72 @@ const instagramEmbedUrl = `${instagramUrl}/embed`;
               </dd>
             </div>
             <div>
-              <dt>{content.instagram}</dt>
-              <dd>
-                <a href={instagramUrl} target="_blank" rel="noopener"
-                  >{content.instagramHandle}</a
-                >
-              </dd>
+              <dt>{content.phone}</dt>
+              <dd>{content.phoneValue}</dd>
             </div>
           </dl>
         </article>
 
-        <div class="contact-card-visual">
-          <Image
-            src={qrImg}
-            alt={content.cardAlt}
-            widths={[300, 480, 600]}
-            sizes="(max-width: 760px) 80vw, 400px"
-            quality={85}
-            loading="lazy"
-          />
-        </div>
-        </div>
-
-        <p class="contact-faq">
-          <span class="contact-faq__prompt">{content.faqPrompt}</span>
-          <a href={`${l('/preise')}#faq`} class="btn btn--primary">{content.faqCta}</a>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!--
-    ===================================================================
-    VERGLEICHS-VARIANTEN (temporär) – Instagram-Live-Einbettung.
-    Die Original-Box oben bleibt unverändert (Sync mit Unternehmensseite).
-    Nach der Auswahl einer Variante können die anderen wieder entfernt
-    und die Sync-Box entsprechend angepasst werden.
-    ===================================================================
-  -->
-
-  <!-- OPTION 2: Karte links, Instagram-Feed rechts (QR-Code ersetzt) -->
-  <section class="section section--tight">
-    <div class="container">
-      <p class="variant-label">{content.variant2}</p>
-      <div class="contact-box">
-        <div class="contact-direct">
-          <article class="card contact-person">
-            <div class="contact-person__avatar">
-              <Image
-                src={portraitImg}
-                alt={content.portraitAlt}
-                widths={[300, 480]}
-                sizes="150px"
-                quality={85}
-                loading="lazy"
-              />
-            </div>
-            <dl class="contact-list">
-              <div>
-                <dt>{content.email}</dt>
-                <dd>
-                  <a href="mailto:evoqueyourself.coaching@gmail.com"
-                    >evoqueyourself.coaching@gmail.com</a
-                  >
-                  <span class="contact-note">{content.emailNote}</span>
-                </dd>
-              </div>
-              <div>
-                <dt>{content.instagram}</dt>
-                <dd>
-                  <a href={instagramUrl} target="_blank" rel="noopener"
-                    >{content.instagramHandle}</a
-                  >
-                </dd>
-              </div>
-            </dl>
-          </article>
-
-          <div class="ig-embed ig-embed--tall">
-            <iframe
-              src={instagramEmbedUrl}
-              title={content.igTitle}
-              loading="lazy"
-              scrolling="auto"
-              frameborder="0"
-              allowtransparency="true"
-            ></iframe>
-          </div>
-        </div>
-
-        <p class="contact-faq">
-          <span class="contact-faq__prompt">{content.faqPrompt}</span>
-          <a href={`${l('/preise')}#faq`} class="btn btn--primary">{content.faqCta}</a>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- OPTION 3: echter Live-Feed via LightWidget, keine Karte links -->
-  <section class="section section--tight">
-    <div class="container">
-      <p class="variant-label">{content.variant3}</p>
-      <div class="contact-box">
-        <div class="ig-embed ig-embed--solo">
+        <div class="ig-embed">
           <iframe
-            src={instagramEmbedUrl}
+            src="https://www.instagram.com/evoqueyourself/embed"
             title={content.igTitle}
             loading="lazy"
-            scrolling="auto"
+            scrolling="no"
             frameborder="0"
             allowtransparency="true"
           ></iframe>
         </div>
-
-        <p class="contact-faq">
-          <span class="contact-faq__prompt">{content.faqPrompt}</span>
-          <a href={`${l('/preise')}#faq`} class="btn btn--primary">{content.faqCta}</a>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- OPTION 4: ausbalanciertes Layout – Karte + Feed sauber ausgerichtet -->
-  <section class="section section--tight">
-    <div class="container">
-      <p class="variant-label">{content.variant4}</p>
-      <div class="contact-box contact-box--wide">
-        <div class="contact-direct contact-direct--balanced">
-          <article class="card contact-person">
-            <div class="contact-person__avatar">
-              <Image
-                src={portraitImg}
-                alt={content.portraitAlt}
-                widths={[300, 480]}
-                sizes="150px"
-                quality={85}
-                loading="lazy"
-              />
-            </div>
-            <dl class="contact-list">
-              <div>
-                <dt>{content.email}</dt>
-                <dd>
-                  <a href="mailto:evoqueyourself.coaching@gmail.com"
-                    >evoqueyourself.coaching@gmail.com</a
-                  >
-                  <span class="contact-note">{content.emailNote}</span>
-                </dd>
-              </div>
-              <div>
-                <dt>{content.instagram}</dt>
-                <dd>
-                  <a href={instagramUrl} target="_blank" rel="noopener"
-                    >{content.instagramHandle}</a
-                  >
-                </dd>
-              </div>
-            </dl>
-          </article>
-
-          <div class="ig-embed ig-embed--framed">
-            <iframe
-              src={instagramEmbedUrl}
-              title={content.igTitle}
-              loading="lazy"
-              scrolling="auto"
-              frameborder="0"
-              allowtransparency="true"
-            ></iframe>
-          </div>
         </div>
-
-        <p class="contact-faq">
-          <span class="contact-faq__prompt">{content.faqPrompt}</span>
-          <a href={`${l('/preise')}#faq`} class="btn btn--primary">{content.faqCta}</a>
-        </p>
       </div>
+
+      <p class="contact-faq">
+        <span class="contact-faq__prompt">{content.faqPrompt}</span>
+        <a href={`${l('/preise')}#faq`} class="btn btn--primary">{content.faqCta}</a>
+      </p>
     </div>
   </section>
-
-  <script>
-    // Instagram-Profil-Embeds melden ihre Inhaltshoehe per postMessage
-    // (Typ "MEASURE"). Wir passen das jeweilige iframe exakt daran an ->
-    // kein Leerraum unten und kein Abschneiden, unabhaengig von der Breite.
-    window.addEventListener('message', (event) => {
-      let host = '';
-      try {
-        host = new URL(event.origin).host;
-      } catch {
-        return;
-      }
-      if (!/(^|\.)instagram\.com$/.test(host)) return;
-
-      let data: any = event.data;
-      if (typeof data === 'string') {
-        try {
-          data = JSON.parse(data);
-        } catch {
-          return;
-        }
-      }
-      const height = data?.type === 'MEASURE' ? data?.details?.height : undefined;
-      if (!height) return;
-
-      document.querySelectorAll<HTMLIFrameElement>('.ig-embed iframe').forEach((frame) => {
-        if (frame.contentWindow === event.source) {
-          frame.style.height = `${height}px`;
-        }
-      });
-    });
-  </script>
 
 </BaseLayout>
 
 <style>
   .contact-direct__title {
     text-align: center;
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-xl);
   }
 
-  /* FAQ-Verweis unter beiden Karten (in der Box), Text links, Button rechts –
-     auf schmalen Bildschirmen bricht er um. (identisch zur Unternehmensseite) */
+  /* FAQ-Verweis unter dem Direktkontakt */
   .contact-faq {
-    margin: var(--space-lg) 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-md);
+    margin: var(--space-2xl) 0 0;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
   }
   .contact-faq__prompt {
-    color: var(--forest-deep);
+    color: var(--calm-earth);
     font-size: 0.95rem;
-    font-weight: 600;
   }
 
   /* Große Box rund um den ganzen Direktkontakt-Bereich */
   .contact-box {
-    max-width: 720px;
-    margin-inline: auto;
     background: var(--soft-sand);
     border: var(--border-soft);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-soft);
-    padding: var(--space-lg);
+    padding: var(--space-2xl);
   }
 
-  /* Zwei Spalten: links Personen-Karte, rechts QR-Code */
+  /* Zwei Spalten: links Personen-Karte, rechts Visitenkarte */
   .contact-direct {
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--space-xl);
     align-items: center;
   }
   @media (min-width: 760px) {
     .contact-direct {
       grid-template-columns: 1fr 1fr;
-      align-items: stretch;
     }
   }
 
@@ -381,7 +179,7 @@ const instagramEmbedUrl = `${instagramUrl}/embed`;
   .contact-person {
     text-align: center;
     display: grid;
-    gap: var(--space-md);
+    gap: var(--space-lg);
     justify-items: center;
   }
   .contact-person__avatar {
@@ -402,7 +200,7 @@ const instagramEmbedUrl = `${instagramUrl}/embed`;
   .contact-list {
     margin: 0;
     display: grid;
-    gap: var(--space-md);
+    gap: var(--space-lg);
     justify-items: center;
     text-align: center;
   }
@@ -430,75 +228,25 @@ const instagramEmbedUrl = `${instagramUrl}/embed`;
     color: var(--calm-earth);
   }
 
-  /* QR-Seite als eigene weiße Karte – gleiche Optik wie die Personen-Karte,
-     damit beide Spalten gleich hoch wirken. Der QR bleibt quadratisch
-     (nicht gequetscht) und sitzt mittig. Gleiche Höhe kommt aus dem
-     align-items: stretch des Rasters. */
-  .contact-card-visual {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-soft);
-    border: var(--border-soft);
-    padding: var(--space-lg);
-  }
-  .contact-card-visual img {
-    width: 100%;
-    max-width: 260px;
-    height: auto;
-    border-radius: var(--radius);
-    display: block;
-  }
-
-  /* -------------------------------------------------------------------
-     Vergleichs-Varianten (temporär) – Instagram-Live-Einbettung
-     ------------------------------------------------------------------- */
-  .variant-label {
-    text-align: center;
-    font-weight: 600;
-    font-size: 0.9rem;
-    letter-spacing: 0.03em;
-    color: var(--calm-earth);
-    margin-bottom: var(--space-md);
-  }
-
-  /* Instagram-Einbettung (iframe auf /embed) – wie die QR-Karte gerahmt */
+  /* Instagram-Feed-Einbettung (rechte Spalte, statt Visitenkarte).
+     Breite begrenzt -> Inhaltshöhe bleibt vorhersehbar; zusammen mit
+     scrolling="no" am Iframe verhindert das den internen Scrollbalken. */
   .ig-embed {
     width: 100%;
+    max-width: 360px;
+    margin-inline: auto;
     border-radius: var(--radius);
     overflow: hidden;
-    background: #fff;
-    border: var(--border-soft);
     box-shadow: var(--shadow-soft);
+    border: var(--border-soft);
+    background: #fff;
   }
-  /* Hoehe ist nur ein Fallback: das Script unten passt das iframe per
-     postMessage exakt an die vom Instagram-Embed gemeldete Inhaltshoehe an
-     -> kein Leerraum unten, kein Abschneiden. (Instagram zeigt im Profil-
-     Embed nur eine begrenzte Vorschau, aktuell 6 Beitraege.) */
   .ig-embed iframe {
     display: block;
     width: 100%;
-    height: 560px;
     border: 0;
-  }
-
-  /* Option 3: nur Feed, mittig und in der Breite begrenzt */
-  .ig-embed--solo {
-    max-width: 400px;
-    margin-inline: auto;
-  }
-
-  /* Option 4: ausbalanciertes Raster – Karte mittig, Feed schmaler & fix */
-  .contact-box--wide {
-    max-width: 900px;
-  }
-  @media (min-width: 760px) {
-    .contact-direct--balanced {
-      grid-template-columns: 1fr minmax(320px, 380px);
-      align-items: center;
-      gap: var(--space-xl);
-    }
+    /* Höhe passend zum Instagram-Profil-Embed (kein interner Scroll).
+       Bei Bedarf hier fein justieren. */
+    height: 540px;
   }
 </style>

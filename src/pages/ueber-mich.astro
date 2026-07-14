@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import FlowerCorner from '../components/FlowerCorner.astro';
 import portraitImg from '../assets/about/DSC00751.jpg';
 import anchorImg from '../assets/about/DSC00842.jpg';
-import logoImg from '../assets/about/Hero_Logo.svg';
+import logoImg from '../assets/about/Head_Logo_Evoque.svg';
 import { type Lang } from '../i18n/ui';
 
 const lang = (Astro.currentLocale ?? 'de') as Lang;
@@ -149,10 +149,19 @@ const content = {
   .values__media img {
     display: block;
     width: 100%;
+    /* Head_Logo_Evoque ist quadratisch (viewBox 5906x5906) – zentriert und
+       begrenzt. Mobil kompakt (nicht formatfüllend), auf großen Screens etwas
+       größer. Fließend über clamp: skaliert mit der Viewport-Breite. */
+    max-width: clamp(160px, 40vw, 320px);
     height: auto;
+    margin-inline: auto;
   }
   .intro__media {
     position: relative;
+    /* Mobil: Porträt nicht die ganze Breite einnehmen -> zentriert, begrenzt,
+       damit es nicht "schwebend" wirkt. */
+    max-width: clamp(240px, 72vw, 360px);
+    margin-inline: auto;
   }
   .intro__media img {
     display: block;
@@ -161,6 +170,17 @@ const content = {
     box-shadow: var(--shadow-card);
     object-fit: cover;
     aspect-ratio: 4 / 5;
+  }
+  @media (min-width: 860px) {
+    /* Desktop: Breite steuert das Grid, Deckel wieder aufheben. */
+    .intro__media,
+    .values__media img {
+      max-width: none;
+      margin-inline: 0;
+    }
+    .values__media img {
+      margin-inline: auto;
+    }
   }
 
   /* Floraler Eckschmuck als Blumenrahmen */
@@ -192,24 +212,39 @@ const content = {
   }
   .anchor__images {
     /* ===== HIER EINSTELLEN ===== */
-    --img-zoom: 1; /* Zoom: 1 = Grundeinstellung, größer = näher ran (z. B. 1.2) */
+    --img-zoom: 1.2; /* REINZOOMEN: Motiv größer -> schneidet oben UND unten weg (weniger Leerraum).
+                        1 = aus, 1.3 = leicht rein, 1.6 = deutlich rein. Für "oben mehr weg": erhöhen. */
     --img-x: 50%; /* Links/Rechts: 0% = ganz links, 50% = Mitte, 100% = ganz rechts */
-    --img-y: 45%; /* Hoch/Runter: 0% = ganz oben, 50% = Mitte, 100% = ganz unten */
-    --img-ratio: 3.7 / 3; /* Bildausschnitt (Breite/Höhe): kleiner = höher/mehr drauf, z. B. 5 / 4 */
+    --img-y: 35%; /* Nur VERSCHIEBEN (nicht zusätzlich schneiden): KLEINER = Ausschnitt rutscht hoch
+                     (mehr unten weg), GRÖSSER = mehr oben weg. 0% = oben bündig, 100% = unten bündig. */
+    --img-ratio: 3.7 / 3; /* Rahmen-Seitenverhältnis (Breite/Höhe). NICHT ändern, wenn das Layout
+                             gleich bleiben soll. Zum Zuschneiden nur --img-zoom und --img-y verstellen. */
     /* =========================== */
 
     aspect-ratio: var(--img-ratio);
     overflow: hidden;
     border-radius: var(--radius);
     box-shadow: var(--shadow-soft);
+    /* Mobil: nicht formatfüllend, sondern zentriert und begrenzt. */
+    max-width: clamp(260px, 82vw, 420px);
+    margin-inline: auto;
+  }
+  @media (min-width: 860px) {
+    /* Desktop: Breite kommt aus dem 2-Spalten-Grid. */
+    .anchor__images {
+      max-width: none;
+      margin-inline: 0;
+    }
   }
   .anchor__images img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: var(--img-x) var(--img-y);
+    /* Zoom von der Mitte aus -> schneidet oben und unten gleichmäßig weg.
+       Die vertikale Feinlage steuert --img-y (object-position) unabhängig davon. */
     transform: scale(var(--img-zoom));
-    transform-origin: var(--img-x) var(--img-y);
+    transform-origin: var(--img-x) center;
   }
   .anchor__text p {
     margin-bottom: 0;

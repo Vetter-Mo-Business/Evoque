@@ -1,11 +1,10 @@
 ---
-import heroLogo from '../assets/about/Hero_Logo.svg';
+import heroLogo from '../assets/about/Head_Logo_Evoque.svg';
 import heroVideo from '../assets/about/Teil1-2.mp4?url';
 import heroGif from '../assets/about/Teil2.gif?url';
 
 interface Props {
   poster?: string;
-  subtitle?: string;
   ctaHref?: string;
   ctaLabel?: string;
   secondaryHref?: string;
@@ -14,7 +13,6 @@ interface Props {
 
 const {
   poster,
-  subtitle = 'become your best you',
   ctaHref,
   ctaLabel,
   secondaryHref,
@@ -48,15 +46,12 @@ const {
 
     <div class="hero__overlay">
       <div class="hero__content">
-        <div class="hero__headline">
-          <img
-            class="hero__logo"
-            src={heroLogo.src}
-            alt="EVOQUE yourself"
-            decoding="async"
-          />
-          {subtitle && <p class="hero__subtitle">{subtitle}</p>}
-        </div>
+        <img
+          class="hero__logo"
+          src={heroLogo.src}
+          alt="EVOQUE yourself"
+          decoding="async"
+        />
         {
           (ctaHref && ctaLabel) || (secondaryHref && secondaryLabel) ? (
             <div class="hero__actions">
@@ -97,30 +92,39 @@ const {
        Standard: erster Bildschirm abzüglich Navbar-Höhe (76px). */
     --hero-height: calc(100svh - 76px);
 
-    /* Breite des Logos "EVOQUE yourself" (oben).
-       clamp(min, fließend, max): mittlerer Wert in cqw steuert die Größe.
-       Der min-Wert ist klein, damit das Logo beim Verkleinern des
-       Bildschirms wirklich weiter mitschrumpft. */
-    --hero-logo-width: clamp(8rem, 50cqw, 50rem);
+    /* === LOGO (Head_Logo_Evoque) – X / Y / SCALE ===================
+       Das Logo ist quadratisch und sitzt mittig im Blumenkranz.
+       Alle Werte sind in cqw (= 1% der Videobreite), damit das Logo
+       IMMER gleich groß im Verhältnis zum Kranz bleibt und auf jedem
+       Bildschirm automatisch mitskaliert. */
 
-    /* Schriftgröße der Unterzeile "become your best you" (kleiner). */
-    --hero-subtitle-size: clamp(0.5rem, 2.4cqw, 1.5rem);
+    /* Grundgröße des Logos (Breite). clamp(min, fließend, max):
+       der mittlere cqw-Wert steuert die Größe relativ zum Video. */
+    --hero-logo-size: clamp(8rem, 26cqw, 28rem);
 
-    /* Textfarbe der Unterzeile (Dunkelgrün) */
-    --hero-text-color: var(--forest-deep);
+    /* SCALE – zusätzlicher Vergrößerungs-/Verkleinerungsfaktor.
+       1 = Grundgröße, 1.2 = 20% größer, 0.8 = 20% kleiner. */
+    --hero-logo-scale: 2;
+
+    /* X – horizontale Verschiebung des Logos (− links / + rechts). */
+    --hero-logo-x: 0cqw;
+
+    /* Y – vertikale Verschiebung des Logos (− nach oben / + nach unten). */
+    --hero-logo-y: 2.5cqw;
 
     /* Breite des Textblocks – hält den Inhalt innerhalb des Blumenkranzes.
-       Greift, sobald der Text umbricht (kleine Bildschirme). */
+       Greift, sobald der Inhalt umbricht (kleine Bildschirme). */
     --hero-content-width: 60cqw;
 
-    /* Abstand zwischen Überschrift-Block und Buttons (Buttons höher/tiefer) */
+    /* Grundabstand zwischen Logo und den Buttons. */
     --hero-actions-gap: 5cqw;
 
-    /* Abstand zwischen Logo und der Unterzeile (negativ erlaubt).
-       Das Logo-SVG ist bereits eng um den Text beschnitten. Mit diesem Wert
-       kann die Unterzeile (und mit ihr die Buttons) fein justiert werden:
-       negativ = näher/höher an "yourself", positiv = tiefer. */
-    --hero-headline-gap: 0.5cqw;
+    /* Y der BUTTONS – zusätzliche vertikale Verschiebung NUR der Buttons.
+       In cqw (skaliert mit dem Video). negativ = nach OBEN (die Buttons
+       dürfen dabei bis vor/über das Logo wandern – das Logo hat keinen
+       Hintergrund), positiv = nach UNTEN. Die Buttons liegen immer im
+       Vordergrund und bleiben klickbar. */
+    --hero-buttons-y: -17cqw;
 
     /* Größe der Buttons (Schrift) – skaliert ebenfalls mit dem Video.
        Kleiner min-Wert, damit die Buttons mitschrumpfen. */
@@ -198,34 +202,22 @@ const {
     text-align: center;
   }
 
-  .hero__headline {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
   .hero__logo {
     display: block;
-    width: var(--hero-logo-width);
+    /* Größe = Grundgröße × Scale-Faktor. Position über translate (X/Y). */
+    width: calc(var(--hero-logo-size) * var(--hero-logo-scale));
     height: auto;
+    transform: translate(var(--hero-logo-x), var(--hero-logo-y));
     /* sanfter heller Schein für Lesbarkeit auf dem Video */
     filter: drop-shadow(0 0.3cqw 2cqw rgba(255, 255, 255, 0.55));
   }
 
-  .hero__subtitle {
-    /* margin-top statt flex-gap: darf negativ sein, damit die Unterzeile
-       dicht unter "yourself" gezogen werden kann. */
-    margin: var(--hero-headline-gap) 0 0;
-    color: var(--hero-text-color);
-    font-size: var(--hero-subtitle-size);
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    line-height: 1.1;
-    white-space: nowrap;
-    text-shadow: 0 0.3cqw 2cqw rgba(255, 255, 255, 0.55);
-  }
-
   .hero__actions {
+    /* Buttons liegen über dem Logo (Vordergrund) und lassen sich per
+       --hero-buttons-y frei nach oben/unten schieben – auch über das Logo. */
+    position: relative;
+    z-index: 2;
+    transform: translateY(var(--hero-buttons-y));
     display: flex;
     flex-wrap: wrap;
     gap: 2cqw;
@@ -239,9 +231,6 @@ const {
       /* erst beim Umbruch begrenzen, damit der Inhalt im Kranz bleibt */
       max-width: var(--hero-content-width);
     }
-    .hero__subtitle {
-      white-space: normal;
-    }
     .hero__actions {
       flex-direction: column;
       align-items: center;
@@ -252,9 +241,15 @@ const {
     }
   }
 
-  /* Auf schmalen Bildschirmen das volle 16:9 zeigen, statt seitlich
-     stark zu beschneiden – so bleibt der ganze Blumenkranz sichtbar. */
-  @media (max-width: 680px) {
+  /* Blumenkranz IMMER vollständig zeigen:
+     Sobald das Fenster schmaler/höher wird als das Video-Seitenverhältnis
+     (16:9), würde "object-fit: cover" bei fester Höhe die Seiten des Kranzes
+     abschneiden (Kranz nur oben/unten sichtbar). Darum in diesem Fall die
+     Höhe aus der Breite ableiten (aspect-ratio) -> das komplette 16:9-Video
+     inkl. Kranz ringsum bleibt sichtbar. Der Wechsel richtet sich nach dem
+     Seitenverhältnis statt einer festen Pixelbreite, damit er in JEDER
+     mittleren Auflösung genau im richtigen Moment greift (kontinuierlich). */
+  @media (max-aspect-ratio: 16 / 9) {
     .hero__stage {
       height: auto;
       aspect-ratio: 16 / 9;

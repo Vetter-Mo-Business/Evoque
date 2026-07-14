@@ -5,6 +5,28 @@ import TopicCard from '../components/TopicCard.astro';
 import ProcessJourney from '../components/ProcessJourney.astro';
 import { localizePath, type Lang } from '../i18n/ui';
 
+// Skizzen für die Themen-Karten (transparente PNGs, dunkelgrüne Striche).
+// Reihenfolge = Reihenfolge von content.topics. Für "Ängste" gibt es
+// bewusst kein Bild (undefined) – die Karte bleibt dort ohne Skizze.
+import imgKonzentration from '../assets/topics/konzentration.png';
+import imgGewicht from '../assets/topics/gewicht.png';
+import imgAengste from '../assets/topics/aengste.png';
+import imgEntscheidungen from '../assets/topics/entscheidungen.png';
+import imgStress from '../assets/topics/stress.png';
+import imgBeruflich from '../assets/topics/beruflich.png';
+import imgWeitere from '../assets/topics/weitere.png';
+import imgThema from '../assets/topics/thema.png';
+
+const topicImages = [
+  imgKonzentration, // Konzentrationsschwierigkeiten
+  imgGewicht,       // Gewichtsunsicherheiten
+  imgAengste,       // Ängste
+  imgEntscheidungen,// Entscheidungen
+  imgStress,        // Stress
+  imgBeruflich,     // Beruflich
+  imgWeitere,       // Weitere Anliegen
+];
+
 const lang = (Astro.currentLocale ?? 'de') as Lang;
 const l = (p: string) => localizePath(p, lang);
 
@@ -54,16 +76,6 @@ const content = {
           { term: 'Vor Gruppen sprechen', desc: 'Vor großen Gruppen sprechen oder präsentieren, sicherer auftreten und die Anspannung lösen.' },
           { term: 'Unsicherheiten', desc: 'Mehr Vertrauen in dich und dein Auftreten gewinnen.' },
           { term: 'Selbstwert', desc: 'Den eigenen Wert erkennen und stabiler in dir selbst stehen.' },
-        ],
-      },
-      {
-        title: 'Beziehungen',
-        items: [
-          { term: 'Kommunikation', desc: 'Klarer und wertschätzender kommunizieren und dich verstanden fühlen.' },
-          { term: 'Familie', desc: 'Familiäre Muster verstehen und Beziehungen entlasten.' },
-          { term: 'Freundschaft', desc: 'Freundschaften bewusster und tragfähiger gestalten.' },
-          { term: 'Partnerschaften', desc: 'Die Partnerschaft bewusster und erfüllender gestalten.' },
-          { term: 'Konflikte & Dynamiken', desc: 'Komplexe, wiederkehrende Beziehungsmuster erkennen und Konflikte klärend lösen.' },
         ],
       },
       {
@@ -134,7 +146,8 @@ const content = {
     ],
     evoqueHighlightLabel: 'Regelmäßige Supervision',
     evoqueHighlightText:
-      'Um die Qualität des Coachings zu gewährleisten.',
+      'zur Sicherung der Coaching-Qualität.',
+    evoqueHighlightCta: 'Termin reservieren',
     soloTag: 'Gewöhnliches 1:1 Coaching',
     soloTitle: 'Einzelne Sitzungen',
     soloText:
@@ -212,16 +225,6 @@ const content = {
         ],
       },
       {
-        title: 'Relationships',
-        items: [
-          { term: 'Communication', desc: 'Communicate more clearly and appreciatively and feel understood.' },
-          { term: 'Family', desc: 'Understand family patterns and ease your relationships.' },
-          { term: 'Friendship', desc: 'Shape friendships more consciously and resiliently.' },
-          { term: 'Partnerships', desc: 'Shape your partnership more consciously and fulfillingly.' },
-          { term: 'Conflicts & dynamics', desc: 'Recognise complex, recurring relationship patterns and resolve conflicts constructively.' },
-        ],
-      },
-      {
         title: 'Decisions',
         items: [
           { term: 'Helplessness', desc: 'Move from a sense of being stuck back into taking action.' },
@@ -289,7 +292,8 @@ const content = {
     ],
     evoqueHighlightLabel: 'Regular supervision',
     evoqueHighlightText:
-      'To ensure the quality of the coaching.',
+      'to safeguard the quality of the coaching.',
+    evoqueHighlightCta: 'Reserve an appointment',
     soloTag: 'Ordinary 1:1 coaching',
     soloTitle: 'Single sessions',
     soloText:
@@ -332,8 +336,8 @@ const content = {
     </div>
   </section>
 
-  <!-- Grundlagen: "Was ist Coaching?" & "Mehr über den Ansatz" nebeneinander -->
-  <section class="section section--tight" id="ansatz">
+  <!-- Grundlagen: "Was ist Coaching?" & "Mehr über den Ansatz" untereinander -->
+  <section class="section section--tight basics-section" id="ansatz">
     <div class="container container--narrow">
       <SectionHeading
         eyebrow={content.basicsEyebrow}
@@ -377,14 +381,22 @@ const content = {
         <div class="topic-slider__viewport" data-viewport>
           <div class="topic-slider__track" data-track>
             {
-              content.topics.map((topic) => (
+              content.topics.map((topic, i) => (
                 <div class="topic-slider__slide">
-                  <TopicCard title={topic.title} items={topic.items} />
+                  <TopicCard
+                    title={topic.title}
+                    items={topic.items}
+                    image={topicImages[i]}
+                  />
                 </div>
               ))
             }
             <div class="topic-slider__slide">
-              <TopicCard title={content.placeholderTitle} placeholder>
+              <TopicCard
+                title={content.placeholderTitle}
+                image={imgThema}
+                placeholder
+              >
                 {content.placeholderText}
               </TopicCard>
             </div>
@@ -461,8 +473,13 @@ const content = {
             {content.evoquePros.map((item) => <li>{item}</li>)}
           </ul>
           <div class="offer-highlight">
-            <span class="offer-highlight__label">{content.evoqueHighlightLabel}</span>
-            <p>{content.evoqueHighlightText}</p>
+            <p class="offer-highlight__note">
+              <span class="offer-highlight__label">{content.evoqueHighlightLabel}</span>
+              {content.evoqueHighlightText}
+            </p>
+            <a href={`${l('/kontakt')}#buchung`} class="btn btn--primary offer-highlight__cta">
+              {content.evoqueHighlightCta}
+            </a>
           </div>
         </article>
         <article class="card offer-card offer-card--others">
@@ -513,10 +530,21 @@ const content = {
     align-items: start;
   }
 
+  /* "Coaching verstehen": Sektion in hellem Grün abgesetzt */
+  .basics-section {
+    background: #e8f0e6;
+  }
+
   /* Grundlagen-Boxen ("Was ist Coaching?" & "Mehr über den Ansatz"):
      etwas Abstand zur Überschrift darüber */
   .basics-details {
     margin-top: var(--space-lg);
+  }
+  /* Dropdowns hier bewusst untereinander (nicht nebeneinander) */
+  @media (min-width: 720px) {
+    .expectations.basics-details {
+      grid-template-columns: 1fr;
+    }
   }
 
   /* Zwei aufklappbare Boxen nebeneinander: Begleitung vs. Eigenverantwortung */
@@ -685,7 +713,7 @@ const content = {
     max-width: 120px;
     background: linear-gradient(
       to right,
-      rgba(225, 210, 203, 0),
+      rgba(230, 217, 193, 0),
       var(--soft-sand)
     );
     pointer-events: none;
@@ -855,34 +883,40 @@ const content = {
     color: var(--calm-earth);
   }
 
-  /* Supervision: besonders hervorgehobener Qualitäts-Hinweis in der EVOQUE-Karte.
-     Aufbau wie "Was mir wichtig ist": Titel oben, Trennstrich, Satz darunter. */
+  /* Supervision: bewusst dezenter Qualitäts-Hinweis am Fuß der EVOQUE-Karte,
+     kombiniert mit einem kompakten Buchungs-Button. Nur eine feine Trennlinie
+     statt einer eigenen Box – braucht so kaum zusätzliche Höhe. */
   .offer-highlight {
     margin-top: var(--space-md);
-    padding: var(--space-md);
-    background: #fff;
-    border: 1px solid rgba(21, 44, 26, 0.25);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-soft);
+    padding-top: var(--space-md);
+    border-top: var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
     text-align: center;
   }
-  .offer-highlight__label {
-    display: block;
-    margin: 0 0 var(--space-sm);
-    padding-bottom: var(--space-sm);
-    border-bottom: var(--border-soft);
-    font-family: var(--font-body);
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--forest-deep);
-  }
-  .offer-highlight p {
+  .offer-highlight__note {
     margin: 0;
     color: var(--forest-deep);
-    line-height: 1.6;
-    font-size: 0.95rem;
+    line-height: 1.5;
+    font-size: 0.82rem;
+  }
+  .offer-highlight__label {
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+  }
+  .offer-highlight__label::after {
+    content: ' – ';
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  /* Kompakter Button, damit die Karte nicht spürbar wächst */
+  .offer-highlight__cta {
+    padding: 0.6em 1.3em;
+    font-size: 0.9rem;
   }
 
 </style>

@@ -118,8 +118,8 @@ export const ui = {
     'home.topics.c3.title': 'Langjährige Themen',
     'home.topics.c3.text':
       'Themen wie Gewichtsreduktion, die Dich möglicherweise schon lange belasten, nachhaltig angehen.',
-    'home.topics.c4.title': 'Beziehungen und Partnerschaften',
-    'home.topics.c4.text': 'Komplexe Beziehungsdynamiken wieder mit Leichtigkeit füllen.',
+    'home.topics.c4.title': 'Stress',
+    'home.topics.c4.text': 'Innere Unruhe lösen, zur Ruhe kommen und den Alltag gelassener gestalten.',
     'home.topics.c5.title': 'Entscheidungen treffen',
     'home.topics.c5.text': 'Klarheit schaffen, Ziele konkretisieren und Motivation erzeugen.',
     'home.topics.more': 'Alle Themen ansehen',
@@ -128,7 +128,7 @@ export const ui = {
     'home.testi.eyebrow': 'Erfahrungen',
     'home.testi.title': 'Was Coachees zurückmelden',
     'home.testi.note':
-      'Aus Datenschutzgründen sind die Bewertungen in anonymisierter Form dargestellt. Die Rückmeldungen sind verifiziert und mit ausdrücklicher Zustimmung der Klienten veröffentlicht worden.',
+      'Aus Datenschutzgründen sind die Bewertungen in anonymisierter Form dargestellt. Die Rückmeldungen wurden verifiziert und mit ausdrücklicher Zustimmung der Klienten veröffentlicht.',
     'home.testi.t1.author': 'Kundin, 29',
     'home.testi.t1.topic': 'Thema: Selbstvertrauen',
     'home.testi.t1.period': 'Begleitung: 2025',
@@ -252,8 +252,8 @@ export const ui = {
     'home.topics.c3.title': 'Long-standing issues',
     'home.topics.c3.text':
       'Tackle issues like weight loss that have been with you for years – sustainably.',
-    'home.topics.c4.title': 'Relationships & partnerships',
-    'home.topics.c4.text': 'Fill complex relationship dynamics with lightness again.',
+    'home.topics.c4.title': 'Stress',
+    'home.topics.c4.text': 'Ease inner restlessness, come to rest and face everyday life more calmly.',
     'home.topics.c5.title': 'Making decisions',
     'home.topics.c5.text': 'Create clarity, define goals and build motivation.',
     'home.topics.more': 'See all topics',

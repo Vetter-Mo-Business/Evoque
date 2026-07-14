@@ -13,7 +13,6 @@ const l = (p: string) => localizePath(p, lang);
 
 <BaseLayout title={t('home.meta.title')} description={t('home.meta.description')}>
   <Hero
-    subtitle="become your best you"
     ctaHref={l('/kontakt') + '#buchung'}
     ctaLabel={t('home.hero.cta')}
     secondaryHref={l('/coaching')}
@@ -83,7 +82,9 @@ const l = (p: string) => localizePath(p, lang);
         </TopicCard>
         <TopicCard title={t('home.topics.c4.title')}>
           <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+            <path d="M12 21v-8" />
+            <path d="M12 13c0-3.6 2.4-6 6.5-6 0 3.6-2.4 6-6.5 6z" />
+            <path d="M12 15c0-3-2-5-5.5-5 0 3 2 5 5.5 5z" />
           </svg>
           {t('home.topics.c4.text')}
         </TopicCard>
@@ -199,9 +200,19 @@ const l = (p: string) => localizePath(p, lang);
     width: 1.05em;
     height: 1.05em;
   }
+  /* Der Notiz-Text soll auf möglichst 2 gleich lange Zeilen umbrechen.
+     Der zentrierte Standard-Heading ist auf 60ch begrenzt (zu schmal ->
+     3 Zeilen mit einem einzelnen Wort unten). Für die Testimonials den
+     Textblock breiter machen, damit die Notiz in 2 Zeilen passt. */
+  .testimonials :global(.section-heading--center) {
+    max-width: 80ch;
+  }
   .testimonials__note {
     margin-top: var(--space-sm);
     font-size: 0.95rem;
+    /* balance verteilt den Text gleichmäßig auf die Zeilen -> saubere
+       2 Zeilen ohne einzelnes Wort in einer neuen Zeile. */
+    text-wrap: balance;
   }
   .testimonials__note-check {
     color: #1d7a4d;

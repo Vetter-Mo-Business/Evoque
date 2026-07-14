@@ -19,11 +19,11 @@ const packages = [
   {
     name: 'Foundation',
     perSession: '1 Sitzung á 60 Minuten',
+    sessions: '12 Sitzungen',
+    duration: '3 Monate Begleitung',
     ctaLabel: 'Auf Nachfrage',
     ctaHref: '/kontakt#buchung',
     features: [
-      '12 Sitzungen',
-      '3 Monate Begleitung',
       'Kurzer Zeitraum, optimal für kleine Herausforderungen',
       'Kurzfristige Begleitung',
       'Optimal zum Kennenlernen',
@@ -33,24 +33,24 @@ const packages = [
   {
     name: 'Momentum',
     perSession: '1 Sitzung á 60 Minuten',
+    sessions: '25 Sitzungen',
+    duration: '6 Monate Begleitung',
     badge: 'Beliebteste Wahl',
     highlight: true,
     ctaLabel: 'Auf Nachfrage',
     ctaHref: '/kontakt#buchung',
     features: [
-      '25 Sitzungen',
-      '6 Monate Begleitung',
       'Ideal geeignet für Themen, die in der Wurzel gelöst werden',
     ],
   },
   {
     name: 'Transformation',
     perSession: '1 Sitzung á 60 Minuten',
+    sessions: '40 Sitzungen',
+    duration: '1 Jahr Begleitung',
     ctaLabel: 'Auf Nachfrage',
     ctaHref: '/kontakt#buchung',
     features: [
-      '40 Sitzungen',
-      '1 Jahr Begleitung',
       'Themen in der Ursache beheben, Verhaltenskonsequenzen langfristig etablieren',
       'Tiefgehende Thematiken',
       'Nachhaltige Verhaltensänderung',
@@ -68,7 +68,7 @@ const faq = [
   },
   {
     q: 'Wofür steht EVOQUE?',
-    a: '[PLATZHALTER: Bedeutung des Namens EVOQUE – bitte noch mitteilen.]',
+    a: 'EVOQUE steht für die erfolgreiche und langfristige Verhaltensänderung. Schritt für Schritt legen wir gemeinsam schädliche Verhaltensmuster ab und ersetzen diese durch positive, erfolgsbringende Gewohnheiten. EVOQUE steht für die Nachhaltigkeit, mit der eine langfristige Verhaltensänderung besteht und für deine Persönlichkeitsentwicklung, die im Coaching in dir geweckt und entstehen wird.',
   },
   {
     q: 'Wie lange dauert ein Coachingprozess?',
@@ -130,7 +130,7 @@ const faq = [
   description="Die Paketoptionen des Evoque-Coachings – Foundation, Momentum und Transformation. Konkrete Preise gern auf Nachfrage."
 >
   <!-- Intro -->
-  <section class="section section--tight">
+  <section class="section section--tight pricing-intro">
     <div class="container container--narrow center">
       <p class="eyebrow">Deine Investition in Dich selbst</p>
       <h1>Dein Weg</h1>
@@ -141,7 +141,7 @@ const faq = [
   </section>
 
   <!-- Pakete -->
-  <section class="section">
+  <section class="section pricing-pakete">
     <div class="container">
       <!-- Pilotphase – aktuelles, limitiertes Angebot quer über den Paketen -->
       <div class="pilot-banner">
@@ -168,6 +168,8 @@ const faq = [
             <PricingCard
               name={p.name}
               perSession={p.perSession}
+              sessions={p.sessions}
+              duration={p.duration}
               features={p.features}
               ctaLabel={p.ctaLabel}
               ctaHref={p.ctaHref}
@@ -215,6 +217,15 @@ const faq = [
 </BaseLayout>
 
 <style>
+  /* Lücke zwischen „Dein Weg" und der Pilotphase-Box schließen:
+     Bottom-Padding des Intros und Top-Padding der Pakete reduzieren. */
+  .pricing-intro {
+    padding-bottom: var(--space-md);
+  }
+  .pricing-pakete {
+    padding-top: var(--space-md);
+  }
+
   /* Pilotphase-Band: quer über den Paketen, in Dunkelgrün abgesetzt */
   .pilot-banner {
     display: grid;
@@ -277,6 +288,8 @@ const faq = [
 
   .pricing-grid {
     align-items: stretch;
+    /* Preisboxen etwas nach unten vom Pilot-Band absetzen. */
+    margin-top: var(--space-xl);
   }
   .pricing-note {
     margin-top: var(--space-xl);

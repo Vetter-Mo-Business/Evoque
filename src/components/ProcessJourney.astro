@@ -51,7 +51,7 @@ const steps: Step[] = [
 ];
 ---
 
-<section class="journey" data-journey>
+<section class="journey" id="ablauf" data-journey>
   <div class="journey__pin" data-pin>
     <!-- Kopf: zentriert oben, bleibt während des Pins sichtbar -->
     <div class="container journey__head">
@@ -77,11 +77,20 @@ const steps: Step[] = [
             <!-- Wurzeln / Der Anfang: die Pflanze bricht unten aus der Erde.
                  Statisch sichtbar – der Startpunkt des Weges. -->
             <g class="roots">
-              <path class="root" d="M120,748 C114,752 106,754 98,759"></path>
-              <path class="root" d="M120,748 C110,751 104,752 99,753"></path>
-              <path class="root" d="M120,749 C120,753 119,757 120,760"></path>
-              <path class="root" d="M120,748 C126,752 134,754 142,759"></path>
-              <path class="root" d="M120,748 C130,751 136,752 141,753"></path>
+              <!-- weit links außen -->
+              <path class="root" d="M120,748 C102,756 80,764 60,782"></path>
+              <!-- links -->
+              <path class="root" d="M120,748 C108,756 90,765 76,780"></path>
+              <!-- links innen -->
+              <path class="root" d="M120,748 C113,757 104,767 98,781"></path>
+              <!-- Mitte / Pfahlwurzel -->
+              <path class="root" d="M120,749 C120,760 119,774 120,788"></path>
+              <!-- rechts innen -->
+              <path class="root" d="M120,748 C127,757 136,767 142,781"></path>
+              <!-- rechts -->
+              <path class="root" d="M120,748 C132,756 150,765 164,780"></path>
+              <!-- weit rechts außen -->
+              <path class="root" d="M120,748 C138,756 160,764 180,782"></path>
             </g>
 
             <!-- Stiel = wachsender, organisch geschwungener Strahl
@@ -247,19 +256,22 @@ const steps: Step[] = [
     --journey-reserve: 200px;
     /* ========================================= */
 
-    /* Höhe der Pflanze = Höhe der Boxen-Spalte (identischer Wert!). */
-    --plant-h: min(100vh - var(--journey-reserve), 820px);
+    /* Höhe der Pflanze = Höhe der Boxen-Spalte (identischer Wert!).
+       Basis = feste, komfortable Höhe für das STATISCHE Overlay (enge/flache
+       Screens, ohne Animation) – so haben alle 6 Boxen genug Platz und der
+       Text wird nicht beschnitten. Im animierten Pin-Modus (genug Platz) wird
+       sie weiter unten auf die Viewport-Höhe umgestellt. */
+    --plant-h: 720px;
   }
   .journey__pin {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    /* Oben verankert: Kopf sitzt oben, Pflanze wächst nach unten,
-       der Restplatz bleibt als Puffer unter dem 1. Punkt. */
-    justify-content: flex-start;
-    gap: var(--space-md);
+    /* Basis = statisch (kein Pin): normaler Fluss, das Overlay scrollt einfach
+       mit der Seite. Der animierte Pin-Modus überschreibt das weiter unten. */
+    display: block;
     padding-top: var(--space-lg);
-    padding-bottom: var(--space-md);
+    padding-bottom: var(--space-xl);
+  }
+  .journey__pin > * + * {
+    margin-top: var(--space-lg);
   }
 
   /* Kopf zentriert oben */
@@ -276,15 +288,69 @@ const steps: Step[] = [
     max-width: 52ch;
   }
 
+  /* ===== Layout =====
+     Grundprinzip: Die grünen Boxen liegen IMMER als Overlay im Vordergrund
+     vor der zentrierten Pflanze – bei enge/flach genauso wie bei viel Platz,
+     nur dann eben statisch (ohne Animation). Erst wenn richtig viel Breite UND
+     Höhe da ist, wandern die Boxen seitlich neben die Pflanze (weiß, animiert). */
+
+  /* Basis = zentriertes Overlay: Pflanze und Boxen in derselben Rasterzelle. */
   .journey__cols {
     display: grid;
-    gap: var(--space-2xl);
+    grid-template-columns: 1fr;
     align-items: start;
+    justify-items: stretch;
   }
-  @media (min-width: 900px) {
+  .journey__plant,
+  .journey__steps {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .journey__steps {
+    width: 100%;
+    max-width: 540px;
+    justify-self: center;
+  }
+
+  /* Genug Platz -> animierter Pin-Modus: Pflanze wächst über die volle
+     Viewport-Höhe, die Boxen blenden nacheinander ein. */
+  @media (min-width: 680px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+    .journey {
+      --plant-h: min(100vh - var(--journey-reserve), 820px);
+    }
+    .journey__pin {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+    }
+    .journey__pin > * + * {
+      margin-top: 0;
+    }
+  }
+
+  /* Sehr breit UND hoch -> Pflanze links, Boxen rechts daneben (kein Overlay). */
+  @media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
     .journey__cols {
       grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
       gap: var(--space-3xl);
+      justify-items: stretch;
+    }
+    .journey__plant {
+      grid-column: 1;
+    }
+    .journey__steps {
+      grid-column: 2;
+      max-width: none;
+      justify-self: stretch;
+    }
+    /* Boxen stehen hier NEBEN der Pflanze -> normale weiße Füllung.
+       Höhere Spezifität als die grüne Basisregel, damit sie sicher greift. */
+    .journey__steps .journey__body {
+      background: #fff;
+      border-color: rgba(133, 124, 117, 0.28);
     }
   }
 
@@ -292,10 +358,10 @@ const steps: Step[] = [
   .journey__plant {
     display: flex;
     justify-content: center;
-    /* Immer im Vordergrund: die Blüte oben darf NIE von einer Box verdeckt
-       werden. */
+    /* Die Pflanze liegt bewusst HINTER den Boxen (z-index 1 < Boxen z-index 3),
+       damit die grünen Boxen mit dem Text immer im Vordergrund stehen. */
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
   .journey__plant .plant {
     height: var(--plant-h);
@@ -324,7 +390,7 @@ const steps: Step[] = [
   .journey__plant .root {
     fill: none;
     stroke: var(--earth-deep);
-    stroke-width: 2;
+    stroke-width: 2.4;
     stroke-linecap: round;
   }
   .journey__plant .leaf {
@@ -352,6 +418,14 @@ const steps: Step[] = [
     transform-box: fill-box;
     transform-origin: center;
   }
+  /* Ziel-Blüte wird über ihren eigenen Mittelpunkt skaliert (fill-box), damit
+     die Wachstums-Animation in den Style schreibt und beim Umschalten auf das
+     statische Layout KEINEN Transform-Rest hinterlässt (sonst säße die Blüte
+     verschoben neben dem Stiel). */
+  .journey__plant .bloom {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
   /* Krone / große Ziel-Blüte = "Das Ziel": farbenfroh */
   .journey__plant .bloom__petal {
     fill: var(--accent-pilot);
@@ -375,25 +449,38 @@ const steps: Step[] = [
     stroke: none;
   }
 
-  /* ---------- Schritt-Boxen (kompakt) ---------- */
+  /* ---------- Schritt-Boxen: liegen IMMER als Overlay über der Pflanze ----------
+     Gilt animiert UND statisch gleichermaßen: Die Boxen-Spalte ist exakt so
+     hoch wie die Pflanze, jede Box sitzt fest auf ihrem Knoten-Verhältnis. */
   .journey__steps {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    gap: var(--space-md);
-    /* liegt unter der Pflanze, damit die Ziel-Blüte immer vorn bleibt */
     position: relative;
-    z-index: 1;
+    height: var(--plant-h);
+    z-index: 3; /* Boxen immer im Vordergrund, vor der Pflanze */
   }
   .journey__step {
-    margin: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--top);
+    /* Feste Slot-Höhe = Knotenabstand (~15,9 %), minus kleine Lücke -> die
+       Boxen können sich bei KEINER Bildschirmgröße überschneiden. */
+    height: calc(var(--plant-h) * 0.15);
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
   }
   .journey__card {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: var(--space-sm);
     align-items: center;
+    width: 100%;
+    max-height: 100%;
+    /* langer Text (Schritt 5 & 6) läuft nie in die Nachbarbox */
+    overflow: hidden;
   }
   .journey__num {
     display: inline-flex;
@@ -410,59 +497,24 @@ const steps: Step[] = [
     font-weight: 600;
     white-space: nowrap;
   }
+  /* Boxen liegen vor der Pflanze -> hellgrüne Füllung, Text hebt sich klar ab.
+     (Im seitlichen Layout wird das oben auf Weiß zurückgesetzt.) */
   .journey__body {
-    background: #fff;
+    background: #dcead5;
     border-radius: var(--radius);
-    border: var(--border-soft);
-    padding: var(--space-xs) var(--space-md);
+    border: 1px solid rgba(21, 44, 26, 0.22);
+    padding: var(--space-2xs) var(--space-sm);
     box-shadow: var(--shadow-soft);
   }
   .journey__body h3 {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     margin-bottom: 2px;
   }
   .journey__body p {
     margin: 0;
-    font-size: 0.8rem;
-    line-height: 1.35;
+    font-size: 0.76rem;
+    line-height: 1.32;
     color: var(--calm-earth);
-  }
-
-  /* Gepinnter Modus: Boxen-Spalte so hoch wie die SVG; jede Box deterministisch
-     auf ihr Knoten-Verhältnis gesetzt – keine JS-Messung nötig. */
-  .journey__steps.is-pinned {
-    display: block;
-    position: relative;
-    height: var(--plant-h);
-  }
-  .journey__steps.is-pinned .journey__step {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: var(--top);
-    transform: translateY(-50%);
-  }
-
-  /* ---------- Mobil (< 900px): normal gestapelt, keine Animation ---------- */
-  @media (max-width: 899.98px) {
-    .journey {
-      --plant-h: min(60vh, 460px);
-    }
-    .journey__pin {
-      min-height: 0;
-      display: block;
-      padding-block: 0;
-    }
-    .journey__pin > * + * {
-      margin-top: var(--space-2xl);
-    }
-  }
-
-  /* ---------- Reduced Motion: einspaltig, alles statisch sichtbar ---------- */
-  @media (prefers-reduced-motion: reduce) {
-    .journey__cols {
-      grid-template-columns: 1fr;
-    }
   }
 </style>
 
@@ -486,9 +538,12 @@ const steps: Step[] = [
 
     const mm = gsap.matchMedia();
 
-    // Nur ab 900px UND ohne reduzierte Bewegung: gepinnte Scroll-Animation.
+    // Ab 680px Breite UND 700px Höhe, ohne reduzierte Bewegung: gepinnte
+    // Scroll-Animation. Das Layout (zentriertes Overlay vs. Pflanze links /
+    // Boxen rechts) steuert allein das CSS. Darunter zeigt das CSS dasselbe
+    // Overlay einfach STATISCH (Boxen sichtbar, kein Pin, scrollt normal).
     mm.add(
-      '(min-width: 900px) and (prefers-reduced-motion: no-preference)',
+      '(min-width: 680px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)',
       () => {
         const L = stem.getTotalLength();
 
@@ -505,7 +560,8 @@ const steps: Step[] = [
           return (lo + hi) / 2 / L;
         };
 
-        // Boxen-Positionierung ist reines CSS – hier nur Klasse setzen.
+        // Layout (Overlay bzw. seitlich) steuert komplett das CSS. Diese Klasse
+        // markiert nur den animierten Zustand (falls später gebraucht).
         steps.classList.add('is-pinned');
 
         // Startzustände der Animation
@@ -513,7 +569,7 @@ const steps: Step[] = [
         gsap.set(leaves, { opacity: 0 });
         gsap.set(nodes, { opacity: 0, scale: 0.2 });
         gsap.set(boxes, { opacity: 0, x: 24 });
-        gsap.set(bloom, { opacity: 1, scale: 0, svgOrigin: '120 60' });
+        gsap.set(bloom, { opacity: 1, scale: 0 });
 
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
@@ -556,7 +612,6 @@ const steps: Step[] = [
             scale: 1,
             duration: 0.25,
             ease: 'back.out(1.7)',
-            svgOrigin: '120 60',
           },
           1
         );

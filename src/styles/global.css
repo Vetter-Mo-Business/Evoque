@@ -7,7 +7,7 @@
   /* --- Kernfarben (visual.md) --- */
   --forest-deep: #152c1a;   /* Fließtext, Überschriften, Footer-BG, primäre Buttons */
   --sage-harmony: #acbfaf;  /* Marken-Akzentflächen, Icon-BG, sekundäre Buttons */
-  --soft-sand: #e1d2cb;     /* Sektions-/Kartenflächen, sanfte Trennungen */
+  --soft-sand: #e6d9c1;     /* Sektions-/Kartenflächen, sanfte Trennungen (heller warmer Tan-Braun-Ton) */
   --calm-earth: #857c75;    /* Sekundärtext/Captions; NICHT als Fließtext auf Weiß */
   --earth-deep: #3f362d;    /* dunkles, warmes Braun (abgeleitet) – starke Hinweisflächen */
 
@@ -15,7 +15,7 @@
   --olive-sage: #abaf8d;    /* nur Hover/Aktiv */
 
   /* --- Basis-Hintergrund (abgeleitetes warmes Off-White) --- */
-  --bg: #f7f5f1;
+  --bg: #f2ede3;
 
   /* --- Pilotphase-Badge: warmer Akzent, abgesetzt von Grün, sparsam --- */
   --accent-pilot: #c4702f;       /* warmes Orange */

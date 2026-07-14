@@ -15,7 +15,7 @@ const nav = [
 // Aktuellen Pfad ermitteln (für aria-current)
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
-const ctaHref = localizePath('/kontakt', lang) + '#buchung';
+const ctaHref = localizePath('/kontakt', lang);
 const switchToDe = localizePath(Astro.url.pathname, 'de');
 const switchToEn = localizePath(Astro.url.pathname, 'en');
 ---
@@ -102,7 +102,7 @@ const switchToEn = localizePath(Astro.url.pathname, 'en');
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(247, 245, 241, 0.92);
+    background: rgba(230, 221, 204, 0.94);
     backdrop-filter: blur(8px);
     border-bottom: var(--border-soft);
   }
