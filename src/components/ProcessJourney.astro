@@ -415,17 +415,17 @@ const steps: Step[] = [
   .journey__plant .node {
     fill: var(--forest-deep);
     stroke: none;
-    transform-box: fill-box;
-    transform-origin: center;
   }
-  /* Ziel-Blüte wird über ihren eigenen Mittelpunkt skaliert (fill-box), damit
-     die Wachstums-Animation in den Style schreibt und beim Umschalten auf das
-     statische Layout KEINEN Transform-Rest hinterlässt (sonst säße die Blüte
-     verschoben neben dem Stiel). */
-  .journey__plant .bloom {
-    transform-box: fill-box;
-    transform-origin: center;
-  }
+  /* WICHTIG: Knoten und Blüte bekommen hier BEWUSST kein transform-box/
+     transform-origin. GSAP schreibt seinen Drehpunkt als Pixelwert im
+     SVG-Koordinatensystem (viewBox). Mit "transform-box: fill-box" würde der
+     Browser denselben Wert stattdessen ab der linken Kante der jeweiligen
+     Bounding-Box messen – der Drehpunkt landete weit rechts vom Element und
+     die Blüte flöge beim Aufskalieren seitlich in den Stiel hinein (dasselbe
+     galt für die Knotenpunkte).
+     Der Drehpunkt wird stattdessen im Skript exakt gesetzt (svgOrigin), für
+     die Blüte auf die Stielspitze 120/60 – sie geht also genau dort auf, wo
+     der Stiel endet. */
   /* Krone / große Ziel-Blüte = "Das Ziel": farbenfroh */
   .journey__plant .bloom__petal {
     fill: var(--accent-pilot);
@@ -516,6 +516,82 @@ const steps: Step[] = [
     line-height: 1.32;
     color: var(--calm-earth);
   }
+
+  /* ==========================================================================
+     VARIANTE 3 – schmal ODER flach (Handy, Tablet hochkant, niedrige Fenster).
+     Gleiches Bild wie Variante 2 (Boxen als Overlay ueber der Pflanze), aber
+     jetzt ebenfalls ANIMIERT statt statisch. Der Unterschied zu Variante 2:
+       * Gepinnt wird nur .journey__cols – die Ueberschrift scrollt vorher weg
+         und verschenkt keine Hoehe. Dadurch steht die volle Fensterhoehe fuer
+         Pflanze + 6 Boxen zur Verfuegung.
+       * Alle Maße (Pflanzenhoehe, Slot-Hoehe, Schrift, Innenabstaende) haengen
+         an der Fensterhoehe, damit die 6 Boxen auf JEDER Groesse zusammen in
+         einen Screen passen und sich nie beruehren.
+     Der Block steht bewusst GANZ AM ENDE und greift nur unterhalb der
+     Schwellen von Variante 1 + 2 – die beiden bleiben unberuehrt.
+     ========================================================================== */
+  @media (max-width: 679.98px), (max-height: 699.98px) {
+    .journey {
+      /* Reserve = Sticky-Navbar (76px) + etwas Luft unten. Der Kopf ist hier
+         NICHT im Lock, taucht also nicht in der Rechnung auf. */
+      --plant-h: calc(100svh - 104px);
+    }
+    .journey__pin {
+      padding-top: var(--space-md);
+      padding-bottom: var(--space-2xl);
+    }
+    /* Etwas schmalerer Seitenabstand → mehr Textbreite pro Box. */
+    .journey__cols {
+      padding-inline: var(--space-md);
+    }
+    .journey__steps {
+      max-width: 540px;
+    }
+
+    /* Slot-Hoehe knapp unter dem Knotenabstand (15,9 %): garantiert eine
+       sichtbare Luecke zwischen zwei benachbarten Boxen. */
+    .journey__step {
+      height: calc(var(--plant-h) * 0.149);
+    }
+
+    /* Kompakte Typo, damit auch der laengste Text (06) in seinen Slot passt. */
+    .journey__card {
+      column-gap: var(--space-2xs);
+    }
+    .journey__num {
+      min-width: 26px;
+      height: 26px;
+      font-size: 0.6rem;
+    }
+    .journey__body {
+      padding: 5px var(--space-xs);
+    }
+    .journey__body h3 {
+      font-size: 0.8rem;
+      line-height: 1.18;
+      margin-bottom: 1px;
+    }
+    .journey__body p {
+      font-size: 0.68rem;
+      line-height: 1.26;
+    }
+  }
+
+  /* Sehr kleine bzw. sehr flache Fenster: noch eine Stufe kompakter. */
+  @media (max-width: 380px), (max-height: 620px) {
+    .journey__body h3 {
+      font-size: 0.74rem;
+    }
+    .journey__body p {
+      font-size: 0.63rem;
+      line-height: 1.22;
+    }
+    .journey__num {
+      min-width: 22px;
+      height: 22px;
+      font-size: 0.55rem;
+    }
+  }
 </style>
 
 <script>
@@ -535,6 +611,27 @@ const steps: Step[] = [
     );
     const boxes = gsap.utils.toArray<HTMLElement>('[data-step]', root);
     const bloom = root.querySelector<SVGGElement>('[data-bloom]')!;
+
+    /**
+     * Skaliert ein SVG-Element um einen EXAKTEN Punkt der viewBox und schreibt
+     * den Transform direkt als Attribut.
+     * Warum nicht einfach gsap {scale}? GSAP legt seinen Drehpunkt fuer SVG als
+     * Pixelwert ab; je nach transform-box misst der Browser diesen Wert ab der
+     * Bounding-Box statt im SVG-Raster. Der Drehpunkt sass dadurch neben dem
+     * Element - die Bluete flog beim Aufgehen seitlich in den Stiel hinein und
+     * auch die Knotenpunkte rutschten waehrend des Einblendens zur Seite.
+     * Mit translate/scale/translate ist der Drehpunkt fix und browserunabhaengig.
+     */
+    const growAbout = (el: SVGElement, cx: number, cy: number, from: number) => {
+      const state = { s: from };
+      const apply = () =>
+        el.setAttribute(
+          'transform',
+          `translate(${cx} ${cy}) scale(${state.s}) translate(${-cx} ${-cy})`
+        );
+      apply();
+      return { state, apply, reset: () => el.removeAttribute('transform') };
+    };
 
     const mm = gsap.matchMedia();
 
@@ -567,9 +664,15 @@ const steps: Step[] = [
         // Startzustände der Animation
         gsap.set(stem, { strokeDasharray: L, strokeDashoffset: L });
         gsap.set(leaves, { opacity: 0 });
-        gsap.set(nodes, { opacity: 0, scale: 0.2 });
+        gsap.set(nodes, { opacity: 0 });
         gsap.set(boxes, { opacity: 0, x: 24 });
-        gsap.set(bloom, { opacity: 1, scale: 0 });
+        gsap.set(bloom, { opacity: 1 });
+        // Knoten wachsen um ihren eigenen Mittelpunkt, die Bluete exakt um die
+        // Stielspitze (120/60) - sie geht also genau dort auf, wo der Stiel endet.
+        const nodeGrows = nodes.map((node) =>
+          growAbout(node, 120, Number(node.getAttribute('cy')), 0.2)
+        );
+        const bloomGrow = growAbout(bloom, 120, 60, 0);
 
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
@@ -597,7 +700,12 @@ const steps: Step[] = [
         // Knoten + zugehörige Box erscheinen, wenn die Spitze den Knoten erreicht.
         boxes.forEach((box, i) => {
           const at = fracAtY(Number(nodes[i].getAttribute('cy')));
-          tl.to(nodes[i], { opacity: 1, scale: 1, duration: 0.04 }, at);
+          tl.to(nodes[i], { opacity: 1, duration: 0.04 }, at);
+          tl.to(
+            nodeGrows[i].state,
+            { s: 1, duration: 0.04, onUpdate: nodeGrows[i].apply },
+            at
+          );
           tl.to(
             box,
             { opacity: 1, x: 0, duration: 0.12, ease: 'power2.out' },
@@ -605,13 +713,15 @@ const steps: Step[] = [
           );
         });
 
-        // Krone: Knospe erblüht erst, wenn der Stiel voll ausgefahren ist.
+        // Krone: Knospe erblüht erst, wenn der Stiel voll ausgefahren ist -
+        // aufgehend an der Stielspitze, ohne seitliche Bewegung.
         tl.to(
-          bloom,
+          bloomGrow.state,
           {
-            scale: 1,
+            s: 1,
             duration: 0.25,
             ease: 'back.out(1.7)',
+            onUpdate: bloomGrow.apply,
           },
           1
         );
@@ -630,6 +740,116 @@ const steps: Step[] = [
           active = false;
           window.removeEventListener('load', refresh);
           steps.classList.remove('is-pinned');
+          // manuell gesetzte Transform-Attribute wieder entfernen
+          bloomGrow.reset();
+          nodeGrows.forEach((g) => g.reset());
+        };
+      }
+    );
+
+    // ------------------------------------------------------------------
+    // VARIANTE 3 - schmal ODER flach: gleiches Overlay-Bild wie Variante 2,
+    // jetzt aber ebenfalls gepinnt und animiert. Gepinnt wird nur die
+    // Spalten-Box (nicht der Kopf) - so bleibt die ganze Fensterhoehe fuer
+    // Pflanze + Boxen uebrig und nichts ueberschneidet sich.
+    // Bewusst eigener Block: Variante 1 + 2 oben bleiben unangetastet.
+    // ------------------------------------------------------------------
+    mm.add(
+      '(prefers-reduced-motion: no-preference) and (max-width: 679.98px), (prefers-reduced-motion: no-preference) and (max-height: 699.98px)',
+      () => {
+        const cols = root.querySelector<HTMLElement>('.journey__cols')!;
+        const L = stem.getTotalLength();
+
+        const fracAtY = (y: number) => {
+          let lo = 0;
+          let hi = L;
+          for (let i = 0; i < 24; i++) {
+            const mid = (lo + hi) / 2;
+            if (stem.getPointAtLength(mid).y > y) lo = mid;
+            else hi = mid;
+          }
+          return (lo + hi) / 2 / L;
+        };
+
+        // Anteil des Scrollwegs fuers Stiel-Wachstum, Rest gehoert der Bluete.
+        const GROW = 0.86;
+
+        gsap.set(stem, { strokeDasharray: L, strokeDashoffset: L });
+        gsap.set(leaves, { opacity: 0 });
+        gsap.set(nodes, { opacity: 0 });
+        gsap.set(bloom, { opacity: 1 });
+        // wie oben: Drehpunkte exakt auf Knoten bzw. Stielspitze
+        const nodeGrows = nodes.map((node) =>
+          growAbout(node, 120, Number(node.getAttribute('cy')), 0.2)
+        );
+        const bloomGrow = growAbout(bloom, 120, 60, 0);
+        // Boxen kommen hier von unten statt von rechts - passt besser zum
+        // schmalen Hochformat.
+        gsap.set(boxes, { opacity: 0, y: 14 });
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            trigger: cols,
+            // direkt unter der 76px hohen Sticky-Navbar einrasten
+            start: 'top top+=84',
+            end: () => '+=' + window.innerHeight * 2.4,
+            pin: true,
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        tl.to(stem, { strokeDashoffset: 0, duration: GROW }, 0);
+
+        leaves.forEach((leaf) => {
+          tl.to(
+            leaf,
+            { opacity: 1, duration: 0.05 },
+            fracAtY(Number(leaf.dataset.y)) * GROW
+          );
+        });
+
+        boxes.forEach((box, i) => {
+          const at = fracAtY(Number(nodes[i].getAttribute('cy'))) * GROW;
+          tl.to(nodes[i], { opacity: 1, duration: 0.04 }, at);
+          tl.to(
+            nodeGrows[i].state,
+            { s: 1, duration: 0.04, onUpdate: nodeGrows[i].apply },
+            at
+          );
+          tl.to(
+            box,
+            { opacity: 1, y: 0, duration: 0.1, ease: 'power2.out' },
+            at
+          );
+        });
+
+        tl.to(
+          bloomGrow.state,
+          {
+            s: 1,
+            duration: 1 - GROW,
+            ease: 'back.out(1.7)',
+            onUpdate: bloomGrow.apply,
+          },
+          GROW
+        );
+
+        let active = true;
+        const refresh = () => {
+          if (active) ScrollTrigger.refresh();
+        };
+        const fontsReady: Promise<unknown> =
+          (document as any).fonts?.ready ?? Promise.resolve();
+        fontsReady.then(() => requestAnimationFrame(refresh));
+        window.addEventListener('load', refresh);
+
+        return () => {
+          active = false;
+          window.removeEventListener('load', refresh);
+          bloomGrow.reset();
+          nodeGrows.forEach((g) => g.reset());
         };
       }
     );

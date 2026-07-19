@@ -75,7 +75,6 @@ const content = {
           { term: 'Prüfungsangst', desc: 'Wieder ruhig und fokussiert in Prüfungssituationen gehen.' },
           { term: 'Vor Gruppen sprechen', desc: 'Vor großen Gruppen sprechen oder präsentieren, sicherer auftreten und die Anspannung lösen.' },
           { term: 'Unsicherheiten', desc: 'Mehr Vertrauen in dich und dein Auftreten gewinnen.' },
-          { term: 'Selbstwert', desc: 'Den eigenen Wert erkennen und stabiler in dir selbst stehen.' },
         ],
       },
       {
@@ -93,6 +92,7 @@ const content = {
           { term: 'Innere Unruhe', desc: 'Den ständigen inneren Antrieb beruhigen und Gelassenheit finden.' },
           { term: 'Schlafstörungen', desc: 'Zur Ruhe kommen und wieder erholsamer schlafen.' },
           { term: 'Keine Zeit zu haben', desc: 'Dem Gefühl der ständigen Zeitknappheit begegnen und wieder durchatmen.' },
+          { term: 'Chronisches Zuspätkommen', desc: 'Zeitstress und ständiges Zuspätkommen verstehen und verlässlicher werden.' },
         ],
       },
       {
@@ -108,7 +108,7 @@ const content = {
         items: [
           { term: 'Selbstdisziplin', desc: 'Dranbleiben und Vorhaben konsequent umsetzen.' },
           { term: 'Antriebslosigkeit', desc: 'Neue Motivation finden und wieder ins Tun kommen.' },
-          { term: 'Chronisches Zuspätkommen', desc: 'Zeitstress und ständiges Zuspätkommen verstehen und verlässlicher werden.' },
+          { term: 'Selbstwert', desc: 'Den eigenen Wert erkennen und stabiler in dir selbst stehen.' },
           'u. v. m.',
         ],
       },
@@ -143,11 +143,9 @@ const content = {
       'Ursachenforschung und Problem an der Wurzel behandeln',
       'Dein Thema erhält die Zeit und den Raum, den es verdient',
       'Individuell auf dich abgestimmt durch Vor- und Nachbereitung',
+      'Regelmäßige Supervision zur Sicherung der Coaching-Qualität',
     ],
-    evoqueHighlightLabel: 'Regelmäßige Supervision',
-    evoqueHighlightText:
-      'zur Sicherung der Coaching-Qualität.',
-    evoqueHighlightCta: 'Termin reservieren',
+    evoqueHighlightCta: 'Termin buchen',
     soloTag: 'Gewöhnliches 1:1 Coaching',
     soloTitle: 'Einzelne Sitzungen',
     soloText:
@@ -221,7 +219,6 @@ const content = {
           { term: 'Exam anxiety', desc: 'Stay calm and focused in exam situations again.' },
           { term: 'Speaking in front of groups', desc: 'Speaking or presenting in front of large groups, appearing more confident and releasing the tension.' },
           { term: 'Insecurities', desc: 'Gain more trust in yourself and how you come across.' },
-          { term: 'Self-worth', desc: 'Recognise your own worth and stand more firmly in yourself.' },
         ],
       },
       {
@@ -239,6 +236,7 @@ const content = {
           { term: 'Inner restlessness', desc: 'Calm the constant inner drive and find composure.' },
           { term: 'Sleep problems', desc: 'Come to rest and sleep more restfully again.' },
           { term: 'Having no time', desc: 'Meet the feeling of constant time pressure and breathe again.' },
+          { term: 'Chronic lateness', desc: 'Understand time stress and constant lateness and become more reliable.' },
         ],
       },
       {
@@ -254,7 +252,7 @@ const content = {
         items: [
           { term: 'Self-discipline', desc: 'Stay on track and follow through on your plans consistently.' },
           { term: 'Lack of drive', desc: 'Find new motivation and get back into action.' },
-          { term: 'Chronic lateness', desc: 'Understand time stress and constant lateness and become more reliable.' },
+          { term: 'Self-worth', desc: 'Recognise your own worth and stand more firmly in yourself.' },
           'and more',
         ],
       },
@@ -289,10 +287,8 @@ const content = {
       'Root-cause work – treating the problem at its source',
       'Your topic gets the time and space it deserves',
       'Individually tailored to you through preparation and follow-up',
+      'Regular supervision to safeguard the quality of the coaching',
     ],
-    evoqueHighlightLabel: 'Regular supervision',
-    evoqueHighlightText:
-      'to safeguard the quality of the coaching.',
     evoqueHighlightCta: 'Reserve an appointment',
     soloTag: 'Ordinary 1:1 coaching',
     soloTitle: 'Single sessions',
@@ -362,7 +358,7 @@ const content = {
   </section>
 
   <!-- Themen / Anliegen -->
-  <section class="section surface-sand" id="themen">
+  <section class="section topics-section" id="themen">
     <div class="container">
       <SectionHeading
         eyebrow={content.topicsEyebrow}
@@ -473,10 +469,6 @@ const content = {
             {content.evoquePros.map((item) => <li>{item}</li>)}
           </ul>
           <div class="offer-highlight">
-            <p class="offer-highlight__note">
-              <span class="offer-highlight__label">{content.evoqueHighlightLabel}</span>
-              {content.evoqueHighlightText}
-            </p>
             <a href={`${l('/kontakt')}#buchung`} class="btn btn--primary offer-highlight__cta">
               {content.evoqueHighlightCta}
             </a>
@@ -530,8 +522,13 @@ const content = {
     align-items: start;
   }
 
-  /* "Coaching verstehen": Sektion in hellem Grün abgesetzt */
+  /* "Coaching verstehen": Sektion in Sand abgesetzt */
   .basics-section {
+    background: var(--soft-sand);
+  }
+
+  /* "Themen & Anliegen": Sektion in hellem Grün abgesetzt */
+  .topics-section {
     background: #e8f0e6;
   }
 
@@ -713,8 +710,8 @@ const content = {
     max-width: 120px;
     background: linear-gradient(
       to right,
-      rgba(230, 217, 193, 0),
-      var(--soft-sand)
+      rgba(232, 240, 230, 0),
+      #e8f0e6
     );
     pointer-events: none;
     opacity: 1;
@@ -783,7 +780,9 @@ const content = {
     align-items: center;
     gap: var(--space-xs);
   }
-  .topic-slider__dot {
+  /* Die Punkte werden per JS erzeugt und tragen daher kein Astro-Scope-
+     Attribut – deshalb :global(). */
+  .topic-slider__dots :global(.topic-slider__dot) {
     width: 9px;
     height: 9px;
     padding: 0;
@@ -791,14 +790,14 @@ const content = {
     border-radius: 999px;
     background: rgba(21, 44, 26, 0.22);
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease, width 0.2s ease;
   }
-  .topic-slider__dot:hover {
-    background: rgba(21, 44, 26, 0.4);
+  .topic-slider__dots :global(.topic-slider__dot:hover) {
+    background: rgba(21, 44, 26, 0.45);
   }
-  .topic-slider__dot[aria-current='true'] {
+  .topic-slider__dots :global(.topic-slider__dot[aria-current='true']) {
+    width: 26px;
     background: var(--forest-deep);
-    transform: scale(1.25);
   }
 
   .offer-card {
@@ -883,9 +882,8 @@ const content = {
     color: var(--calm-earth);
   }
 
-  /* Supervision: bewusst dezenter Qualitäts-Hinweis am Fuß der EVOQUE-Karte,
-     kombiniert mit einem kompakten Buchungs-Button. Nur eine feine Trennlinie
-     statt einer eigenen Box – braucht so kaum zusätzliche Höhe. */
+  /* Kompakter Buchungs-Button am Fuß der EVOQUE-Karte. Nur eine feine
+     Trennlinie statt einer eigenen Box – braucht so kaum zusätzliche Höhe. */
   .offer-highlight {
     margin-top: var(--space-md);
     padding-top: var(--space-md);
@@ -895,23 +893,6 @@ const content = {
     align-items: center;
     gap: var(--space-sm);
     text-align: center;
-  }
-  .offer-highlight__note {
-    margin: 0;
-    color: var(--forest-deep);
-    line-height: 1.5;
-    font-size: 0.82rem;
-  }
-  .offer-highlight__label {
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    font-size: 0.72rem;
-  }
-  .offer-highlight__label::after {
-    content: ' – ';
-    letter-spacing: 0;
-    text-transform: none;
   }
   /* Kompakter Button, damit die Karte nicht spürbar wächst */
   .offer-highlight__cta {
@@ -978,9 +959,12 @@ const content = {
       const max = maxOffset();
       const x = Math.min(slides[i].offsetLeft, max);
       track.style.transform = `translateX(${-x}px)`;
-      dots.forEach((d, di) =>
-        d.setAttribute('aria-current', di === index ? 'true' : 'false')
-      );
+      // Punkte hinter dem letzten anfahrbaren Index ausblenden – sie werden
+      // nie aktiv, weil dort bereits das Track-Ende erreicht ist.
+      dots.forEach((d, di) => {
+        d.hidden = di > last;
+        d.setAttribute('aria-current', di === index ? 'true' : 'false');
+      });
       // Fade ausblenden, sobald die letzte Karte voll sichtbar ist
       slider!.classList.toggle('is-end', x >= max - 1);
     }

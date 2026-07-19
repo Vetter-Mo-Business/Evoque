@@ -6,6 +6,11 @@ import TopicCard from '../components/TopicCard.astro';
 import Testimonial from '../components/Testimonial.astro';
 import { useTranslations, localizePath, type Lang } from '../i18n/ui';
 
+// Skizzen für die drei Themen-Karten (transparente PNGs, dunkelgrüne Striche).
+import imgProkrastination from '../assets/topics/home-prokrastination.png';
+import imgStress from '../assets/topics/home-stress.png';
+import imgEntscheidungen from '../assets/topics/home-entscheidungen.png';
+
 const lang = (Astro.currentLocale ?? 'de') as Lang;
 const t = useTranslations(lang);
 const l = (p: string) => localizePath(p, lang);
@@ -71,29 +76,13 @@ const l = (p: string) => localizePath(p, lang);
       </SectionHeading>
 
       <div class="grid grid--3">
-        <TopicCard title={t('home.topics.c2.title')}>
-          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="13" r="8" />
-            <path d="M12 9v4l2.5 2" />
-            <path d="M9 2h6" />
-            <path d="M18.5 5.5l1.5 1.5" />
-          </svg>
+        <TopicCard title={t('home.topics.c2.title')} image={imgProkrastination}>
           {t('home.topics.c2.text')}
         </TopicCard>
-        <TopicCard title={t('home.topics.c4.title')}>
-          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 21v-8" />
-            <path d="M12 13c0-3.6 2.4-6 6.5-6 0 3.6-2.4 6-6.5 6z" />
-            <path d="M12 15c0-3-2-5-5.5-5 0 3 2 5 5.5 5z" />
-          </svg>
+        <TopicCard title={t('home.topics.c4.title')} image={imgStress}>
           {t('home.topics.c4.text')}
         </TopicCard>
-        <TopicCard title={t('home.topics.c5.title')}>
-          <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3v18" />
-            <path d="M12 5h6l2 2.5L18 10h-6" />
-            <path d="M12 12H6l-2 2.5L6 17h6" />
-          </svg>
+        <TopicCard title={t('home.topics.c5.title')} image={imgEntscheidungen}>
           {t('home.topics.c5.text')}
         </TopicCard>
       </div>
@@ -129,24 +118,14 @@ const l = (p: string) => localizePath(p, lang);
       >
         <p class="testimonials__note">{t('home.testi.note')}</p>
       </SectionHeading>
-      <div class="grid grid--3">
+      <div class="testimonials__list">
         <Testimonial
-          quote={t('home.testi.placeholder')}
+          quote={t('home.testi.t1.quote')}
           author={t('home.testi.t1.author')}
           topic={t('home.testi.t1.topic')}
           period={t('home.testi.t1.period')}
-        />
-        <Testimonial
-          quote={t('home.testi.placeholder')}
-          author={t('home.testi.t2.author')}
-          topic={t('home.testi.t2.topic')}
-          period={t('home.testi.t2.period')}
-        />
-        <Testimonial
-          quote={t('home.testi.placeholder')}
-          author={t('home.testi.t3.author')}
-          topic={t('home.testi.t3.topic')}
-          period={t('home.testi.t3.period')}
+          rating={5}
+          ratingLabel={t('home.testi.t1.ratingLabel')}
         />
       </div>
     </div>
@@ -214,6 +193,19 @@ const l = (p: string) => localizePath(p, lang);
        2 Zeilen ohne einzelnes Wort in einer neuen Zeile. */
     text-wrap: balance;
   }
+  /* Aktuell nur eine echte Rezension -> mittig und schmal statt in einer
+     3er-Reihe verloren. Kommen weitere dazu, füllen sie die Spalten
+     automatisch auf (max. 3 nebeneinander). */
+  .testimonials__list {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    max-width: 62ch;
+    margin: 0 auto;
+  }
+  .testimonials__list:has(> :nth-child(2)) {
+    max-width: none;
+  }
   .testimonials__note-check {
     color: #1d7a4d;
     font-weight: 600;
@@ -227,6 +219,10 @@ const l = (p: string) => localizePath(p, lang);
     }
     .testimonials {
       text-align: center;
+    }
+    /* Sterne sind Flex -> folgen text-align nicht automatisch */
+    .testimonials :global(.testimonial__rating) {
+      justify-content: center;
     }
   }
 

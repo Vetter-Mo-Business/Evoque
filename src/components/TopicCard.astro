@@ -178,16 +178,29 @@ const hasItems = normItems.length > 0;
        längeren Oberthemen). */
     line-height: 1.25;
     min-height: 2.5em;
-    /* Lange Einzelwörter (z. B. "Konzentrationsschwierigkeiten") auch
-       auf schmalen Karten sauber umbrechen statt abschneiden. */
+    /* Nie mit Trennstrich trennen und nie mitten im Wort umbrechen –
+       lange Wörter wandern komplett in die nächste Zeile.
+       overflow-wrap greift nur, wenn ein Wort allein breiter als die
+       Karte wäre (Notbremse gegen Überlaufen). */
+    hyphens: none;
+    word-break: normal;
     overflow-wrap: break-word;
-    word-break: break-word;
-    hyphens: auto;
   }
   .topic-card__text {
     margin: 0;
     color: var(--calm-earth);
     line-height: 1.6;
+    hyphens: none;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+  /* Auch Chips und Hinweistext ohne Silbentrennung */
+  .topic-chip,
+  .topic-card__hint,
+  .topic-card__overlay {
+    hyphens: none;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
   /* Platzhalter-Text ("Dein Thema") mittig im Kartenkörper, damit unten
      kein einseitiger Leerraum entsteht, wenn die Karte gestreckt wird. */

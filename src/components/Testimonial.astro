@@ -7,11 +7,31 @@ interface Props {
   topic?: string;
   /** Optionaler Begleitungszeitraum, z. B. "Begleitung: 2026". */
   period?: string;
+  /** Optionale Sternebewertung 1–5. Ohne Angabe werden keine Sterne gezeigt. */
+  rating?: number;
+  /** Barrierefreies Label für die Sterne, z. B. "5 von 5 Sternen". */
+  ratingLabel?: string;
 }
-const { quote, author, topic, period } = Astro.props;
+const { quote, author, topic, period, rating, ratingLabel } = Astro.props;
+const stars = rating ? Math.round(Math.min(Math.max(rating, 0), 5)) : 0;
 ---
 
 <figure class="testimonial">
+  {
+    stars > 0 && (
+      <p class="testimonial__rating" aria-label={ratingLabel}>
+        {Array.from({ length: 5 }, (_, i) => (
+          <svg
+            class:list={['testimonial__star', i >= stars && 'testimonial__star--empty']}
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.58 1.11 6.47L12 17.45 6.19 20.5 7.3 14.03 2.6 9.45l6.5-.95L12 2.6z" />
+          </svg>
+        ))}
+      </p>
+    )
+  }
   <blockquote class="testimonial__quote">
     <p>{quote}</p>
   </blockquote>
@@ -34,6 +54,25 @@ const { quote, author, topic, period } = Astro.props;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+  .testimonial__rating {
+    display: flex;
+    gap: 0.15em;
+    margin: 0 0 var(--space-xs);
+  }
+  .testimonial__star {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: #e0a02a;
+  }
+  .testimonial__star--empty {
+    fill: var(--sage-harmony);
+    opacity: 0.5;
+  }
+  /* Ohne Sterne braucht das Zitat oben Platz für das große Anführungszeichen,
+     mit Sterne-Zeile sitzt es sonst zu tief. */
+  .testimonial__rating + .testimonial__quote {
+    padding-top: var(--space-sm);
   }
   .testimonial__quote {
     margin: 0 0 var(--space-lg);

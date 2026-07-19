@@ -1,7 +1,13 @@
 ---
-import heroLogo from '../assets/about/Head_Logo_Evoque.svg';
-import heroVideo from '../assets/about/Teil1-2.mp4?url';
-import heroGif from '../assets/about/Teil2.gif?url';
+import heroLogo from '../assets/Lgoo/Logo_hero.svg';
+import heroPoster from '../assets/about/hero-poster.jpg';
+// Intro (spielt einmal) und Loop (endlos) jeweils als WebM + MP4:
+// WebM ist deutlich kleiner, MP4 ist der Fallback fuer aeltere Browser.
+// Der Browser nimmt automatisch das erste Format, das er abspielen kann.
+import introWebm from '../assets/about/Teil1-2-web.webm?url';
+import introMp4 from '../assets/about/Teil1-2-web.mp4?url';
+import loopWebm from '../assets/about/Teil2-loop.webm?url';
+import loopMp4 from '../assets/about/Teil2-loop.mp4?url';
 
 interface Props {
   poster?: string;
@@ -22,27 +28,35 @@ const {
 
 <section class="hero">
   <div class="hero__stage">
-    <!-- Zwei Media-Ebenen: Das Video (Teil1-2) spielt EINMAL die Intro-
-         Animation. Wenn es fertig ist, wird sanft (ohne harten Schnitt) auf
-         das GIF (Teil2) übergeblendet, das die ruhige Blätter-Bewegung von
-         sich aus endlos loopt. Das GIF liegt voll deckend UNTEN, das Video
-         blendet OBEN aus -> es wird nie dunkler. -->
-    <img
-      class="hero__media hero__gif"
-      data-src={heroGif}
-      alt=""
+    <!-- Zwei Media-Ebenen: Das Intro-Video (Teil1-2) spielt EINMAL die
+         Animation. Wenn es fertig ist, wird auf das Loop-Video (Teil2)
+         gewechselt, das die ruhige Blätter-Bewegung endlos loopt. Das Loop-
+         Video liegt voll deckend UNTEN, das Intro blendet OBEN aus -> es wird
+         nie dunkler.
+         Frueher war der Loop ein 16-MB-GIF. Als Video ist er ~0,4 MB und
+         belastet beim Dekodieren den Browser deutlich weniger. -->
+    <video
+      class="hero__media hero__loop"
+      loop
+      muted
+      playsinline
+      preload="none"
       aria-hidden="true"
-      decoding="async"
-    />
+    >
+      <source src={loopWebm} type="video/webm" />
+      <source src={loopMp4} type="video/mp4" />
+    </video>
     <video
       class="hero__media hero__video"
-      src={heroVideo}
-      poster={poster}
+      poster={poster ?? heroPoster.src}
       muted
       playsinline
       preload="auto"
       data-fade="1"
-    ></video>
+    >
+      <source src={introWebm} type="video/webm" />
+      <source src={introMp4} type="video/mp4" />
+    </video>
 
     <div class="hero__overlay">
       <div class="hero__content">
@@ -92,7 +106,7 @@ const {
        Standard: erster Bildschirm abzüglich Navbar-Höhe (76px). */
     --hero-height: calc(100svh - 76px);
 
-    /* === LOGO (Head_Logo_Evoque) – X / Y / SCALE ===================
+    /* === LOGO (Logo_hero) – X / Y / SCALE ==========================
        Das Logo ist quadratisch und sitzt mittig im Blumenkranz.
        Alle Werte sind in cqw (= 1% der Videobreite), damit das Logo
        IMMER gleich groß im Verhältnis zum Kranz bleibt und auf jedem
@@ -170,9 +184,9 @@ const {
     will-change: opacity;
   }
 
-  /* Startzustand: Video oben sichtbar, GIF darunter (wird beim Ende
-     eingeblendet, während das Video ausblendet). */
-  .hero__gif {
+  /* Startzustand: Intro-Video oben sichtbar, Loop-Video darunter (wird beim
+     Ende eingeblendet, während das Intro ausblendet). */
+  .hero__loop {
     z-index: 0;
     opacity: 0;
   }
@@ -207,6 +221,11 @@ const {
     /* Größe = Grundgröße × Scale-Faktor. Position über translate (X/Y). */
     width: calc(var(--hero-logo-size) * var(--hero-logo-scale));
     height: auto;
+    /* Das Logo ist quadratisch. Ohne diese Angabe hätte das Bild BEVOR es
+       geladen ist die Höhe 0 -> der Inhalt wäre kurz nach oben gerutscht und
+       die Buttons hätten oben "gehangen" (sichtbar beim ersten Laden / F5).
+       Mit aspect-ratio steht der Platz von Anfang an fest. */
+    aspect-ratio: 1 / 1;
     transform: translate(var(--hero-logo-x), var(--hero-logo-y));
     /* sanfter heller Schein für Lesbarkeit auf dem Video */
     filter: drop-shadow(0 0.3cqw 2cqw rgba(255, 255, 255, 0.55));
@@ -262,30 +281,50 @@ const {
     font-size: var(--hero-btn-size);
     padding: 0.9em 1.8em;
   }
+
+  /* Handy: Buttons insgesamt etwas kompakter (Schrift + Innenabstand). */
+  @media (max-width: 640px) {
+    .hero {
+      --hero-btn-size: clamp(0.46rem, 1.9cqw, 0.8rem);
+    }
+    .hero__btn {
+      padding: 0.7em 1.35em;
+      border-width: 1px;
+    }
+  }
 </style>
 
 <script>
-  // Ablauf: Das Video (Teil1-2) spielt EINMAL die Intro-Animation. Sobald es
-  // zu Ende ist, wird sanft (ohne harten Schnitt) auf das GIF (Teil2)
-  // übergeblendet, das die ruhige Blätter-Bewegung von sich aus endlos loopt.
+  // Ablauf: Das Intro-Video (Teil1-2) spielt EINMAL die Animation. Sobald es
+  // zu Ende ist, wird auf das Loop-Video (Teil2) gewechselt, das die ruhige
+  // Blätter-Bewegung endlos loopt.
   //
-  // Kein Abdunkeln: Das GIF liegt voll deckend UNTEN und wird zuerst sichtbar
-  // gemacht, danach blendet nur das Video OBEN aus. Das Bild ist dadurch immer
-  // vollständig gedeckt.
+  // Kein Abdunkeln: Das Loop-Video liegt voll deckend UNTEN und wird zuerst
+  // sichtbar gemacht, danach blendet nur das Intro OBEN aus. Das Bild ist
+  // dadurch immer vollständig gedeckt.
   document.querySelectorAll<HTMLElement>('.hero').forEach((hero) => {
     const video = hero.querySelector<HTMLVideoElement>('.hero__video');
-    const gif = hero.querySelector<HTMLImageElement>('.hero__gif');
-    if (!video || !gif) return;
+    const loop = hero.querySelector<HTMLVideoElement>('.hero__loop');
+    if (!video || !loop) return;
 
-    const gifUrl = gif.dataset.src || '';
-
-    video.muted = true;
-    video.defaultMuted = true;
-    video.setAttribute('muted', '');
+    for (const v of [video, loop]) {
+      v.muted = true;
+      v.defaultMuted = true;
+      v.setAttribute('muted', '');
+    }
     video.loop = false;
+    loop.loop = true;
 
-    // GIF vorab in den Cache laden, damit der Wechsel verzögerungsfrei ist.
-    if (gifUrl) new Image().src = gifUrl;
+    // Das Loop-Video startet mit preload="none", damit es dem Intro beim
+    // ersten Bildaufbau keine Bandbreite wegnimmt. Sobald das Intro genug
+    // Daten hat, wird der Loop im Hintergrund geladen -> der Wechsel am Ende
+    // erfolgt dann ohne Verzögerung.
+    const preloadLoop = () => {
+      if (loop.preload === 'auto') return;
+      loop.preload = 'auto';
+      loop.load();
+    };
+    video.addEventListener('canplay', preloadLoop, { once: true });
 
     const safePlay = () => {
       const p = video.play();
@@ -293,33 +332,37 @@ const {
     };
 
     let switched = false;
-    const showGif = () => {
+    const showLoop = () => {
       if (switched) return;
       switched = true;
 
-      // GIF frisch laden -> startet garantiert bei Frame 0 (= letzter
-      // Video-Frame). DIREKTER Wechsel ohne Überblendung, aber erst wenn das
-      // GIF fertig dekodiert ist. Bis dahin bleibt das Video auf seinem
+      // DIREKTER Wechsel ohne Überblendung, aber erst wenn das Loop-Video
+      // tatsächlich ein Bild liefert. Bis dahin bleibt das Intro auf seinem
       // eingefrorenen letzten Frame stehen -> keine Lücke, kein Abdunkeln.
-      gif.src = gifUrl;
-
       const reveal = () => {
-        gif.style.transition = 'none';
+        loop.style.transition = 'none';
         video.style.transition = 'none';
-        gif.style.opacity = '1';
+        loop.style.opacity = '1';
         video.style.opacity = '0';
       };
 
-      if (typeof gif.decode === 'function') {
-        gif.decode().then(reveal).catch(reveal);
-      } else if (gif.complete) {
-        reveal();
+      preloadLoop();
+      loop.currentTime = 0;
+      const p = loop.play();
+      if (p) p.catch(reveal); // Blockiert der Browser den Start: trotzdem zeigen
+
+      // Auf den ersten gerenderten Frame warten, sonst je nach Timing kurz
+      // schwarz. Fallback für Browser ohne requestVideoFrameCallback.
+      if (typeof loop.requestVideoFrameCallback === 'function') {
+        loop.requestVideoFrameCallback(() => reveal());
       } else {
-        gif.addEventListener('load', reveal, { once: true });
+        loop.addEventListener('playing', reveal, { once: true });
       }
+      // Letzte Sicherung, falls kein Event kommt.
+      setTimeout(reveal, 1000);
     };
 
-    video.addEventListener('ended', showGif);
+    video.addEventListener('ended', showLoop);
 
     // Autoplay zuverlässig anstoßen (frisch deployte Domain ist strenger).
     safePlay();

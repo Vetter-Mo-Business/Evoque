@@ -1,5 +1,6 @@
 ---
 import { useTranslations, localizePath, type Lang } from '../i18n/ui';
+import logo from '../assets/Lgoo/Logo_white_transparent.svg';
 
 const year = 2026;
 const lang = (Astro.currentLocale ?? 'de') as Lang;
@@ -11,10 +12,10 @@ const l = (p: string) => localizePath(p, lang);
   <div class="container site-footer__inner">
     <div class="site-footer__brand">
       <img
-        src="/images/Logos/0_logo.png"
+        src={logo.src}
         alt="EVOQUE Yourself – Coaching"
         width="120"
-        height="120"
+        height="116"
         class="site-footer__logo"
       />
       <p class="site-footer__tagline">
@@ -25,9 +26,12 @@ const l = (p: string) => localizePath(p, lang);
     <nav class="site-footer__nav" aria-label={t('footer.pages')}>
       <h2 class="site-footer__heading">{t('footer.pages')}</h2>
       <ul>
-        <li><a href={l('/ueber-mich')}>{t('footer.about')}</a></li>
-        <li><a href={l('/coaching')}>{t('footer.coaching')}</a></li>
-        <li><a href={l('/kontakt')}>{t('footer.contact')}</a></li>
+        <li><a href={l('/')}>{t('nav.start')}</a></li>
+        <li><a href={l('/coaching')}>{t('nav.coaching')}</a></li>
+        <li><a href={l('/ueber-mich')}>{t('nav.about')}</a></li>
+        <li><a href={l('/preise')}>{t('nav.prices')}</a></li>
+        <li><a href={l('/fuer-unternehmen')}>{t('nav.companies')}</a></li>
+        <li><a href={l('/kontakt')}>{t('nav.cta')}</a></li>
       </ul>
     </nav>
 

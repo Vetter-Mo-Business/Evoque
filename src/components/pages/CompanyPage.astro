@@ -5,6 +5,24 @@ import TopicCard from '../TopicCard.astro';
 import portraitImg from '../../assets/about/DSC00751.jpg';
 import { useTranslations, localizePath, type Lang } from '../../i18n/ui';
 
+// Skizzen für die Themen-Karten (transparente PNGs, dunkelgrüne Striche).
+// Reihenfolge = Reihenfolge von topicsContent.items.
+import imgMitarbeiter from '../../assets/topics/corp-mitarbeiterdynamiken.png';
+import imgGesundheit from '../../assets/topics/corp-gesundheitsmanagement.png';
+import imgLeistungsdruck from '../../assets/topics/corp-leistungsdruck.png';
+import imgMeinungen from '../../assets/topics/corp-meinungsverschiedenheiten.png';
+import imgFuehrung from '../../assets/topics/corp-fuehrungsdynamiken.png';
+import imgAutonomie from '../../assets/topics/corp-autonomie.png';
+
+const topicImages = [
+  imgMitarbeiter,    // Mitarbeiterdynamiken
+  imgGesundheit,     // Gesundheitsmanagement
+  imgLeistungsdruck, // Leistungsdruck
+  imgMeinungen,      // Meinungsverschiedenheiten
+  imgFuehrung,       // Führungsdynamiken
+  imgAutonomie,      // Autonomie vs. Kontrolle
+];
+
 interface Props {
   lang: Lang;
 }
@@ -19,7 +37,6 @@ const steps = ['1', '2', '3'] as const;
 
 // "Weitere mögliche Themen" – Karten-Slider analog zur Coaching-Seite.
 // Bewusst hier als Liste lokalisiert (statt flacher i18n-Schlüssel).
-// Der grüne Banner oben in jeder Karte bleibt frei für ein späteres Bild.
 const topicsContent =
   lang === 'en'
     ? {
@@ -34,7 +51,7 @@ const topicsContent =
             text: 'Recognise recurring patterns within the team and shape collaboration consciously – for a way of working together that holds.',
           },
           {
-            title: 'Health management (prevention, intervention)',
+            title: 'Health management',
             text: 'Spot strain early and counteract it deliberately – from preventive measures to concrete support when it really matters.',
           },
           {
@@ -67,7 +84,7 @@ const topicsContent =
             text: 'Wiederkehrende Muster im Team erkennen und die Zusammenarbeit bewusst gestalten – für ein Miteinander, das trägt.',
           },
           {
-            title: 'Gesundheitsmanagement (Prävention, Intervention)',
+            title: 'Gesundheitsmanagement',
             text: 'Belastungen früh erkennen und gezielt gegensteuern – von vorbeugenden Maßnahmen bis zur konkreten Begleitung im Ernstfall.',
           },
           {
@@ -75,7 +92,7 @@ const topicsContent =
             text: 'Mit hohen Erwartungen gelassener umgehen und Leistung ermöglichen, ohne dauerhaft an die Belastungsgrenze zu gehen.',
           },
           {
-            title: 'Meinungsverschiedenheiten',
+            title: 'Konflikte proaktiv lösen',
             text: 'Konflikte konstruktiv klären und unterschiedliche Sichtweisen als Chance für bessere Lösungen nutzen.',
           },
           {
@@ -190,9 +207,11 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
           <div class="topic-slider__viewport" data-viewport>
             <div class="topic-slider__track" data-track>
               {
-                topicsContent.items.map((topic) => (
+                topicsContent.items.map((topic, i) => (
                   <div class="topic-slider__slide">
-                    <TopicCard title={topic.title}>{topic.text}</TopicCard>
+                    <TopicCard title={topic.title} image={topicImages[i]}>
+                      {topic.text}
+                    </TopicCard>
                   </div>
                 ))
               }
@@ -592,7 +611,9 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
     align-items: center;
     gap: var(--space-xs);
   }
-  .topic-slider__dot {
+  /* Die Punkte werden per JS erzeugt und tragen daher kein Astro-Scope-
+     Attribut – deshalb :global(). */
+  .topic-slider__dots :global(.topic-slider__dot) {
     width: 9px;
     height: 9px;
     padding: 0;
@@ -600,14 +621,14 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
     border-radius: 999px;
     background: rgba(21, 44, 26, 0.22);
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease, width 0.2s ease;
   }
-  .topic-slider__dot:hover {
-    background: rgba(21, 44, 26, 0.4);
+  .topic-slider__dots :global(.topic-slider__dot:hover) {
+    background: rgba(21, 44, 26, 0.45);
   }
-  .topic-slider__dot[aria-current='true'] {
+  .topic-slider__dots :global(.topic-slider__dot[aria-current='true']) {
+    width: 26px;
     background: var(--forest-deep);
-    transform: scale(1.25);
   }
 
   /* ===== Direktkontakt (weiße Sektion, grüne Daten-Box) ===== */
@@ -794,9 +815,12 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
       const max = maxOffset();
       const x = Math.min(slides[i].offsetLeft, max);
       track.style.transform = `translateX(${-x}px)`;
-      dots.forEach((d, di) =>
-        d.setAttribute('aria-current', di === index ? 'true' : 'false')
-      );
+      // Punkte hinter dem letzten anfahrbaren Index ausblenden – sie werden
+      // nie aktiv, weil dort bereits das Track-Ende erreicht ist.
+      dots.forEach((d, di) => {
+        d.hidden = di > last;
+        d.setAttribute('aria-current', di === index ? 'true' : 'false');
+      });
       slider!.classList.toggle('is-end', x >= max - 1);
     }
 
