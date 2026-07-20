@@ -1,6 +1,6 @@
 ---
 import { useTranslations, localizePath, type Lang } from '../i18n/ui';
-import logo from '../assets/Lgoo/Logo_black_transparent.svg';
+import logo from '../assets/logos/nav.svg';
 
 const lang = (Astro.currentLocale ?? 'de') as Lang;
 const t = useTranslations(lang);
@@ -27,8 +27,8 @@ const switchToEn = localizePath(Astro.url.pathname, 'en');
       <img
         src={logo.src}
         alt="EVOQUE Yourself – Coaching & Strategy"
-        width="180"
-        height="173"
+        width="207"
+        height="180"
       />
     </a>
 

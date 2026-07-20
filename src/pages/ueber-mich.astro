@@ -2,9 +2,9 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FlowerCorner from '../components/FlowerCorner.astro';
-import portraitImg from '../assets/about/DSC00751.jpg';
-import anchorImg from '../assets/about/DSC00842.jpg';
-import logoImg from '../assets/Lgoo/Logo_original_transparent.svg';
+import portraitImg from '../assets/about/portrait.jpg';
+import anchorImg from '../assets/about/anchor.jpg';
+import logoImg from '../assets/logos/about.svg';
 import { type Lang } from '../i18n/ui';
 
 const lang = (Astro.currentLocale ?? 'de') as Lang;
@@ -149,7 +149,7 @@ const content = {
   .values__media img {
     display: block;
     width: 100%;
-    /* Logo_original_transparent ist quadratisch (viewBox 5906x5906) – zentriert und
+    /* Logo ist nahezu quadratisch (viewBox 2610x2513) – zentriert und
        begrenzt. Mobil kompakt (nicht formatfüllend), auf großen Screens etwas
        größer. Fließend über clamp: skaliert mit der Viewport-Breite. */
     max-width: clamp(160px, 40vw, 320px);

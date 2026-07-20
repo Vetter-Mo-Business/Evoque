@@ -1,5 +1,5 @@
 ---
-import heroLogo from '../assets/Lgoo/Logo_hero.svg';
+import heroLogo from '../assets/logos/hero.svg';
 import heroPoster from '../assets/about/hero-poster.jpg';
 // Intro (spielt einmal) und Loop (endlos) jeweils als WebM + MP4:
 // WebM ist deutlich kleiner, MP4 ist der Fallback fuer aeltere Browser.
@@ -118,7 +118,7 @@ const {
 
     /* SCALE – zusätzlicher Vergrößerungs-/Verkleinerungsfaktor.
        1 = Grundgröße, 1.2 = 20% größer, 0.8 = 20% kleiner. */
-    --hero-logo-scale: 2;
+    --hero-logo-scale: 1;
 
     /* X – horizontale Verschiebung des Logos (− links / + rechts). */
     --hero-logo-x: 0cqw;
@@ -138,7 +138,7 @@ const {
        dürfen dabei bis vor/über das Logo wandern – das Logo hat keinen
        Hintergrund), positiv = nach UNTEN. Die Buttons liegen immer im
        Vordergrund und bleiben klickbar. */
-    --hero-buttons-y: -17cqw;
+    --hero-buttons-y: -1cqw;
 
     /* Größe der Buttons (Schrift) – skaliert ebenfalls mit dem Video.
        Kleiner min-Wert, damit die Buttons mitschrumpfen. */
@@ -221,11 +221,12 @@ const {
     /* Größe = Grundgröße × Scale-Faktor. Position über translate (X/Y). */
     width: calc(var(--hero-logo-size) * var(--hero-logo-scale));
     height: auto;
-    /* Das Logo ist quadratisch. Ohne diese Angabe hätte das Bild BEVOR es
-       geladen ist die Höhe 0 -> der Inhalt wäre kurz nach oben gerutscht und
-       die Buttons hätten oben "gehangen" (sichtbar beim ersten Laden / F5).
-       Mit aspect-ratio steht der Platz von Anfang an fest. */
-    aspect-ratio: 1 / 1;
+    /* Das Logo ist nahezu quadratisch (viewBox 4283x4077). Ohne diese Angabe
+       hätte das Bild BEVOR es geladen ist die Höhe 0 -> der Inhalt wäre kurz
+       nach oben gerutscht und die Buttons hätten oben "gehangen" (sichtbar
+       beim ersten Laden / F5). Mit aspect-ratio steht der Platz von Anfang an
+       fest und es wird nicht verzerrt. */
+    aspect-ratio: 4283 / 4077;
     transform: translate(var(--hero-logo-x), var(--hero-logo-y));
     /* sanfter heller Schein für Lesbarkeit auf dem Video */
     filter: drop-shadow(0 0.3cqw 2cqw rgba(255, 255, 255, 0.55));
