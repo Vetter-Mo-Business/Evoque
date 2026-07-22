@@ -2,42 +2,147 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
+
+// E-Mail ist bereits über die Website bekannt (Kontaktseite). Übrige
+// Pflichtangaben sind als [BITTE AUSFÜLLEN: …] markiert und vor der
+// Veröffentlichung durch die echten Daten zu ersetzen.
+const EMAIL = 'evoqueyourself.coaching@gmail.com';
+
 const c = {
   de: {
     metaTitle: 'Impressum',
     metaDesc: 'Impressum von EVOQUE – Yourself // Coaching & Strategy.',
     eyebrow: 'Rechtliches',
     title: 'Impressum',
-    h1: 'Angaben gemäß § 5 DDG',
-    p1: '[PLATZHALTER: Impressumsdaten – Name, Anschrift, Rechtsform des Coaching-Angebots.]',
-    hContact: 'Kontakt',
-    email: 'E-Mail',
-    phone: 'Telefon',
-    hVat: 'Umsatzsteuer-ID',
-    pVat: '[PLATZHALTER: USt-IdNr. gemäß § 27 a UStG, falls vorhanden.]',
-    hResp: 'Verantwortlich für den Inhalt',
-    pResp: '[PLATZHALTER: Name und Anschrift der verantwortlichen Person.]',
-    hDispute: 'Streitschlichtung',
-    pDispute: '[PLATZHALTER: Hinweis zur Verbraucherstreitbeilegung / EU-Plattform zur Online-Streitbeilegung, falls zutreffend.]',
-    note: 'Hinweis: Dieser Text ist ein Platzhalter und ersetzt keine Rechtsberatung. Die konkreten Pflichtangaben sind vor Veröffentlichung zu ergänzen.',
+
+    providerH: 'Angaben gemäß § 5 DDG',
+    providerLines: [
+      '[BITTE AUSFÜLLEN: vollständiger Name der verantwortlichen Person, z. B. Malin Langer]',
+      'EVOQUE – Yourself // Coaching & Strategy',
+      '[BITTE AUSFÜLLEN: Straße und Hausnummer]',
+      '[BITTE AUSFÜLLEN: PLZ und Ort]',
+      'Deutschland',
+    ],
+    legalFormNote:
+      'Rechtsform: Einzelunternehmen. [BITTE PRÜFEN: Kleinunternehmerin gemäß § 19 UStG – bitte bestätigen oder anpassen.]',
+
+    contactH: 'Kontakt',
+    emailLabel: 'E-Mail',
+    phoneLabel: 'Telefon',
+    phoneValue: '[BITTE AUSFÜLLEN: Telefonnummer]',
+
+    vatH: 'Umsatzsteuer-Identifikationsnummer',
+    vatText:
+      'Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: [BITTE AUSFÜLLEN: USt-IdNr., sofern vorhanden – bei Kleinunternehmerregelung nach § 19 UStG entfällt der Ausweis der Umsatzsteuer; diesen Abschnitt dann entfernen oder entsprechend anpassen.]',
+
+    activityH: 'Angaben zur Tätigkeit',
+    activityText:
+      'EVOQUE bietet Coaching zur Persönlichkeitsentwicklung und Zielerreichung an. Das Angebot ist eine Coaching- und Beratungsleistung und stellt keine Heilkunde, Psychotherapie oder medizinische Behandlung dar. Es ersetzt keine ärztliche oder psychotherapeutische Diagnose oder Therapie.',
+
+    respH: 'Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV',
+    respText:
+      'Verantwortlich für den Inhalt dieser Website ist die oben unter „Angaben gemäß § 5 DDG“ genannte Person unter der dort angegebenen Anschrift.',
+
+    sections: [
+      {
+        title: 'Verbraucherstreitbeilegung / Streitschlichtung',
+        paragraphs: [
+          'Die von der Europäischen Kommission bereitgestellte Plattform zur Online-Streitbeilegung (OS) wurde zum 20. Juli 2025 eingestellt und steht nicht mehr zur Verfügung.',
+          'Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen (§ 36 Verbraucherstreitbeilegungsgesetz – VSBG).',
+        ],
+      },
+      {
+        title: 'Haftung für Inhalte',
+        paragraphs: [
+          'Als Diensteanbieterin sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir als Diensteanbieterin jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.',
+          'Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden entsprechender Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.',
+        ],
+      },
+      {
+        title: 'Haftung für Links',
+        paragraphs: [
+          'Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft; rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.',
+          'Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.',
+        ],
+      },
+      {
+        title: 'Urheberrecht',
+        paragraphs: [
+          'Die durch die Seitenbetreiberin erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung der jeweiligen Autorin bzw. Erstellerin.',
+          'Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht von der Betreiberin erstellt wurden, werden die Urheberrechte Dritter beachtet und als solche gekennzeichnet.',
+        ],
+      },
+    ],
+
+    note: 'Hinweis: Dieser Text ist ein sorgfältig erstellter Entwurf, aber keine Rechtsberatung. Die mit [BITTE AUSFÜLLEN] bzw. [BITTE PRÜFEN] markierten Angaben sind vor der Veröffentlichung zu ergänzen bzw. zu prüfen; im Zweifel bitte anwaltlich oder durch eine spezialisierte Impressums-/Datenschutz-Prüfung abklären lassen.',
   },
+
   en: {
     metaTitle: 'Imprint',
     metaDesc: 'Imprint of EVOQUE – Yourself // Coaching & Strategy.',
     eyebrow: 'Legal',
     title: 'Imprint',
-    h1: 'Information pursuant to § 5 DDG (German Digital Services Act)',
-    p1: '[PLACEHOLDER: imprint details – name, address, legal form of the coaching offer.]',
-    hContact: 'Contact',
-    email: 'Email',
-    phone: 'Phone',
-    hVat: 'VAT ID',
-    pVat: '[PLACEHOLDER: VAT ID pursuant to § 27 a German VAT Act, if applicable.]',
-    hResp: 'Responsible for the content',
-    pResp: '[PLACEHOLDER: name and address of the responsible person.]',
-    hDispute: 'Dispute resolution',
-    pDispute: '[PLACEHOLDER: note on consumer dispute resolution / EU online dispute resolution platform, if applicable.]',
-    note: 'Note: This text is a placeholder and does not replace legal advice. The specific mandatory details must be added before publication.',
+
+    providerH: 'Information pursuant to § 5 DDG (German Digital Services Act)',
+    providerLines: [
+      '[PLEASE COMPLETE: full name of the responsible person, e.g. Malin Langer]',
+      'EVOQUE – Yourself // Coaching & Strategy',
+      '[PLEASE COMPLETE: street and house number]',
+      '[PLEASE COMPLETE: postal code and city]',
+      'Germany',
+    ],
+    legalFormNote:
+      'Legal form: sole proprietorship. [PLEASE CHECK: small-business regulation pursuant to § 19 German VAT Act – please confirm or adjust.]',
+
+    contactH: 'Contact',
+    emailLabel: 'Email',
+    phoneLabel: 'Phone',
+    phoneValue: '[PLEASE COMPLETE: phone number]',
+
+    vatH: 'VAT identification number',
+    vatText:
+      'VAT identification number pursuant to § 27 a German VAT Act: [PLEASE COMPLETE: VAT ID, if available – under the small-business regulation (§ 19 German VAT Act) no VAT is shown; in that case remove or adjust this section accordingly.]',
+
+    activityH: 'Nature of the activity',
+    activityText:
+      'EVOQUE offers coaching for personal development and goal achievement. The service is a coaching and consulting service and does not constitute the practice of medicine, psychotherapy or medical treatment. It does not replace medical or psychotherapeutic diagnosis or therapy.',
+
+    respH: 'Responsible for the content pursuant to § 18 (2) MStV',
+    respText:
+      'Responsible for the content of this website is the person named above under “Information pursuant to § 5 DDG”, at the address stated there.',
+
+    sections: [
+      {
+        title: 'Consumer dispute resolution',
+        paragraphs: [
+          'The Online Dispute Resolution (ODR) platform provided by the European Commission was discontinued on 20 July 2025 and is no longer available.',
+          'We are neither willing nor obliged to participate in dispute resolution proceedings before a consumer arbitration board (§ 36 German Consumer Dispute Resolution Act – VSBG).',
+        ],
+      },
+      {
+        title: 'Liability for content',
+        paragraphs: [
+          'As a service provider, we are responsible for our own content on these pages in accordance with general legislation pursuant to § 7 (1) DDG. According to §§ 8 to 10 DDG, however, we are not obliged as a service provider to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity.',
+          'Obligations to remove or block the use of information under general legislation remain unaffected. However, liability in this respect is only possible from the point in time at which knowledge of a specific infringement of the law is obtained. If we become aware of any such infringements, we will remove the relevant content immediately.',
+        ],
+      },
+      {
+        title: 'Liability for links',
+        paragraphs: [
+          'Our offer contains links to external third-party websites over whose content we have no influence. Therefore, we cannot accept any liability for this third-party content. The respective provider or operator of the linked pages is always responsible for their content. The linked pages were checked for possible legal violations at the time of linking; illegal content was not recognisable at the time of linking.',
+          'Permanent monitoring of the content of the linked pages is not reasonable without concrete evidence of a legal violation. If we become aware of any legal violations, we will remove such links immediately.',
+        ],
+      },
+      {
+        title: 'Copyright',
+        paragraphs: [
+          'The content and works created by the site operator on these pages are subject to German copyright law. Duplication, processing, distribution and any kind of use outside the limits of copyright law require the written consent of the respective author or creator.',
+          'Downloads and copies of this page are only permitted for private, non-commercial use. Insofar as the content on this site was not created by the operator, the copyrights of third parties are respected and marked as such.',
+        ],
+      },
+    ],
+
+    note: 'Note: This text is a carefully prepared draft, but it is not legal advice. The details marked with [PLEASE COMPLETE] or [PLEASE CHECK] must be added or verified before publication; if in doubt, please have it reviewed by a lawyer or a specialised imprint/privacy review.',
   },
 }[lang];
 ---
@@ -48,23 +153,35 @@ const c = {
       <p class="eyebrow">{c.eyebrow}</p>
       <h1>{c.title}</h1>
 
-      <h2>{c.h1}</h2>
-      <p>{c.p1}</p>
-
-      <h2>{c.hContact}</h2>
+      <h2>{c.providerH}</h2>
       <p>
-        {c.email}: [PLATZHALTER: E-Mail]<br />
-        {c.phone}: [PLATZHALTER: Telefonnummer]
+        {c.providerLines.map((line, i) => (
+          <>{line}{i < c.providerLines.length - 1 && <br />}</>
+        ))}
+      </p>
+      <p class="text-muted">{c.legalFormNote}</p>
+
+      <h2>{c.contactH}</h2>
+      <p>
+        {c.emailLabel}: <a href={`mailto:${EMAIL}`}>{EMAIL}</a><br />
+        {c.phoneLabel}: {c.phoneValue}
       </p>
 
-      <h2>{c.hVat}</h2>
-      <p>{c.pVat}</p>
+      <h2>{c.vatH}</h2>
+      <p>{c.vatText}</p>
 
-      <h2>{c.hResp}</h2>
-      <p>{c.pResp}</p>
+      <h2>{c.activityH}</h2>
+      <p>{c.activityText}</p>
 
-      <h2>{c.hDispute}</h2>
-      <p>{c.pDispute}</p>
+      <h2>{c.respH}</h2>
+      <p>{c.respText}</p>
+
+      {c.sections.map((s) => (
+        <>
+          <h2>{s.title}</h2>
+          {s.paragraphs.map((p) => <p>{p}</p>)}
+        </>
+      ))}
 
       <p class="legal__note text-muted">{c.note}</p>
     </div>
@@ -75,6 +192,9 @@ const c = {
   .legal h2 {
     margin-top: var(--space-xl);
     font-size: 1.4rem;
+  }
+  .legal p + p {
+    margin-top: var(--space-sm);
   }
   .legal__note {
     margin-top: var(--space-2xl);

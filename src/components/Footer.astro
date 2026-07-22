@@ -1,6 +1,7 @@
 ---
 import { useTranslations, localizePath, type Lang } from '../i18n/ui';
-import logo from '../assets/logos/footer.svg';
+import logo from '../assets/logos/footer.png';
+import vemoLogo from '../assets/logos/VeMo.png';
 
 const year = 2026;
 const lang = (Astro.currentLocale ?? 'de') as Lang;
@@ -49,10 +50,10 @@ const l = (p: string) => localizePath(p, lang);
     <span class="site-footer__credit">
       {t('footer.credit')}
       <img
-        src="/images/github.png"
+        src={vemoLogo.src}
         alt="VeMo IT &amp; Design"
-        width="18"
-        height="18"
+        width="27"
+        height="24"
         class="site-footer__credit-logo"
         loading="lazy"
       />
@@ -153,14 +154,14 @@ const l = (p: string) => localizePath(p, lang);
     display: inline-flex;
     align-items: center;
     gap: 0.5em;
-    font-size: 0.72rem;
+    font-size: 0.85rem;
     color: var(--sage-harmony);
     opacity: 0.6;
   }
   .site-footer__credit-logo {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
+    width: auto;
+    height: 24px;
+    object-fit: contain;
     flex-shrink: 0;
   }
 </style>

@@ -26,13 +26,13 @@ const content = {
     directTitle: 'Kontaktiere mich direkt',
     email: 'E-Mail',
     emailNote: '[PLATZHALTER: finale E-Mail-Adresse bestätigen]',
-    phone: 'Telefon',
-    phoneValue: '[PLATZHALTER: Telefonnummer]',
+    instagram: 'Instagram',
+    instagramHandle: '@evoqueyourself',
     portraitAlt: 'Malin – EVOQUE',
-    cardAlt: 'Visitenkarte von EVOQUE – Vorderseite',
+    cardAlt: 'QR-Code zum EVOQUE Instagram-Profil',
     igTitle: 'EVOQUE auf Instagram',
-    faqPrompt: 'Noch offene Fragen vor dem Gespräch?',
-    faqCta: 'Häufige Fragen ansehen',
+    faqPrompt: 'Noch Fragen offen?',
+    faqCta: "Zu den FAQ's",
   },
   en: {
     metaTitle: 'Contact & Booking',
@@ -46,15 +46,16 @@ const content = {
     directTitle: 'Contact me directly',
     email: 'Email',
     emailNote: '[PLACEHOLDER: confirm final email address]',
-    phone: 'Phone',
-    phoneValue: '[PLACEHOLDER: phone number]',
+    instagram: 'Instagram',
+    instagramHandle: '@evoqueyourself',
     portraitAlt: 'Malin – EVOQUE',
-    cardAlt: 'EVOQUE business card – front',
+    cardAlt: 'QR code to the EVOQUE Instagram profile',
     igTitle: 'EVOQUE on Instagram',
-    faqPrompt: 'Still have questions before the call?',
-    faqCta: 'View the FAQ',
+    faqPrompt: 'Still have open questions?',
+    faqCta: 'To the FAQ',
   },
 }[lang];
+const instagramUrl = 'https://www.instagram.com/evoqueyourself';
 ---
 
 <BaseLayout title={content.metaTitle} description={content.metaDesc}>
@@ -84,51 +85,55 @@ const content = {
 
       <div class="contact-box">
         <div class="contact-direct">
-        <article class="card contact-person">
-          <div class="contact-person__avatar">
-            <Image
-              src={portraitImg}
-              alt={content.portraitAlt}
-              widths={[300, 480]}
-              sizes="150px"
-              quality={85}
+          <article class="card contact-person">
+            <div class="contact-person__avatar">
+              <Image
+                src={portraitImg}
+                alt={content.portraitAlt}
+                widths={[300, 480]}
+                sizes="150px"
+                quality={85}
+                loading="lazy"
+              />
+            </div>
+            <dl class="contact-list">
+              <div>
+                <dt>{content.email}</dt>
+                <dd>
+                  <a href="mailto:evoqueyourself.coaching@gmail.com"
+                    >evoqueyourself.coaching@gmail.com</a
+                  >
+                  <span class="contact-note">{content.emailNote}</span>
+                </dd>
+              </div>
+              <div>
+                <dt>{content.instagram}</dt>
+                <dd>
+                  <a href={instagramUrl} target="_blank" rel="noopener"
+                    >{content.instagramHandle}</a
+                  >
+                </dd>
+              </div>
+            </dl>
+          </article>
+
+          <div class="ig-embed">
+            <iframe
+              src="https://www.instagram.com/evoqueyourself/embed"
+              title={content.igTitle}
               loading="lazy"
-            />
+              scrolling="no"
+              frameborder="0"
+              allowtransparency="true"
+            ></iframe>
           </div>
-          <dl class="contact-list">
-            <div>
-              <dt>{content.email}</dt>
-              <dd>
-                <a href="mailto:evoqueyourself.coaching@gmail.com"
-                  >evoqueyourself.coaching@gmail.com</a
-                >
-                <span class="contact-note">{content.emailNote}</span>
-              </dd>
-            </div>
-            <div>
-              <dt>{content.phone}</dt>
-              <dd>{content.phoneValue}</dd>
-            </div>
-          </dl>
-        </article>
+        </div>
 
-        <div class="ig-embed">
-          <iframe
-            src="https://www.instagram.com/evoqueyourself/embed"
-            title={content.igTitle}
-            loading="lazy"
-            scrolling="no"
-            frameborder="0"
-            allowtransparency="true"
-          ></iframe>
-        </div>
-        </div>
+        <p class="contact-faq">
+          <span class="contact-faq__prompt">{content.faqPrompt}</span>
+          <a href={`${l('/preise')}#faq`} class="btn btn--primary">{content.faqCta}</a>
+        </p>
       </div>
-
-      <p class="contact-faq">
-        <span class="contact-faq__prompt">{content.faqPrompt}</span>
-        <a href={`${l('/preise')}#faq`} class="btn btn--primary">{content.faqCta}</a>
-      </p>
     </div>
   </section>
 
@@ -137,41 +142,49 @@ const content = {
 <style>
   .contact-direct__title {
     text-align: center;
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-lg);
   }
 
-  /* FAQ-Verweis unter dem Direktkontakt */
-  .contact-faq {
-    margin: var(--space-2xl) 0 0;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-sm);
-  }
-  .contact-faq__prompt {
-    color: var(--calm-earth);
-    font-size: 0.95rem;
-  }
-
-  /* Große Box rund um den ganzen Direktkontakt-Bereich */
+  /* Große Box rund um den ganzen Direktkontakt-Bereich.
+     Layout wie auf der Unternehmensseite – nur der Hintergrund bleibt
+     bewusst soft-sand (dort Sage-Grün). */
   .contact-box {
+    max-width: 720px;
+    margin-inline: auto;
     background: var(--soft-sand);
     border: var(--border-soft);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-soft);
-    padding: var(--space-2xl);
+    padding: var(--space-lg);
   }
 
-  /* Zwei Spalten: links Personen-Karte, rechts Visitenkarte */
+  /* FAQ-Verweis unter beiden Karten (in der Box), Text links,
+     Button rechts – auf schmalen Bildschirmen bricht er um. */
+  .contact-faq {
+    margin: var(--space-lg) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    text-align: center;
+  }
+  .contact-faq__prompt {
+    color: var(--forest-deep);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  /* Zwei Spalten: links Personen-Karte, rechts Instagram-Feed */
   .contact-direct {
     display: grid;
-    gap: var(--space-xl);
+    gap: var(--space-lg);
     align-items: center;
   }
   @media (min-width: 760px) {
     .contact-direct {
       grid-template-columns: 1fr 1fr;
+      align-items: stretch;
     }
   }
 
@@ -179,7 +192,7 @@ const content = {
   .contact-person {
     text-align: center;
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--space-md);
     justify-items: center;
   }
   .contact-person__avatar {
@@ -190,7 +203,7 @@ const content = {
     border: 3px solid var(--sage-harmony);
     box-shadow: var(--shadow-soft);
   }
-  .contact-person__avatar img {
+  .contact-person__avatar :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -200,7 +213,7 @@ const content = {
   .contact-list {
     margin: 0;
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--space-md);
     justify-items: center;
     text-align: center;
   }
@@ -216,6 +229,7 @@ const content = {
   .contact-list dd {
     margin: 0;
     font-size: 1.1rem;
+    color: var(--forest-deep);
   }
   .contact-list a {
     color: var(--forest-deep);

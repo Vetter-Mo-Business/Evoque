@@ -2,149 +2,296 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import PricingCard from '../components/PricingCard.astro';
+import { localizePath, type Lang } from '../i18n/ui';
 
-const pilot = {
-  title: 'Pilotphase',
-  note: 'Aktuell gültig · nur für begrenzte Zeit und Plätze',
-  features: [
-    '8 Sitzungen á 60 Minuten',
-    'Exklusiver, vergünstigter Einführungspreis',
-    'Begrenzte Plätze',
-    'Mitgestaltung und Erweiterung des Angebots',
-    'Intensive Betreuung',
-  ],
-};
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+// Interne Links lokalisieren (/... <-> /en/...). Reine Anker (#...) bleiben
+// unverändert – sie zeigen auf die aktuelle Seite.
+const lh = (href: string) => (href.startsWith('#') ? href : localizePath(href, lang));
 
-const packages = [
-  {
-    name: 'Foundation',
-    perSession: '1 Sitzung á 60 Minuten',
-    sessions: '12 Sitzungen',
-    duration: '3 Monate Begleitung',
-    ctaLabel: 'Auf Nachfrage',
-    ctaHref: '/kontakt#buchung',
-    features: [
-      'Ideal für akute Themen und konkrete Herausforderungen',
-      'Schnelle Klarheit und erste Lösungsansätze',
-      'Fokus auf kurzfristige Entlastung und Orientierung',
-      'Geeignet für alltagsnahe Fragestellungen',
-      'Einstieg ins Coaching und erste Selbstreflexion',
+const content = {
+  de: {
+    metaTitle: 'Preise',
+    metaDesc:
+      'Die Paketoptionen des Evoque-Coachings – Foundation, Momentum und Transformation. Konkrete Preise gern auf Nachfrage.',
+    introEyebrow: 'Deine Investition in Dich selbst',
+    introTitle: 'Dein Weg',
+    introLead:
+      'Ich nehme mir Zeit, mich individuell auf Dich und Deine Herausforderungen einzustellen und mein Coaching Dir anzupassen. Diese Methode benötigt Zeit, weshalb du die Wahl zwischen verschiedenen Paketen hast. Einzelsitzungen nur nach individueller Absprache möglich.',
+    pilotBadge: 'Aktuell',
+    pilotNote: 'Alle Pakete beinhalten ein kostenloses 30-minütiges Kennenlerngespräch vorab.',
+    faqEyebrow: 'Häufige Fragen',
+    faqTitle: 'Gut zu wissen, bevor wir starten',
+    onRequest: 'Auf Nachfrage',
+    pilot: {
+      title: 'Pilotphase',
+      note: 'Aktuell gültig · nur für begrenzte Zeit und Plätze',
+      features: [
+        '8 Sitzungen á 60 Minuten',
+        'Exklusiver, vergünstigter Einführungspreis',
+        'Begrenzte Plätze',
+        'Mitgestaltung und Erweiterung des Angebots',
+        'Intensive Betreuung',
+      ],
+    },
+    packages: [
+      {
+        name: 'Foundation',
+        perSession: '1 Sitzung á 60 Minuten',
+        sessions: '12 Sitzungen',
+        duration: '3 Monate Begleitung',
+        features: [
+          'Ideal für akute Themen und konkrete Herausforderungen',
+          'Schnelle Klarheit und erste Lösungsansätze',
+          'Fokus auf kurzfristige Entlastung und Orientierung',
+          'Geeignet für alltagsnahe Fragestellungen',
+          'Einstieg ins Coaching und erste Selbstreflexion',
+        ],
+      },
+      {
+        name: 'Momentum',
+        perSession: '1 Sitzung á 60 Minuten',
+        sessions: '25 Sitzungen',
+        duration: '6 Monate Begleitung',
+        badge: 'Beliebteste Wahl',
+        highlight: true,
+        features: [
+          'Nachhaltigere Veränderung durch vertiefte Arbeit',
+          'Ursachen verstehen statt nur Symptome bearbeiten',
+          'Entwicklung stabiler Denk- und Verhaltensmuster',
+          'Förderung von Selbstreflexion und Eigenverantwortung',
+          'Begleitete Umsetzung im Alltag mit Feedbackschleifen',
+          'Aufbau von Routinen und langfristigen Strategien',
+          'Vorbereitung auf eigenständige Weiterentwicklung nach Coaching-Ende',
+        ],
+      },
+      {
+        name: 'Transformation',
+        perSession: '1 Sitzung á 60 Minuten',
+        sessions: '40 Sitzungen',
+        duration: '1 Jahr Begleitung',
+        features: [
+          'Tiefenanalyse von Mustern, Glaubenssätzen und Auslösern',
+          'Tiefgreifende und nachhaltige Verhaltensänderung',
+          'Langfristige Begleitung komplexer Themen',
+          'Integration neuer Muster auf allen Ebenen (Denken, Fühlen, Handeln)',
+          'Stabilisierung und langfristige Verankerung von Veränderungen',
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: 'Was ist Coaching?',
+        a: 'Seriöses psychologisches Coaching richtet sich ausschließlich an gesunde Personen, um sie bei privaten oder beruflichen Herausforderungen zu begleiten. Innerhalb des Coachingprozesses werden problematische Verhaltensweisen systematisch bearbeitet, die den Coachee stören und auf dem Weg zu dessen Zielen oder im Alltag einschränken. Im Coaching bei EVOQUE schauen wir uns gemeinsam die Wurzel des Problems an und erzeugen eine nachhaltige gesunde Verhaltensänderung mithilfe psychologisch fundierter und wissenschaftlicher Methoden.',
+        link: { href: '/coaching#ansatz', label: 'Mehr zum Coaching' },
+      },
+      {
+        q: 'Wofür steht EVOQUE?',
+        a: 'EVOQUE steht für die erfolgreiche und langfristige Verhaltensänderung. Schritt für Schritt legen wir gemeinsam schädliche Verhaltensmuster ab und ersetzen diese durch positive, erfolgsbringende Gewohnheiten. EVOQUE steht für die Nachhaltigkeit, mit der eine langfristige Verhaltensänderung besteht und für deine Persönlichkeitsentwicklung, die im Coaching in dir geweckt und entstehen wird.',
+      },
+      {
+        q: 'Wie lange dauert ein Coachingprozess?',
+        a: 'Du kannst zwischen verschiedenen Paketoptionen wählen. Du hast die Wahl zwischen 12, 25 und 40 Sitzungen. Grundsätzlich kannst Du davon ausgehen, dass 12 Sitzungen in etwa 3 Monate dauern, 25 Sitzungen etwa 6 Monate und 40 Sitzungen in etwa 1 Jahr, da es im Prozess auch Sitzungspausen zur eigenen Reflexion und zum Üben der Techniken geben wird. Welche Dauer für Dein individuelles Thema geeignet ist, können wir gemeinsam im Erstgespräch ergründen. Es gibt leichtere und tiefergehende Themen, die sich im zeitlichen Umfang unterscheiden. Falls Du unsicher bist, kannst Du auch zum Kennenlernen mit dem kleinsten Paket (12 Sitzungen) starten. Deine Sitzungsanzahl können wir bei Bedarf individuell erhöhen.',
+        link: { href: '#pakete', label: 'Zu den Paketen' },
+      },
+      {
+        q: 'Findet das Coaching online oder vor Ort statt?',
+        a: 'Beides ist möglich! Viele Coachingprozesse laufen flexibel online, während auch einzelne persönliche Treffen sinnvoll sind. Das besprechen wir im Kennenlerngespräch. Wir schauen gemeinsam, was für Dich am besten in Deinen Alltag integrierbar ist.',
+        link: { href: '/kontakt#buchung', label: 'Kennenlerngespräch vereinbaren' },
+      },
+      {
+        q: 'Was kostet ein Coaching bei EVOQUE?',
+        a: 'Der Preis richtet sich nach dem zeitlichen Umfang. Grundsätzlich werden größere Pakete pro Sitzung günstiger, da die zeitliche Vor- und Nachbereitung sinkt, je besser ich Klienten kennenlerne. Preise werden auf Anfrage gerne zugesendet, spätestens jedoch im Erstgespräch transparent besprochen.',
+        link: { href: '/kontakt#buchung', label: 'Preise anfragen' },
+      },
+      {
+        q: 'Was beinhaltet der Preis alles?',
+        a: 'Es gibt Festpreise für die Pakete. Diese umfassen Vor- sowie Nachbereitung der Sitzungen, die Coaching-Sessions des jeweiligen Pakets und alle Zwischen- sowie Ergebnisberichte. Die Supervision ist Teil des Coachings, wird dem Coachee jedoch nicht in Rechnung gestellt. Der Preis wird vor Beginn transparent besprochen – es gibt keine unerwarteten Kosten.',
+        link: { href: '#pakete', label: 'Zu den Paketen' },
+      },
+      {
+        q: 'Woran erkenne ich, ob Coaching das Richtige für mich ist?',
+        a: 'Coaching ist grundsätzlich bei jedem Problem geeignet, das nicht psychotherapeutisch relevant ist. Im Coaching lernst Du Techniken und Werkzeuge zur Zielerreichung und wie Du selbständig an Deinem Verhalten arbeiten kannst. Diese Techniken sind besonders wertvoll, wenn Du schon lange versuchst, ein Verhalten zu verändern oder ein Ziel zu erreichen, und bisher noch nicht erfolgreich warst. Auch bei kurzfristigen Problemen ist Unterstützung hilfreich, um das Problem nicht zu einer tiefgehenden Verhaltensweise werden zu lassen. Je früher eine schlechte Gewohnheit bearbeitet wird, desto einfacher ist es, sie in eine positive umzuwandeln. Zögere also nicht, Dir Unterstützung zu suchen, wenn Du sie benötigst!',
+        link: { href: '/coaching#themen', label: 'Themen & Anliegen ansehen' },
+      },
+      {
+        q: 'Was ist, wenn ich das Coaching abbrechen möchte?',
+        a: 'Wenn Du frühzeitig merken solltest, dass die Zusammenarbeit sich für Dich nicht richtig anfühlt, bitte ich Dich, dies unverzüglich anzusprechen.',
+      },
+      {
+        q: 'Kann ich das Coaching auch auf Englisch in Anspruch nehmen?',
+        a: 'Ja! Das Coaching ist sowohl auf Deutsch als auch auf Englisch verfügbar.',
+      },
+      {
+        q: 'Erhalte ich nach Abschluss des Coachings einen Ergebnisbericht zu meinem Fortschritt?',
+        a: 'Ja! Du erhältst einen umfassenden Überblick über all Deine Fortschritte, Deine Entwicklungsschritte und Deine Lernschritte im Rahmen des Coachings. Auf Wunsch kann dem Arbeitgeber eine Bescheinigung über das abgeschlossene Coaching ausgestellt werden.',
+      },
+      {
+        q: 'Was ist, wenn mein Thema nach Abschluss des Coachings noch besteht?',
+        a: 'Zunächst ermuntere ich Dich, selbständig die erlernten Tools und Techniken zu erproben. Nachhaltige Veränderung ist ein stetiger Prozess und kann nicht von heute auf morgen erzielt werden. Wenn Du Dir nach einigen Wochen weitere Unterstützung wünschst, kannst Du das Coaching jederzeit erneut in Anspruch nehmen – mit demselben oder anderen Themen!',
+        link: { href: '/kontakt#buchung', label: 'Erneut Kontakt aufnehmen' },
+      },
+      {
+        q: 'Wie grenzt sich Psychotherapie von Coaching ab?',
+        a: 'Coaching ist ausdrücklich nicht zur Behandlung oder Heilung von psychotherapeutischen Erkrankungen geeignet. Coaching ergründet nicht in einer psychotherapeutischen Tiefe die Vergangenheit eines Problemverhaltens. Im Coaching geht es darum, die Verhaltenskonsequenzen im Hier & Jetzt in positive, dem Coachee nützliche Verhaltensmuster zu verändern. Ein Coaching kann parallel zu einer Psychotherapie unterstützend eingesetzt werden – dies wird individuell nach Situation abgeklärt.',
+        link: { href: '/coaching#psychotherapie', label: 'Mehr zur Abgrenzung' },
+      },
+      {
+        q: 'Wie fange ich an?',
+        a: 'Mit einem kostenlosen, unverbindlichen Kennenlerngespräch. Dort schauen wir gemeinsam, ob es passt und wie ich Dich begleiten kann.',
+        link: { href: '/kontakt#buchung', label: 'Kennenlerngespräch buchen' },
+      },
     ],
   },
-  {
-    name: 'Momentum',
-    perSession: '1 Sitzung á 60 Minuten',
-    sessions: '25 Sitzungen',
-    duration: '6 Monate Begleitung',
-    badge: 'Beliebteste Wahl',
-    highlight: true,
-    ctaLabel: 'Auf Nachfrage',
-    ctaHref: '/kontakt#buchung',
-    features: [
-      'Nachhaltigere Veränderung durch vertiefte Arbeit',
-      'Ursachen verstehen statt nur Symptome bearbeiten',
-      'Entwicklung stabiler Denk- und Verhaltensmuster',
-      'Förderung von Selbstreflexion und Eigenverantwortung',
-      'Begleitete Umsetzung im Alltag mit Feedbackschleifen',
-      'Aufbau von Routinen und langfristigen Strategien',
-      'Vorbereitung auf eigenständige Weiterentwicklung nach Coaching-Ende',
+  en: {
+    metaTitle: 'Pricing',
+    metaDesc:
+      'The package options of EVOQUE coaching – Foundation, Momentum and Transformation. Specific prices gladly on request.',
+    introEyebrow: 'Your investment in yourself',
+    introTitle: 'Your path',
+    introLead:
+      'I take the time to attune to you and your challenges individually and to adapt my coaching to you. This method needs time, which is why you can choose between different packages. Single sessions only by individual arrangement.',
+    pilotBadge: 'Current',
+    pilotNote: 'All packages include a free 30-minute intro call beforehand.',
+    faqEyebrow: 'Frequently asked questions',
+    faqTitle: 'Good to know before we start',
+    onRequest: 'On request',
+    pilot: {
+      title: 'Pilot phase',
+      // Geschütztes Leerzeichen, damit "only" nicht allein in die zweite Zeile rutscht.
+      note: 'Currently valid · limited time and places only',
+      features: [
+        '8 sessions of 60 minutes',
+        'Exclusive, reduced introductory price',
+        'Limited places',
+        'Help shape and expand the offer',
+        'Intensive support',
+      ],
+    },
+    packages: [
+      {
+        name: 'Foundation',
+        perSession: '1 session of 60 minutes',
+        sessions: '12 sessions',
+        duration: '3 months of guidance',
+        features: [
+          'Ideal for acute topics and concrete challenges',
+          'Quick clarity and first solution approaches',
+          'Focus on short-term relief and orientation',
+          'Suitable for everyday questions',
+          'An entry into coaching and first self-reflection',
+        ],
+      },
+      {
+        name: 'Momentum',
+        perSession: '1 session of 60 minutes',
+        sessions: '25 sessions',
+        duration: '6 months of guidance',
+        badge: 'Most popular choice',
+        highlight: true,
+        features: [
+          'More lasting change through deeper work',
+          'Understanding causes instead of only treating symptoms',
+          'Developing stable patterns of thought and behaviour',
+          'Encouraging self-reflection and personal responsibility',
+          'Guided implementation in everyday life with feedback loops',
+          'Building routines and long-term strategies',
+          'Preparation for independent further development after the coaching ends',
+        ],
+      },
+      {
+        name: 'Transformation',
+        perSession: '1 session of 60 minutes',
+        sessions: '40 sessions',
+        duration: '1 year of guidance',
+        features: [
+          'In-depth analysis of patterns, beliefs and triggers',
+          'Profound and lasting change in behaviour',
+          'Long-term guidance for complex topics',
+          'Integration of new patterns on all levels (thinking, feeling, acting)',
+          'Stabilising and anchoring changes for the long term',
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: 'What is coaching?',
+        a: 'Serious psychological coaching is aimed exclusively at healthy people, to support them with private or professional challenges. Within the coaching process, problematic behaviours that trouble the coachee and limit them on the way to their goals or in everyday life are worked through systematically. In coaching at EVOQUE, we look together at the root of the problem and create a lasting, healthy change in behaviour with the help of psychologically grounded and scientific methods.',
+        link: { href: '/coaching#ansatz', label: 'More about coaching' },
+      },
+      {
+        q: 'What does EVOQUE stand for?',
+        a: 'EVOQUE stands for successful, long-term change in behaviour. Step by step, we let go of harmful behavioural patterns together and replace them with positive habits that bring success. EVOQUE stands for the sustainability with which a long-term change in behaviour endures – and for your personal development, which is awakened and grows within you throughout the coaching.',
+      },
+      {
+        q: 'How long does a coaching process take?',
+        a: 'You can choose between different package options. You have the choice between 12, 25 and 40 sessions. As a rule, you can expect 12 sessions to take about 3 months, 25 sessions about 6 months and 40 sessions about 1 year, since the process also includes breaks between sessions for your own reflection and for practising the techniques. Which duration suits your individual topic is something we can explore together in the first call. There are lighter and deeper topics that differ in how much time they need. If you are unsure, you can also start with the smallest package (12 sessions) to get to know the process. We can increase your number of sessions individually if needed.',
+        link: { href: '#pakete', label: 'To the packages' },
+      },
+      {
+        q: 'Does coaching take place online or in person?',
+        a: 'Both are possible! Many coaching processes run flexibly online, while individual in-person meetings can also be worthwhile. We discuss this in the intro call. Together we look at what fits best into your everyday life.',
+        link: { href: '/kontakt#buchung', label: 'Arrange an intro call' },
+      },
+      {
+        q: 'What does coaching at EVOQUE cost?',
+        a: 'The price depends on the amount of time involved. As a rule, larger packages become cheaper per session, since the time for preparation and follow-up decreases the better I get to know a client. Prices are gladly sent on request, but at the latest discussed transparently in the first call.',
+        link: { href: '/kontakt#buchung', label: 'Request prices' },
+      },
+      {
+        q: 'What does the price include?',
+        a: 'There are fixed prices for the packages. These cover the preparation and follow-up of the sessions, the coaching sessions of the respective package and all interim and results reports. Supervision is part of the coaching but is not charged to the coachee. The price is discussed transparently before we start – there are no unexpected costs.',
+        link: { href: '#pakete', label: 'To the packages' },
+      },
+      {
+        q: 'How do I know whether coaching is right for me?',
+        a: 'Coaching is generally suitable for any problem that is not psychotherapeutically relevant. In coaching you learn techniques and tools for reaching your goals and how to work on your behaviour independently. These techniques are especially valuable if you have been trying to change a behaviour or reach a goal for a long time without success so far. Even with short-term problems, support is helpful so the issue does not turn into a deep-seated behaviour. The earlier a bad habit is addressed, the easier it is to turn it into a positive one. So do not hesitate to seek support when you need it!',
+        link: { href: '/coaching#themen', label: 'See topics & concerns' },
+      },
+      {
+        q: 'What if I want to stop the coaching?',
+        a: 'If you notice early on that the collaboration does not feel right for you, I ask you to raise this without delay.',
+      },
+      {
+        q: 'Can I also take the coaching in English?',
+        a: 'Yes! Coaching is available in both German and English.',
+      },
+      {
+        q: 'Do I receive a results report on my progress after the coaching ends?',
+        a: 'Yes! You receive a comprehensive overview of all your progress, your development steps and your learning steps within the coaching. On request, a certificate of the completed coaching can be issued for your employer.',
+      },
+      {
+        q: 'What if my topic still persists after the coaching ends?',
+        a: 'First, I encourage you to try out the tools and techniques you have learned on your own. Lasting change is a continuous process and cannot be achieved overnight. If after a few weeks you would like further support, you can take up coaching again at any time – with the same or different topics!',
+        link: { href: '/kontakt#buchung', label: 'Get in touch again' },
+      },
+      {
+        q: 'How does psychotherapy differ from coaching?',
+        a: 'Coaching is explicitly not suitable for the treatment or cure of psychotherapeutic conditions. Coaching does not explore the past of a problematic behaviour to a psychotherapeutic depth. Coaching is about changing the behavioural consequences in the here and now into positive behavioural patterns that are useful to the coachee. Coaching can be used as a supportive measure alongside psychotherapy – this is clarified individually according to the situation.',
+        link: { href: '/coaching#psychotherapie', label: 'More on the distinction' },
+      },
+      {
+        q: 'How do I start?',
+        a: 'With a free, no-obligation intro call. There we look together at whether it fits and how I can support you.',
+        link: { href: '/kontakt#buchung', label: 'Book an intro call' },
+      },
     ],
   },
-  {
-    name: 'Transformation',
-    perSession: '1 Sitzung á 60 Minuten',
-    sessions: '40 Sitzungen',
-    duration: '1 Jahr Begleitung',
-    ctaLabel: 'Auf Nachfrage',
-    ctaHref: '/kontakt#buchung',
-    features: [
-      'Tiefenanalyse von Mustern, Glaubenssätzen und Auslösern',
-      'Tiefgreifende und nachhaltige Verhaltensänderung',
-      'Langfristige Begleitung komplexer Themen',
-      'Integration neuer Muster auf allen Ebenen (Denken, Fühlen, Handeln)',
-      'Stabilisierung und langfristige Verankerung von Veränderungen',
-    ],
-  },
-];
+}[lang];
 
-// FAQ – wo möglich mit Link auf die passende Seite/Sektion.
-// Einige Antworten werden bewusst von anderen Seiten übernommen ("von oben").
-const faq = [
-  {
-    q: 'Was ist Coaching?',
-    a: 'Seriöses psychologisches Coaching richtet sich ausschließlich an gesunde Personen, um sie bei privaten oder beruflichen Herausforderungen zu begleiten. Innerhalb des Coachingprozesses werden problematische Verhaltensweisen systematisch bearbeitet, die den Coachee stören und auf dem Weg zu dessen Zielen oder im Alltag einschränken. Im Coaching bei EVOQUE schauen wir uns gemeinsam die Wurzel des Problems an und erzeugen eine nachhaltige gesunde Verhaltensänderung mithilfe psychologisch fundierter und wissenschaftlicher Methoden.',
-    link: { href: '/coaching#ansatz', label: 'Mehr zum Coaching' },
-  },
-  {
-    q: 'Wofür steht EVOQUE?',
-    a: 'EVOQUE steht für die erfolgreiche und langfristige Verhaltensänderung. Schritt für Schritt legen wir gemeinsam schädliche Verhaltensmuster ab und ersetzen diese durch positive, erfolgsbringende Gewohnheiten. EVOQUE steht für die Nachhaltigkeit, mit der eine langfristige Verhaltensänderung besteht und für deine Persönlichkeitsentwicklung, die im Coaching in dir geweckt und entstehen wird.',
-  },
-  {
-    q: 'Wie lange dauert ein Coachingprozess?',
-    a: 'Du kannst zwischen verschiedenen Paketoptionen wählen. Du hast die Wahl zwischen 12, 25 und 40 Sitzungen. Grundsätzlich kannst Du davon ausgehen, dass 12 Sitzungen in etwa 3 Monate dauern, 25 Sitzungen etwa 6 Monate und 40 Sitzungen in etwa 1 Jahr, da es im Prozess auch Sitzungspausen zur eigenen Reflexion und zum Üben der Techniken geben wird. Welche Dauer für Dein individuelles Thema geeignet ist, können wir gemeinsam im Erstgespräch ergründen. Es gibt leichtere und tiefergehende Themen, die sich im zeitlichen Umfang unterscheiden. Falls Du unsicher bist, kannst Du auch zum Kennenlernen mit dem kleinsten Paket (12 Sitzungen) starten. Deine Sitzungsanzahl können wir bei Bedarf individuell erhöhen.',
-    link: { href: '#pakete', label: 'Zu den Paketen' },
-  },
-  {
-    q: 'Findet das Coaching online oder vor Ort statt?',
-    a: 'Beides ist möglich! Viele Coachingprozesse laufen flexibel online, während auch einzelne persönliche Treffen sinnvoll sind. Das besprechen wir im Kennenlerngespräch. Wir schauen gemeinsam, was für Dich am besten in Deinen Alltag integrierbar ist.',
-    link: { href: '/kontakt#buchung', label: 'Kennenlerngespräch vereinbaren' },
-  },
-  {
-    q: 'Was kostet ein Coaching bei EVOQUE?',
-    a: 'Der Preis richtet sich nach dem zeitlichen Umfang. Grundsätzlich werden größere Pakete pro Sitzung günstiger, da die zeitliche Vor- und Nachbereitung sinkt, je besser ich Klienten kennenlerne. Preise werden auf Anfrage gerne zugesendet, spätestens jedoch im Erstgespräch transparent besprochen.',
-    link: { href: '/kontakt#buchung', label: 'Preise anfragen' },
-  },
-  {
-    q: 'Was beinhaltet der Preis alles?',
-    a: 'Es gibt Festpreise für die Pakete. Diese umfassen Vor- sowie Nachbereitung der Sitzungen, die Coaching-Sessions des jeweiligen Pakets und alle Zwischen- sowie Ergebnisberichte. Die Supervision ist Teil des Coachings, wird dem Coachee jedoch nicht in Rechnung gestellt. Der Preis wird vor Beginn transparent besprochen – es gibt keine unerwarteten Kosten.',
-    link: { href: '#pakete', label: 'Zu den Paketen' },
-  },
-  {
-    q: 'Woran erkenne ich, ob Coaching das Richtige für mich ist?',
-    a: 'Coaching ist grundsätzlich bei jedem Problem geeignet, das nicht psychotherapeutisch relevant ist. Im Coaching lernst Du Techniken und Werkzeuge zur Zielerreichung und wie Du selbständig an Deinem Verhalten arbeiten kannst. Diese Techniken sind besonders wertvoll, wenn Du schon lange versuchst, ein Verhalten zu verändern oder ein Ziel zu erreichen, und bisher noch nicht erfolgreich warst. Auch bei kurzfristigen Problemen ist Unterstützung hilfreich, um das Problem nicht zu einer tiefgehenden Verhaltensweise werden zu lassen. Je früher eine schlechte Gewohnheit bearbeitet wird, desto einfacher ist es, sie in eine positive umzuwandeln. Zögere also nicht, Dir Unterstützung zu suchen, wenn Du sie benötigst!',
-    link: { href: '/coaching#themen', label: 'Themen & Anliegen ansehen' },
-  },
-  {
-    q: 'Was ist, wenn ich das Coaching abbrechen möchte?',
-    a: 'Wenn Du frühzeitig merken solltest, dass die Zusammenarbeit sich für Dich nicht richtig anfühlt, bitte ich Dich, dies unverzüglich anzusprechen.',
-  },
-  {
-    q: 'Kann ich das Coaching auch auf Englisch in Anspruch nehmen?',
-    a: 'Ja! Das Coaching ist sowohl auf Deutsch als auch auf Englisch verfügbar.',
-  },
-  {
-    q: 'Erhalte ich nach Abschluss des Coachings einen Ergebnisbericht zu meinem Fortschritt?',
-    a: 'Ja! Du erhältst einen umfassenden Überblick über all Deine Fortschritte, Deine Entwicklungsschritte und Deine Lernschritte im Rahmen des Coachings. Auf Wunsch kann dem Arbeitgeber eine Bescheinigung über das abgeschlossene Coaching ausgestellt werden.',
-  },
-  {
-    q: 'Was ist, wenn mein Thema nach Abschluss des Coachings noch besteht?',
-    a: 'Zunächst ermuntere ich Dich, selbständig die erlernten Tools und Techniken zu erproben. Nachhaltige Veränderung ist ein stetiger Prozess und kann nicht von heute auf morgen erzielt werden. Wenn Du Dir nach einigen Wochen weitere Unterstützung wünschst, kannst Du das Coaching jederzeit erneut in Anspruch nehmen – mit demselben oder anderen Themen!',
-    link: { href: '/kontakt#buchung', label: 'Erneut Kontakt aufnehmen' },
-  },
-  {
-    q: 'Wie grenzt sich Psychotherapie von Coaching ab?',
-    a: 'Coaching ist ausdrücklich nicht zur Behandlung oder Heilung von psychotherapeutischen Erkrankungen geeignet. Coaching ergründet nicht in einer psychotherapeutischen Tiefe die Vergangenheit eines Problemverhaltens. Im Coaching geht es darum, die Verhaltenskonsequenzen im Hier & Jetzt in positive, dem Coachee nützliche Verhaltensmuster zu verändern. Ein Coaching kann parallel zu einer Psychotherapie unterstützend eingesetzt werden – dies wird individuell nach Situation abgeklärt.',
-    link: { href: '/coaching#psychotherapie', label: 'Mehr zur Abgrenzung' },
-  },
-  {
-    q: 'Wie fange ich an?',
-    a: 'Mit einem kostenlosen, unverbindlichen Kennenlerngespräch. Dort schauen wir gemeinsam, ob es passt und wie ich Dich begleiten kann.',
-    link: { href: '/kontakt#buchung', label: 'Kennenlerngespräch buchen' },
-  },
-];
+const pilot = content.pilot;
+const packages = content.packages;
+const faq = content.faq;
 ---
 
-<BaseLayout
-  title="Preise"
-  description="Die Paketoptionen des Evoque-Coachings – Foundation, Momentum und Transformation. Konkrete Preise gern auf Nachfrage."
->
+<BaseLayout title={content.metaTitle} description={content.metaDesc}>
   <!-- Intro -->
   <section class="section section--tight pricing-intro">
     <div class="container container--narrow center">
-      <p class="eyebrow">Deine Investition in Dich selbst</p>
-      <h1>Dein Weg</h1>
+      <p class="eyebrow">{content.introEyebrow}</p>
+      <h1>{content.introTitle}</h1>
       <p class="lead">
-         Ich nehme mir Zeit, mich individuell auf Dich und Deine Herausforderungen einzustellen und mein Coaching Dir anzupassen. Diese Methode benötigt Zeit, weshalb du die Wahl zwischen verschiedenen Paketen hast. Einzelsitzungen nur nach individueller Absprache möglich.
+         {content.introLead}
       </p>
     </div>
   </section>
@@ -155,7 +302,7 @@ const faq = [
       <!-- Pilotphase – aktuelles, limitiertes Angebot quer über den Paketen -->
       <div class="pilot-banner">
         <div class="pilot-banner__head">
-          <span class="badge badge--pilot">Aktuell</span>
+          <span class="badge badge--pilot">{content.pilotBadge}</span>
           <h2 class="pilot-banner__title">{pilot.title}</h2>
           <p class="pilot-banner__note">{pilot.note}</p>
         </div>
@@ -180,8 +327,8 @@ const faq = [
               sessions={p.sessions}
               duration={p.duration}
               features={p.features}
-              ctaLabel={p.ctaLabel}
-              ctaHref={p.ctaHref}
+              ctaLabel={content.onRequest}
+              ctaHref={lh('/kontakt#buchung')}
               badge={p.badge}
               highlight={p.highlight}
             />
@@ -190,7 +337,7 @@ const faq = [
       </div>
 
       <p class="center pricing-note text-muted">
-        Alle Pakete beinhalten ein kostenloses 30-minütiges Kennenlerngespräch vorab.
+        {content.pilotNote}
       </p>
     </div>
   </section>
@@ -199,8 +346,8 @@ const faq = [
   <section class="section surface-sand" id="faq">
     <div class="container container--narrow">
       <SectionHeading
-        eyebrow="Häufige Fragen"
-        title="Gut zu wissen, bevor wir starten"
+        eyebrow={content.faqEyebrow}
+        title={content.faqTitle}
         align="center"
       />
       <div class="faq">

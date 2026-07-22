@@ -1,13 +1,11 @@
 ---
-import heroLogo from '../assets/logos/hero.svg';
-import heroPoster from '../assets/about/hero-poster.jpg';
-// Intro (spielt einmal) und Loop (endlos) jeweils als WebM + MP4:
-// WebM ist deutlich kleiner, MP4 ist der Fallback fuer aeltere Browser.
-// Der Browser nimmt automatisch das erste Format, das er abspielen kann.
-import introWebm from '../assets/about/Teil1-2-web.webm?url';
-import introMp4 from '../assets/about/Teil1-2-web.mp4?url';
-import loopWebm from '../assets/about/Teil2-loop.webm?url';
-import loopMp4 from '../assets/about/Teil2-loop.mp4?url';
+import heroLogo from '../assets/logos/hero.png';
+import heroPoster from '../assets/hero/poster.jpg';
+// Intro (spielt einmal) + Loop (endlos), je als WebM (klein) + MP4 (Fallback)
+import introWebm from '../assets/hero/intro.webm?url';
+import introMp4 from '../assets/hero/intro.mp4?url';
+import loopWebm from '../assets/hero/loop.webm?url';
+import loopMp4 from '../assets/hero/loop.mp4?url';
 
 interface Props {
   poster?: string;
@@ -28,13 +26,8 @@ const {
 
 <section class="hero">
   <div class="hero__stage">
-    <!-- Zwei Media-Ebenen: Das Intro-Video (Teil1-2) spielt EINMAL die
-         Animation. Wenn es fertig ist, wird auf das Loop-Video (Teil2)
-         gewechselt, das die ruhige Blätter-Bewegung endlos loopt. Das Loop-
-         Video liegt voll deckend UNTEN, das Intro blendet OBEN aus -> es wird
-         nie dunkler.
-         Frueher war der Loop ein 16-MB-GIF. Als Video ist er ~0,4 MB und
-         belastet beim Dekodieren den Browser deutlich weniger. -->
+    <!-- Zwei Media-Ebenen: Intro (Teil1-2) spielt einmal, danach übernimmt das
+         Loop-Video (Teil2) darunter; das Intro blendet oben aus (kein Abdunkeln). -->
     <video
       class="hero__media hero__loop"
       loop
@@ -89,77 +82,24 @@ const {
 
 <style>
   .hero {
-    /* =================================================================
-       HIER ANPASSEN
-       Alle Werte skalieren mit der Videobreite (cqw = 1% der Videobreite).
-       Dadurch bleibt der Inhalt auf JEDEM Bildschirm gleich groß im
-       Verhältnis zum Blumenkranz – also immer mittig innerhalb davon.
-       ================================================================= */
-
-    /* Maximale Breite des Videos.
-       100% = volle Bildschirmbreite. Für kleiner z.B. 1040px setzen. */
-    --hero-max-width: 100%;
-
-    /* Höhe der Hero-Sektion. Das Video wird oben/unten passend
-       beschnitten (object-fit: cover), um genau diese Höhe zu füllen,
-       ohne das Seitenverhältnis zu verzerren.
-       Standard: erster Bildschirm abzüglich Navbar-Höhe (76px). */
-    --hero-height: calc(100svh - 76px);
-
-    /* === LOGO (Logo_hero) – X / Y / SCALE ==========================
-       Das Logo ist quadratisch und sitzt mittig im Blumenkranz.
-       Alle Werte sind in cqw (= 1% der Videobreite), damit das Logo
-       IMMER gleich groß im Verhältnis zum Kranz bleibt und auf jedem
-       Bildschirm automatisch mitskaliert. */
-
-    /* Grundgröße des Logos (Breite). clamp(min, fließend, max):
-       der mittlere cqw-Wert steuert die Größe relativ zum Video. */
-    --hero-logo-size: clamp(8rem, 26cqw, 28rem);
-
-    /* SCALE – zusätzlicher Vergrößerungs-/Verkleinerungsfaktor.
-       1 = Grundgröße, 1.2 = 20% größer, 0.8 = 20% kleiner. */
-    --hero-logo-scale: 1;
-
-    /* X – horizontale Verschiebung des Logos (− links / + rechts). */
-    --hero-logo-x: 0cqw;
-
-    /* Y – vertikale Verschiebung des Logos (− nach oben / + nach unten). */
-    --hero-logo-y: 2.5cqw;
-
-    /* Breite des Textblocks – hält den Inhalt innerhalb des Blumenkranzes.
-       Greift, sobald der Inhalt umbricht (kleine Bildschirme). */
-    --hero-content-width: 60cqw;
-
-    /* Grundabstand zwischen Logo und den Buttons. */
-    --hero-actions-gap: 5cqw;
-
-    /* Y der BUTTONS – zusätzliche vertikale Verschiebung NUR der Buttons.
-       In cqw (skaliert mit dem Video). negativ = nach OBEN (die Buttons
-       dürfen dabei bis vor/über das Logo wandern – das Logo hat keinen
-       Hintergrund), positiv = nach UNTEN. Die Buttons liegen immer im
-       Vordergrund und bleiben klickbar. */
-    --hero-buttons-y: -1cqw;
-
-    /* Größe der Buttons (Schrift) – skaliert ebenfalls mit dem Video.
-       Kleiner min-Wert, damit die Buttons mitschrumpfen. */
-    --hero-btn-size: clamp(0.55rem, 1.9cqw, 1.1rem);
-
-    /* Horizontale Verschiebung von Inhalt (− links / + rechts) */
-    --hero-text-x: 0px;
-
-    /* Vertikale Verschiebung von Inhalt (− nach oben / + nach unten).
-       In cqw, damit sie proportional zum Video bleibt. Hier nachjustieren,
-       um alles minimal höher/tiefer zu rücken. */
-    --hero-text-y: 3cqw;
-
-    /* =================================================================
-       Ab hier in der Regel nichts mehr ändern
-       ================================================================= */
+    /* ===== Stellschrauben (cqw = 1% der Videobreite, skaliert mit dem Video) ===== */
+    --hero-max-width: 100%;                         /* max. Videobreite */
+    --hero-height: calc(100svh - 76px);             /* Höhe: 1. Bildschirm minus Navbar */
+    --hero-logo-size: clamp(8rem, 26cqw, 28rem);    /* Logo-Grundgröße */
+    --hero-logo-scale: 1;                           /* Logo-Faktor (1.2 = 20% größer) */
+    --hero-logo-x: 0cqw;                            /* Logo horizontal (− links / + rechts) */
+    --hero-logo-y: 2.5cqw;                          /* Logo vertikal (− oben / + unten) */
+    --hero-content-width: 60cqw;                    /* Textblock-Breite (greift beim Umbruch) */
+    --hero-actions-gap: 5cqw;                        /* Abstand Logo ↔ Buttons */
+    --hero-buttons-y: -1cqw;                         /* Buttons vertikal (− oben / + unten) */
+    --hero-btn-size: clamp(0.55rem, 1.9cqw, 1.1rem); /* Button-Schriftgröße */
+    --hero-text-x: 0px;                              /* Inhalt horizontal */
+    --hero-text-y: 3cqw;                             /* Inhalt vertikal */
 
     overflow: hidden;
   }
 
-  /* Bühne hält das 16:9-Verhältnis, ist zentriert und begrenzt */
+  /* Bühne: zentriert, begrenzt, 16:9 */
   .hero__stage {
     position: relative;
     width: 100%;
@@ -168,8 +108,7 @@ const {
     height: var(--hero-height);
     overflow: hidden;
     background: var(--forest-deep, #0f1f17);
-    /* macht cqw-Einheiten relativ zur Videobreite verfügbar */
-    container-type: inline-size;
+    container-type: inline-size; /* cqw relativ zur Videobreite */
   }
 
   .hero__media {
@@ -180,12 +119,10 @@ const {
     object-fit: cover;
     object-position: center;
     display: block;
-    /* Opacity wird per JS für die Überblendung gesteuert. */
-    will-change: opacity;
+    will-change: opacity; /* Opacity-Überblendung per JS */
   }
 
-  /* Startzustand: Intro-Video oben sichtbar, Loop-Video darunter (wird beim
-     Ende eingeblendet, während das Intro ausblendet). */
+  /* Startzustand: Intro oben sichtbar, Loop darunter */
   .hero__loop {
     z-index: 0;
     opacity: 0;
@@ -195,7 +132,7 @@ const {
     opacity: 1;
   }
 
-  /* Zentrierte Inhalts-Ebene über dem Video */
+  /* Inhalts-Ebene über dem Video */
   .hero__overlay {
     position: absolute;
     inset: 0;
@@ -218,23 +155,16 @@ const {
 
   .hero__logo {
     display: block;
-    /* Größe = Grundgröße × Scale-Faktor. Position über translate (X/Y). */
     width: calc(var(--hero-logo-size) * var(--hero-logo-scale));
     height: auto;
-    /* Das Logo ist nahezu quadratisch (viewBox 4283x4077). Ohne diese Angabe
-       hätte das Bild BEVOR es geladen ist die Höhe 0 -> der Inhalt wäre kurz
-       nach oben gerutscht und die Buttons hätten oben "gehangen" (sichtbar
-       beim ersten Laden / F5). Mit aspect-ratio steht der Platz von Anfang an
-       fest und es wird nicht verzerrt. */
+    /* aspect-ratio reserviert den Platz vor dem Laden (sonst springt der Inhalt) */
     aspect-ratio: 4283 / 4077;
     transform: translate(var(--hero-logo-x), var(--hero-logo-y));
-    /* sanfter heller Schein für Lesbarkeit auf dem Video */
     filter: drop-shadow(0 0.3cqw 2cqw rgba(255, 255, 255, 0.55));
   }
 
   .hero__actions {
-    /* Buttons liegen über dem Logo (Vordergrund) und lassen sich per
-       --hero-buttons-y frei nach oben/unten schieben – auch über das Logo. */
+    /* Buttons liegen über dem Logo und lassen sich per --hero-buttons-y verschieben */
     position: relative;
     z-index: 2;
     transform: translateY(var(--hero-buttons-y));
@@ -244,11 +174,9 @@ const {
     justify-content: center;
   }
 
-  /* Wird das Video (= der Kranz) schmal, bricht der Inhalt um und die
-     Buttons stehen untereinander – alles bleibt mittig. */
+  /* Schmales Video: Inhalt bricht um, Buttons untereinander */
   @container (max-width: 680px) {
     .hero__content {
-      /* erst beim Umbruch begrenzen, damit der Inhalt im Kranz bleibt */
       max-width: var(--hero-content-width);
     }
     .hero__actions {
@@ -256,19 +184,12 @@ const {
       align-items: center;
     }
     .hero__btn {
-      /* nur so breit wie das Wort darin – schrumpft mit */
       width: auto;
     }
   }
 
-  /* Blumenkranz IMMER vollständig zeigen:
-     Sobald das Fenster schmaler/höher wird als das Video-Seitenverhältnis
-     (16:9), würde "object-fit: cover" bei fester Höhe die Seiten des Kranzes
-     abschneiden (Kranz nur oben/unten sichtbar). Darum in diesem Fall die
-     Höhe aus der Breite ableiten (aspect-ratio) -> das komplette 16:9-Video
-     inkl. Kranz ringsum bleibt sichtbar. Der Wechsel richtet sich nach dem
-     Seitenverhältnis statt einer festen Pixelbreite, damit er in JEDER
-     mittleren Auflösung genau im richtigen Moment greift (kontinuierlich). */
+  /* Blumenkranz immer ganz zeigen: schmaler als 16:9 -> Höhe aus der Breite
+     ableiten, statt die Seiten per object-fit: cover abzuschneiden */
   @media (max-aspect-ratio: 16 / 9) {
     .hero__stage {
       height: auto;
@@ -283,7 +204,7 @@ const {
     padding: 0.9em 1.8em;
   }
 
-  /* Handy: Buttons insgesamt etwas kompakter (Schrift + Innenabstand). */
+  /* Handy: Buttons kompakter */
   @media (max-width: 640px) {
     .hero {
       --hero-btn-size: clamp(0.46rem, 1.9cqw, 0.8rem);
@@ -296,13 +217,7 @@ const {
 </style>
 
 <script>
-  // Ablauf: Das Intro-Video (Teil1-2) spielt EINMAL die Animation. Sobald es
-  // zu Ende ist, wird auf das Loop-Video (Teil2) gewechselt, das die ruhige
-  // Blätter-Bewegung endlos loopt.
-  //
-  // Kein Abdunkeln: Das Loop-Video liegt voll deckend UNTEN und wird zuerst
-  // sichtbar gemacht, danach blendet nur das Intro OBEN aus. Das Bild ist
-  // dadurch immer vollständig gedeckt.
+  // Intro spielt einmal, danach Wechsel auf das Loop-Video (ohne Abdunkeln)
   document.querySelectorAll<HTMLElement>('.hero').forEach((hero) => {
     const video = hero.querySelector<HTMLVideoElement>('.hero__video');
     const loop = hero.querySelector<HTMLVideoElement>('.hero__loop');
@@ -316,10 +231,7 @@ const {
     video.loop = false;
     loop.loop = true;
 
-    // Das Loop-Video startet mit preload="none", damit es dem Intro beim
-    // ersten Bildaufbau keine Bandbreite wegnimmt. Sobald das Intro genug
-    // Daten hat, wird der Loop im Hintergrund geladen -> der Wechsel am Ende
-    // erfolgt dann ohne Verzögerung.
+    // Loop erst laden, sobald das Intro genug Daten hat (spart Anfangs-Bandbreite)
     const preloadLoop = () => {
       if (loop.preload === 'auto') return;
       loop.preload = 'auto';
@@ -337,9 +249,7 @@ const {
       if (switched) return;
       switched = true;
 
-      // DIREKTER Wechsel ohne Überblendung, aber erst wenn das Loop-Video
-      // tatsächlich ein Bild liefert. Bis dahin bleibt das Intro auf seinem
-      // eingefrorenen letzten Frame stehen -> keine Lücke, kein Abdunkeln.
+      // Direkter Wechsel, aber erst wenn der Loop ein Bild liefert (keine Lücke)
       const reveal = () => {
         loop.style.transition = 'none';
         video.style.transition = 'none';
@@ -352,26 +262,24 @@ const {
       const p = loop.play();
       if (p) p.catch(reveal); // Blockiert der Browser den Start: trotzdem zeigen
 
-      // Auf den ersten gerenderten Frame warten, sonst je nach Timing kurz
-      // schwarz. Fallback für Browser ohne requestVideoFrameCallback.
+      // Auf den ersten gerenderten Frame warten (Fallback ohne requestVideoFrameCallback)
       if (typeof loop.requestVideoFrameCallback === 'function') {
         loop.requestVideoFrameCallback(() => reveal());
       } else {
         loop.addEventListener('playing', reveal, { once: true });
       }
-      // Letzte Sicherung, falls kein Event kommt.
-      setTimeout(reveal, 1000);
+      setTimeout(reveal, 1000); // letzte Sicherung
+
     };
 
     video.addEventListener('ended', showLoop);
 
-    // Autoplay zuverlässig anstoßen (frisch deployte Domain ist strenger).
+    // Autoplay anstoßen
     safePlay();
     video.addEventListener('loadeddata', safePlay, { once: true });
     video.addEventListener('canplay', safePlay, { once: true });
 
-    // Letzter Fallback: sollte der Browser den Start blockieren, startet das
-    // Video bei der ersten Interaktion des Besuchers.
+    // Fallback: bei blockiertem Autoplay bei erster Interaktion starten
     const onInteract = () => {
       if (!switched) safePlay();
       window.removeEventListener('pointerdown', onInteract);

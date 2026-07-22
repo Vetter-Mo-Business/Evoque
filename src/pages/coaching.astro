@@ -371,7 +371,7 @@ const content = {
         class="topic-slider"
         data-topic-slider
         role="group"
-        aria-roledescription="Karussell"
+        aria-roledescription={lang === 'en' ? 'Carousel' : 'Karussell'}
         aria-label={content.carouselLabel}
       >
         <div class="topic-slider__viewport" data-viewport>
@@ -929,7 +929,12 @@ const content = {
       const dot = document.createElement('button');
       dot.type = 'button';
       dot.className = 'topic-slider__dot';
-      dot.setAttribute('aria-label', `Thema ${i + 1} anzeigen`);
+      dot.setAttribute(
+        'aria-label',
+        document.documentElement.lang === 'en'
+          ? `Show topic ${i + 1}`
+          : `Thema ${i + 1} anzeigen`
+      );
       dot.addEventListener('click', () => {
         goTo(i);
         scheduleResume();

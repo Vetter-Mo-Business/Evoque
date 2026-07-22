@@ -1,66 +1,100 @@
 ---
+import { type Lang } from '../i18n/ui';
+
 interface Step {
   num: string;
   title: string;
   text: string;
-  /** Vertikale Lage = Knoten-cy / viewBox-Höhe (760). node-1 unten … node-4 oben. */
+  /** Vertikale Position der Box = Knoten-cy / viewBox-Höhe (760). */
   top: string;
 }
 
-// DOM-Reihenfolge = logische Lesereihenfolge 01 → 06.
-// top = cy/760: node-1 cy=725 → 95.395% (unten) … node-6 cy=120 → 15.789% (oben).
-// Knoten über fast die gesamte Stielhöhe verteilt: oberster Punkt nah an
-// der Überschrift, unterster knapp über dem Boden – maximaler Box-Abstand.
-const steps: Step[] = [
-  {
-    num: '01',
-    title: 'Kennenlerngespräch',
-    text: 'Wir schauen, wo dein Problem auftritt. Zunächst klären wir wie, wann und warum das Verhalten besteht.',
-    top: '95.395%',
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+
+// Knoten-Positionen (cy/760), von unten (01) nach oben (06).
+const tops = ['95.395%', '79.474%', '63.553%', '47.632%', '31.711%', '15.789%'];
+
+const content = {
+  de: {
+    eyebrow: 'Der Ablauf',
+    title: 'Dein Weg zum Ziel',
+    steps: [
+      {
+        title: 'Kennenlerngespräch',
+        text: 'Wir schauen, wo dein Problem auftritt. Zunächst klären wir wie, wann und warum das Verhalten besteht.',
+      },
+      {
+        title: 'Ursachenforschung',
+        text: 'Wir schauen uns an, wo das Verhalten entstanden sein könnte. Verständnis ist die zentrale Basis für Veränderung.',
+      },
+      {
+        title: 'Ziele festlegen',
+        text: 'Wir bestimmen Dein Ziel und den Weg dorthin.',
+      },
+      {
+        title: 'Praxisnahe Anwendung',
+        text: 'Wir wenden erste praktische Übungen an, um Deine alten Muster Schritt für Schritt in positive Verhaltenskonsequenzen umzuwandeln.',
+      },
+      {
+        title: 'Reflexion',
+        text: 'Veränderung ist ein stetiger Prozess. Wir reflektieren gemeinsam und schärfen an den Stellen nach, wo es noch nicht funktioniert.',
+      },
+      {
+        title: 'Nachhaltige Zielerreichung',
+        text: 'Idealerweise hast Du am Ende unseres Coachings bereits Dein Ziel erreicht. Wenn nicht, hast Du auf dem Weg alle Werkzeuge mitnehmen können, dich nun selbständig auszuprobieren.',
+      },
+    ],
   },
-  {
-    num: '02',
-    title: 'Ursachenforschung',
-    text: 'Wir schauen uns an, wo das Verhalten entstanden sein könnte. Verständnis ist die zentrale Basis für Veränderung.',
-    top: '79.474%',
+  en: {
+    eyebrow: 'The process',
+    title: 'Your path to your goal',
+    steps: [
+      {
+        title: 'Intro call',
+        text: 'We look at where your problem shows up. First we clarify how, when and why the behaviour exists.',
+      },
+      {
+        title: 'Root-cause exploration',
+        text: 'We look at where the behaviour might have originated. Understanding is the central basis for change.',
+      },
+      {
+        title: 'Setting goals',
+        text: 'We define your goal and the path towards it.',
+      },
+      {
+        title: 'Hands-on application',
+        text: 'We apply first practical exercises to gradually turn your old patterns into positive behavioural outcomes.',
+      },
+      {
+        title: 'Reflection',
+        text: 'Change is a continuous process. We reflect together and refine wherever things are not yet working.',
+      },
+      {
+        title: 'Lasting goal achievement',
+        text: 'Ideally, by the end of our coaching you will already have reached your goal. If not, you will have gathered all the tools along the way to keep exploring on your own.',
+      },
+    ],
   },
-  {
-    num: '03',
-    title: 'Ziele festlegen',
-    text: 'Wir bestimmen Dein Ziel und den Weg dorthin.',
-    top: '63.553%',
-  },
-  {
-    num: '04',
-    title: 'Praxisnahe Anwendung',
-    text: 'Wir wenden erste praktische Übungen an, um Deine alten Muster Schritt für Schritt in positive Verhaltenskonsequenzen umzuwandeln.',
-    top: '47.632%',
-  },
-  {
-    num: '05',
-    title: 'Reflexion',
-    text: 'Veränderung ist ein stetiger Prozess. Wir reflektieren gemeinsam und schärfen an den Stellen nach, wo es noch nicht funktioniert.',
-    top: '31.711%',
-  },
-  {
-    num: '06',
-    title: 'Nachhaltige Zielerreichung',
-    text: 'Idealerweise hast Du am Ende unseres Coachings bereits Dein Ziel erreicht. Wenn nicht, hast Du auf dem Weg alle Werkzeuge mitnehmen können, dich nun selbständig auszuprobieren.',
-    top: '15.789%',
-  },
-];
+}[lang];
+
+const steps: Step[] = content.steps.map((step, i) => ({
+  num: String(i + 1).padStart(2, '0'),
+  title: step.title,
+  text: step.text,
+  top: tops[i],
+}));
 ---
 
 <section class="journey" id="ablauf" data-journey>
   <div class="journey__pin" data-pin>
-    <!-- Kopf: zentriert oben, bleibt während des Pins sichtbar -->
+    <!-- Kopf -->
     <div class="container journey__head">
-      <p class="eyebrow">Der Ablauf</p>
-      <h2>Dein Weg zum Ziel</h2>
+      <p class="eyebrow">{content.eyebrow}</p>
+      <h2>{content.title}</h2>
     </div>
 
     <div class="container journey__cols">
-      <!-- Links: Pflanzen-SVG (inline, damit Stem/Blätter/Knoten animierbar sind) -->
+      <!-- Pflanzen-SVG (inline, damit Stem/Blätter/Knoten animierbar sind) -->
       <div class="journey__plant" data-plant>
         <svg
           class="plant"
@@ -74,45 +108,28 @@ const steps: Step[] = [
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <!-- Wurzeln / Der Anfang: die Pflanze bricht unten aus der Erde.
-                 Statisch sichtbar – der Startpunkt des Weges. -->
+            <!-- Wurzeln (Der Anfang) -->
             <g class="roots">
-              <!-- weit links außen -->
               <path class="root" d="M120,748 C102,756 80,764 60,782"></path>
-              <!-- links -->
               <path class="root" d="M120,748 C108,756 90,765 76,780"></path>
-              <!-- links innen -->
               <path class="root" d="M120,748 C113,757 104,767 98,781"></path>
-              <!-- Mitte / Pfahlwurzel -->
               <path class="root" d="M120,749 C120,760 119,774 120,788"></path>
-              <!-- rechts innen -->
               <path class="root" d="M120,748 C127,757 136,767 142,781"></path>
-              <!-- rechts -->
               <path class="root" d="M120,748 C132,756 150,765 164,780"></path>
-              <!-- weit rechts außen -->
               <path class="root" d="M120,748 C138,756 160,764 180,782"></path>
             </g>
 
-            <!-- Stiel = wachsender, organisch geschwungener Strahl
-                 (unten y=748 → oben y=60). y fällt monoton, damit die
-                 Skript-Suche fracAtY sauber funktioniert. -->
+            <!-- Stiel (Der Weg): y fällt monoton, damit fracAtY im Skript sauber sucht. -->
             <path
               id="stem"
               d="M120,748 C111,725 111,702 120,679 C129,656 129,633 120,610 C111,587 111,564 120,541 C129,518 129,495 120,472 C111,449 111,426 120,403 C129,380 129,357 120,334 C111,311 111,288 120,265 C129,242 129,219 120,196 C113,173 113,150 120,127 C122,104 121,82 120,60"
             ></path>
 
-            <!-- Weg-Bewuchs: abwechselnd Blätter UND kleine Blüten, links und
-                 rechts verteilt. Die kleinen Blüten stehen für die kleinen
-                 Erfolge unterwegs; die große Blüte oben ist das Highlight.
-                 Alle tragen die Klasse "leaf" + data-y, damit die bestehende
-                 Wachstums-Animation sie ohne Skript-Änderung mit einblendet. -->
-
-            <!-- unten: Blatt links (gut sichtbar, aber klein – wächst nach oben) -->
+            <!-- Weg-Bewuchs: Blätter + kleine Blüten (data-y steuert das Einblenden per Skript) -->
             <g class="leaf" data-y="714">
               <path transform="translate(113,714) rotate(-147) scale(0.85)"
                 d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <!-- kleine Blüte rechts -->
             <g class="leaf bud bud--orange" data-y="645">
               <g transform="translate(135,645) scale(0.92)">
                 <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9"></ellipse>
@@ -123,17 +140,14 @@ const steps: Step[] = [
                 <circle class="bud__center" cx="0" cy="0" r="3.8"></circle>
               </g>
             </g>
-            <!-- Blatt links -->
             <g class="leaf" data-y="576">
               <path transform="translate(113,576) rotate(-145) scale(1)"
                 d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <!-- Blatt rechts -->
             <g class="leaf" data-y="507">
               <path transform="translate(127,507) rotate(-37) scale(1.1)"
                 d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <!-- kleine Blüte links -->
             <g class="leaf bud bud--rose" data-y="438">
               <g transform="translate(104,438) scale(1.24)">
                 <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9"></ellipse>
@@ -144,17 +158,14 @@ const steps: Step[] = [
                 <circle class="bud__center" cx="0" cy="0" r="3.6"></circle>
               </g>
             </g>
-            <!-- Blatt rechts -->
             <g class="leaf" data-y="369">
               <path transform="translate(127,369) rotate(-36) scale(1.3)"
                 d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <!-- Blatt links -->
             <g class="leaf" data-y="300">
               <path transform="translate(113,300) rotate(-145) scale(1.4)"
                 d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <!-- kleine Blüte rechts (nach oben größer & schöner) -->
             <g class="leaf bud bud--sun" data-y="231">
               <g transform="translate(136,231) scale(1.45)">
                 <ellipse class="bud__petal" cx="0" cy="-9" rx="4.6" ry="9"></ellipse>
@@ -165,20 +176,16 @@ const steps: Step[] = [
                 <circle class="bud__center" cx="0" cy="0" r="3.4"></circle>
               </g>
             </g>
-            <!-- oben: das größte, schönste Blatt links, kurz vor dem Ziel -->
             <g class="leaf" data-y="164">
               <path transform="translate(117,166) rotate(-150) scale(1.5)"
                 d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
-            <!-- kleines Akzent-Blatt rechts, tuckt sich seitlich unter die
-                 Krone (nach außen gerichtet, verdeckt die Blüte nicht) -->
             <g class="leaf" data-y="110">
               <path transform="translate(126,112) rotate(-22) scale(0.78)"
                 d="M0,0 C10,-12 34,-13 50,-2 C36,-2 18,8 0,2 Z"></path>
             </g>
 
-            <!-- Krone: volle, gefüllte Blüte, die den Weg oben krönt.
-                 Äußerer + innerer Blütenkranz + warmer Kern mit Highlight. -->
+            <!-- Krone / Ziel-Blüte (Das Ziel) -->
             <g class="bloom" data-bloom>
               <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(0 120 60)"></ellipse>
               <ellipse class="bloom__petal" cx="120" cy="30" rx="11" ry="26" transform="rotate(45 120 60)"></ellipse>
@@ -196,12 +203,11 @@ const steps: Step[] = [
               <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(247.5 120 60)"></ellipse>
               <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(292.5 120 60)"></ellipse>
               <ellipse class="bloom__petal bloom__petal--inner" cx="120" cy="44" rx="7" ry="15" transform="rotate(337.5 120 60)"></ellipse>
-              <!-- Gelber Kern der Ziel-Blüte -->
               <circle class="bloom__center" cx="120" cy="60" r="10.5"></circle>
               <circle class="bloom__coredot" cx="120" cy="60" r="4.6"></circle>
             </g>
 
-            <!-- Knoten: node-1 unten (01) … node-6 oben (06) -->
+            <!-- Knoten (01 unten … 06 oben) -->
             <circle id="node-1" class="node" cx="120" cy="725" r="6.5"></circle>
             <circle id="node-2" class="node" cx="120" cy="604" r="6.5"></circle>
             <circle id="node-3" class="node" cx="120" cy="483" r="6.5"></circle>
@@ -212,12 +218,7 @@ const steps: Step[] = [
         </svg>
       </div>
 
-      <!--
-        Rechts: vier Schritt-Boxen. DOM-Reihenfolge 01→04 (Lesefluss).
-        Im gepinnten Modus wird jede Box per CSS exakt auf ihr Knoten-Verhältnis
-        gesetzt (top = cy/760, translateY(-50%)). Die Spalte ist genauso hoch wie
-        die SVG (gleicher CSS-Wert) → punktgenau, ohne JS-Messung.
-      -->
+      <!-- Schritt-Boxen: jede sitzt per CSS auf ihrem Knoten-Verhältnis (top = cy/760) -->
       <ol class="journey__steps" data-steps>
         {
           steps.map((step) => (
@@ -239,33 +240,19 @@ const steps: Step[] = [
 
 <style>
   .journey {
-    /* Reiner weißer Hintergrund: lenkt den Fokus ganz auf die Lebensblume.
-       Kein oberer Außenabstand -> kein schmaler leerer Streifen zwischen der
-       Themen-Sektion und der weißen Ablauf-Sektion. */
     background: #fff;
     margin-top: 0;
 
-    /* ============ HIER EINSTELLEN ============
-       Vertikaler Puffer für Kopf + Abstände + unteren Puffer. Kopf +
-       Pflanze + alle 6 Boxen passen zusammen in EINE Bildschirmhöhe.
-       Die Pflanze ist oben verankert: oberster Punkt sitzt nah an der
-       Überschrift, der freie Rest bleibt als Puffer unten.
-       GRÖSSER  = mehr Puffer unten (falls der 1. Punkt gedrückt wirkt).
-       KLEINER  = Pflanze höher, Punkte weiter auseinander.
-       Sinnvoller Bereich ca. 160–260px. */
+    /* Vertikaler Puffer (Kopf + Pflanze + 6 Boxen passen in eine Bildschirmhöhe).
+       Größer = mehr Puffer unten, kleiner = Pflanze höher. Bereich ca. 160–260px. */
     --journey-reserve: 200px;
-    /* ========================================= */
 
-    /* Höhe der Pflanze = Höhe der Boxen-Spalte (identischer Wert!).
-       Basis = feste, komfortable Höhe für das STATISCHE Overlay (enge/flache
-       Screens, ohne Animation) – so haben alle 6 Boxen genug Platz und der
-       Text wird nicht beschnitten. Im animierten Pin-Modus (genug Platz) wird
-       sie weiter unten auf die Viewport-Höhe umgestellt. */
+    /* Höhe der Pflanze = Höhe der Boxen-Spalte (gleicher Wert). Basis für das
+       statische Overlay; der Pin-Modus stellt sie unten auf Viewport-Höhe um. */
     --plant-h: 720px;
   }
   .journey__pin {
-    /* Basis = statisch (kein Pin): normaler Fluss, das Overlay scrollt einfach
-       mit der Seite. Der animierte Pin-Modus überschreibt das weiter unten. */
+    /* Basis = statisch (kein Pin); der animierte Pin-Modus überschreibt das unten. */
     display: block;
     padding-top: var(--space-lg);
     padding-bottom: var(--space-xl);
@@ -289,12 +276,8 @@ const steps: Step[] = [
   }
 
   /* ===== Layout =====
-     Grundprinzip: Die grünen Boxen liegen IMMER als Overlay im Vordergrund
-     vor der zentrierten Pflanze – bei enge/flach genauso wie bei viel Platz,
-     nur dann eben statisch (ohne Animation). Erst wenn richtig viel Breite UND
-     Höhe da ist, wandern die Boxen seitlich neben die Pflanze (weiß, animiert). */
-
-  /* Basis = zentriertes Overlay: Pflanze und Boxen in derselben Rasterzelle. */
+     Boxen liegen als Overlay vor der zentrierten Pflanze (Basis, statisch);
+     erst bei viel Breite UND Höhe wandern sie seitlich neben die Pflanze. */
   .journey__cols {
     display: grid;
     grid-template-columns: 1fr;
@@ -312,8 +295,7 @@ const steps: Step[] = [
     justify-self: center;
   }
 
-  /* Genug Platz -> animierter Pin-Modus: Pflanze wächst über die volle
-     Viewport-Höhe, die Boxen blenden nacheinander ein. */
+  /* Genug Platz -> animierter Pin-Modus (Overlay) */
   @media (min-width: 680px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
     .journey {
       --plant-h: min(100vh - var(--journey-reserve), 820px);
@@ -331,7 +313,7 @@ const steps: Step[] = [
     }
   }
 
-  /* Sehr breit UND hoch -> Pflanze links, Boxen rechts daneben (kein Overlay). */
+  /* Sehr breit UND hoch -> Pflanze links, Boxen rechts daneben (kein Overlay) */
   @media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
     .journey__cols {
       grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
@@ -346,8 +328,7 @@ const steps: Step[] = [
       max-width: none;
       justify-self: stretch;
     }
-    /* Boxen stehen hier NEBEN der Pflanze -> normale weiße Füllung.
-       Höhere Spezifität als die grüne Basisregel, damit sie sicher greift. */
+    /* Boxen stehen neben der Pflanze -> weiße Füllung (überschreibt grüne Basis) */
     .journey__steps .journey__body {
       background: #fff;
       border-color: rgba(133, 124, 117, 0.28);
@@ -358,20 +339,16 @@ const steps: Step[] = [
   .journey__plant {
     display: flex;
     justify-content: center;
-    /* Die Pflanze liegt bewusst HINTER den Boxen (z-index 1 < Boxen z-index 3),
-       damit die grünen Boxen mit dem Text immer im Vordergrund stehen. */
+    /* Pflanze liegt hinter den Boxen (z-index 1 < Boxen z-index 3) */
     position: relative;
     z-index: 1;
   }
   .journey__plant .plant {
     height: var(--plant-h);
     width: auto;
-    /* nichts abschneiden – große Blätter/Blüten dürfen über den Rahmen
-       hinausragen und bleiben im Vordergrund. */
-    overflow: visible;
+    overflow: visible; /* große Blätter/Blüten dürfen über den Rahmen ragen */
   }
-  /* Dekorative, auf die "Lebensblume" beschränkte Farben. Bewusst warm/erdig,
-     damit es bunt & niedlich wirkt und trotzdem zur Marke passt. */
+  /* Farben der Pflanze */
   .journey__plant {
     --stem-green: #3f6f3c;
     --leaf-green: #6fa06a;
@@ -381,12 +358,12 @@ const steps: Step[] = [
   .journey__plant .plant__ink {
     stroke: var(--forest-deep);
   }
-  /* Grüner, lebendiger Stängel = "Der Weg" */
+  /* Stängel = "Der Weg" */
   .journey__plant #stem {
     stroke: var(--stem-green);
     stroke-width: 4.2;
   }
-  /* Wurzeln = "Der Anfang" (die Pflanze bricht aus der Erde) */
+  /* Wurzeln = "Der Anfang" */
   .journey__plant .root {
     fill: none;
     stroke: var(--earth-deep);
@@ -396,7 +373,7 @@ const steps: Step[] = [
   .journey__plant .leaf {
     fill: var(--leaf-green);
   }
-  /* Kleine, BUNTE Blüten entlang des Weges (die kleinen Erfolge unterwegs) */
+  /* Kleine Blüten entlang des Weges */
   .journey__plant .bud__petal {
     fill: var(--soft-sand);
     stroke: var(--forest-deep);
@@ -416,29 +393,22 @@ const steps: Step[] = [
     fill: var(--forest-deep);
     stroke: none;
   }
-  /* WICHTIG: Knoten und Blüte bekommen hier BEWUSST kein transform-box/
-     transform-origin. GSAP schreibt seinen Drehpunkt als Pixelwert im
-     SVG-Koordinatensystem (viewBox). Mit "transform-box: fill-box" würde der
-     Browser denselben Wert stattdessen ab der linken Kante der jeweiligen
-     Bounding-Box messen – der Drehpunkt landete weit rechts vom Element und
-     die Blüte flöge beim Aufskalieren seitlich in den Stiel hinein (dasselbe
-     galt für die Knotenpunkte).
-     Der Drehpunkt wird stattdessen im Skript exakt gesetzt (svgOrigin), für
-     die Blüte auf die Stielspitze 120/60 – sie geht also genau dort auf, wo
-     der Stiel endet. */
-  /* Krone / große Ziel-Blüte = "Das Ziel": farbenfroh */
+  /* WICHTIG: Knoten und Blüte bewusst OHNE transform-box/transform-origin –
+     der Drehpunkt wird im Skript exakt gesetzt. Mit "transform-box: fill-box"
+     würde die Blüte beim Aufskalieren seitlich in den Stiel springen. */
+  /* Krone / Ziel-Blüte = "Das Ziel" */
   .journey__plant .bloom__petal {
     fill: var(--accent-pilot);
     stroke: var(--forest-deep);
     stroke-width: 1.5;
   }
-  /* Innerer Blütenkranz: sonnengelb, füllt die Lücken und gibt Tiefe. */
+  /* Innerer Blütenkranz */
   .journey__plant .bloom__petal--inner {
     fill: var(--bloom-sun);
     stroke: var(--forest-deep);
     stroke-width: 1.2;
   }
-  /* Gelber Kern der Ziel-Blüte */
+  /* Kern der Ziel-Blüte */
   .journey__plant .bloom__center {
     fill: var(--bloom-sun);
     stroke: var(--forest-deep);
@@ -449,9 +419,7 @@ const steps: Step[] = [
     stroke: none;
   }
 
-  /* ---------- Schritt-Boxen: liegen IMMER als Overlay über der Pflanze ----------
-     Gilt animiert UND statisch gleichermaßen: Die Boxen-Spalte ist exakt so
-     hoch wie die Pflanze, jede Box sitzt fest auf ihrem Knoten-Verhältnis. */
+  /* ---------- Schritt-Boxen (Overlay über der Pflanze) ---------- */
   .journey__steps {
     list-style: none;
     margin: 0;
@@ -465,8 +433,7 @@ const steps: Step[] = [
     left: 0;
     right: 0;
     top: var(--top);
-    /* Feste Slot-Höhe = Knotenabstand (~15,9 %), minus kleine Lücke -> die
-       Boxen können sich bei KEINER Bildschirmgröße überschneiden. */
+    /* Slot-Höhe knapp unter dem Knotenabstand -> Boxen überschneiden sich nie */
     height: calc(var(--plant-h) * 0.15);
     transform: translateY(-50%);
     display: flex;
@@ -479,8 +446,7 @@ const steps: Step[] = [
     align-items: center;
     width: 100%;
     max-height: 100%;
-    /* langer Text (Schritt 5 & 6) läuft nie in die Nachbarbox */
-    overflow: hidden;
+    overflow: hidden; /* langer Text läuft nie in die Nachbarbox */
   }
   .journey__num {
     display: inline-flex;
@@ -497,8 +463,7 @@ const steps: Step[] = [
     font-weight: 600;
     white-space: nowrap;
   }
-  /* Boxen liegen vor der Pflanze -> hellgrüne Füllung, Text hebt sich klar ab.
-     (Im seitlichen Layout wird das oben auf Weiß zurückgesetzt.) */
+  /* Boxen vor der Pflanze -> hellgrüne Füllung (im seitlichen Layout wieder weiß) */
   .journey__body {
     background: #dcead5;
     border-radius: var(--radius);
@@ -517,44 +482,27 @@ const steps: Step[] = [
     color: var(--calm-earth);
   }
 
-  /* ==========================================================================
-     VARIANTE 3 – schmal ODER flach (Handy, Tablet hochkant, niedrige Fenster).
-     Gleiches Bild wie Variante 2 (Boxen als Overlay ueber der Pflanze), aber
-     jetzt ebenfalls ANIMIERT statt statisch. Der Unterschied zu Variante 2:
-       * Gepinnt wird nur .journey__cols – die Ueberschrift scrollt vorher weg
-         und verschenkt keine Hoehe. Dadurch steht die volle Fensterhoehe fuer
-         Pflanze + 6 Boxen zur Verfuegung.
-       * Alle Maße (Pflanzenhoehe, Slot-Hoehe, Schrift, Innenabstaende) haengen
-         an der Fensterhoehe, damit die 6 Boxen auf JEDER Groesse zusammen in
-         einen Screen passen und sich nie beruehren.
-     Der Block steht bewusst GANZ AM ENDE und greift nur unterhalb der
-     Schwellen von Variante 1 + 2 – die beiden bleiben unberuehrt.
-     ========================================================================== */
+  /* ===== Variante 3 – schmal ODER flach (Handy, Tablet hochkant, flache Fenster) =====
+     Overlay wie oben, aber animiert; gepinnt wird nur .journey__cols, alle Maße
+     hängen an der Fensterhöhe, damit die 6 Boxen immer zusammen auf einen Screen passen. */
   @media (max-width: 679.98px), (max-height: 699.98px) {
     .journey {
-      /* Reserve = Sticky-Navbar (76px) + etwas Luft unten. Der Kopf ist hier
-         NICHT im Lock, taucht also nicht in der Rechnung auf. */
-      --plant-h: calc(100svh - 104px);
+      --plant-h: calc(100svh - 104px); /* Reserve = Sticky-Navbar + Luft unten */
     }
     .journey__pin {
       padding-top: var(--space-md);
       padding-bottom: var(--space-2xl);
     }
-    /* Etwas schmalerer Seitenabstand → mehr Textbreite pro Box. */
     .journey__cols {
       padding-inline: var(--space-md);
     }
     .journey__steps {
       max-width: 540px;
     }
-
-    /* Slot-Hoehe knapp unter dem Knotenabstand (15,9 %): garantiert eine
-       sichtbare Luecke zwischen zwei benachbarten Boxen. */
     .journey__step {
       height: calc(var(--plant-h) * 0.149);
     }
-
-    /* Kompakte Typo, damit auch der laengste Text (06) in seinen Slot passt. */
+    /* Kompakte Typo, damit auch der längste Text in seinen Slot passt */
     .journey__card {
       column-gap: var(--space-2xs);
     }
@@ -577,7 +525,7 @@ const steps: Step[] = [
     }
   }
 
-  /* Sehr kleine bzw. sehr flache Fenster: noch eine Stufe kompakter. */
+  /* Sehr kleine/flache Fenster: noch eine Stufe kompakter */
   @media (max-width: 380px), (max-height: 620px) {
     .journey__body h3 {
       font-size: 0.74rem;
@@ -612,16 +560,8 @@ const steps: Step[] = [
     const boxes = gsap.utils.toArray<HTMLElement>('[data-step]', root);
     const bloom = root.querySelector<SVGGElement>('[data-bloom]')!;
 
-    /**
-     * Skaliert ein SVG-Element um einen EXAKTEN Punkt der viewBox und schreibt
-     * den Transform direkt als Attribut.
-     * Warum nicht einfach gsap {scale}? GSAP legt seinen Drehpunkt fuer SVG als
-     * Pixelwert ab; je nach transform-box misst der Browser diesen Wert ab der
-     * Bounding-Box statt im SVG-Raster. Der Drehpunkt sass dadurch neben dem
-     * Element - die Bluete flog beim Aufgehen seitlich in den Stiel hinein und
-     * auch die Knotenpunkte rutschten waehrend des Einblendens zur Seite.
-     * Mit translate/scale/translate ist der Drehpunkt fix und browserunabhaengig.
-     */
+    // Skaliert ein SVG-Element um einen exakten viewBox-Punkt (Drehpunkt fix,
+    // browserunabhängig) – gsap {scale} setzt den Drehpunkt je nach transform-box daneben.
     const growAbout = (el: SVGElement, cx: number, cy: number, from: number) => {
       const state = { s: from };
       const apply = () =>
@@ -635,17 +575,14 @@ const steps: Step[] = [
 
     const mm = gsap.matchMedia();
 
-    // Ab 680px Breite UND 700px Höhe, ohne reduzierte Bewegung: gepinnte
-    // Scroll-Animation. Das Layout (zentriertes Overlay vs. Pflanze links /
-    // Boxen rechts) steuert allein das CSS. Darunter zeigt das CSS dasselbe
-    // Overlay einfach STATISCH (Boxen sichtbar, kein Pin, scrollt normal).
+    // Variante 1/2: ab 680px Breite UND 700px Höhe -> gepinnte Scroll-Animation
+    // (das Layout steuert allein das CSS; darunter zeigt das CSS dasselbe Overlay statisch).
     mm.add(
       '(min-width: 680px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)',
       () => {
         const L = stem.getTotalLength();
 
         // Längen-Anteil (0..1), an dem die Stem-Spitze die Höhe y passiert.
-        // y fällt monoton entlang des Pfades (748 → 28).
         const fracAtY = (y: number) => {
           let lo = 0;
           let hi = L;
@@ -657,18 +594,15 @@ const steps: Step[] = [
           return (lo + hi) / 2 / L;
         };
 
-        // Layout (Overlay bzw. seitlich) steuert komplett das CSS. Diese Klasse
-        // markiert nur den animierten Zustand (falls später gebraucht).
         steps.classList.add('is-pinned');
 
-        // Startzustände der Animation
+        // Startzustände
         gsap.set(stem, { strokeDasharray: L, strokeDashoffset: L });
         gsap.set(leaves, { opacity: 0 });
         gsap.set(nodes, { opacity: 0 });
         gsap.set(boxes, { opacity: 0, x: 24 });
         gsap.set(bloom, { opacity: 1 });
-        // Knoten wachsen um ihren eigenen Mittelpunkt, die Bluete exakt um die
-        // Stielspitze (120/60) - sie geht also genau dort auf, wo der Stiel endet.
+        // Knoten wachsen um ihren Mittelpunkt, die Blüte exakt um die Stielspitze (120/60)
         const nodeGrows = nodes.map((node) =>
           growAbout(node, 120, Number(node.getAttribute('cy')), 0.2)
         );
@@ -677,8 +611,7 @@ const steps: Step[] = [
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
-            // Lock etwas höher: Pin rastet ein, wenn die Sektion noch ~48px
-            // unter dem oberen Rand steht → kleiner Freiraum über "Der Ablauf".
+            // Pin rastet mit etwas Freiraum über "Der Ablauf" ein
             trigger: pin,
             start: 'top top+=60',
             end: () => '+=' + window.innerHeight * 3,
@@ -688,16 +621,16 @@ const steps: Step[] = [
           },
         });
 
-        // Stiel zeichnet sich von unten nach oben über den gesamten Scrollweg.
+        // Stiel zeichnet sich von unten nach oben
         tl.to(stem, { strokeDashoffset: 0, duration: 1 }, 0);
 
-        // Blätter faden ein, sobald die Spitze sie passiert.
+        // Blätter faden ein, sobald die Spitze sie passiert
         leaves.forEach((leaf) => {
           const y = Number(leaf.dataset.y);
           tl.to(leaf, { opacity: 1, duration: 0.06 }, fracAtY(y));
         });
 
-        // Knoten + zugehörige Box erscheinen, wenn die Spitze den Knoten erreicht.
+        // Knoten + zugehörige Box erscheinen am jeweiligen Knoten
         boxes.forEach((box, i) => {
           const at = fracAtY(Number(nodes[i].getAttribute('cy')));
           tl.to(nodes[i], { opacity: 1, duration: 0.04 }, at);
@@ -713,8 +646,7 @@ const steps: Step[] = [
           );
         });
 
-        // Krone: Knospe erblüht erst, wenn der Stiel voll ausgefahren ist -
-        // aufgehend an der Stielspitze, ohne seitliche Bewegung.
+        // Krone: erblüht erst, wenn der Stiel voll ausgefahren ist
         tl.to(
           bloomGrow.state,
           {
@@ -726,7 +658,7 @@ const steps: Step[] = [
           1
         );
 
-        // Pin-Start/-Ende mit finalen Maßen rechnen, sobald Layout/Fonts stehen.
+        // Pin neu berechnen, sobald Layout/Fonts stehen
         let active = true;
         const refresh = () => {
           if (active) ScrollTrigger.refresh();
@@ -740,20 +672,14 @@ const steps: Step[] = [
           active = false;
           window.removeEventListener('load', refresh);
           steps.classList.remove('is-pinned');
-          // manuell gesetzte Transform-Attribute wieder entfernen
           bloomGrow.reset();
           nodeGrows.forEach((g) => g.reset());
         };
       }
     );
 
-    // ------------------------------------------------------------------
-    // VARIANTE 3 - schmal ODER flach: gleiches Overlay-Bild wie Variante 2,
-    // jetzt aber ebenfalls gepinnt und animiert. Gepinnt wird nur die
-    // Spalten-Box (nicht der Kopf) - so bleibt die ganze Fensterhoehe fuer
-    // Pflanze + Boxen uebrig und nichts ueberschneidet sich.
-    // Bewusst eigener Block: Variante 1 + 2 oben bleiben unangetastet.
-    // ------------------------------------------------------------------
+    // Variante 3: schmal ODER flach – gleiches Overlay, gepinnt wird nur die
+    // Spalten-Box (nicht der Kopf), damit die volle Fensterhöhe frei bleibt.
     mm.add(
       '(prefers-reduced-motion: no-preference) and (max-width: 679.98px), (prefers-reduced-motion: no-preference) and (max-height: 699.98px)',
       () => {
@@ -771,27 +697,25 @@ const steps: Step[] = [
           return (lo + hi) / 2 / L;
         };
 
-        // Anteil des Scrollwegs fuers Stiel-Wachstum, Rest gehoert der Bluete.
+        // Anteil des Scrollwegs fürs Stiel-Wachstum, Rest gehört der Blüte
         const GROW = 0.86;
 
         gsap.set(stem, { strokeDasharray: L, strokeDashoffset: L });
         gsap.set(leaves, { opacity: 0 });
         gsap.set(nodes, { opacity: 0 });
         gsap.set(bloom, { opacity: 1 });
-        // wie oben: Drehpunkte exakt auf Knoten bzw. Stielspitze
         const nodeGrows = nodes.map((node) =>
           growAbout(node, 120, Number(node.getAttribute('cy')), 0.2)
         );
         const bloomGrow = growAbout(bloom, 120, 60, 0);
-        // Boxen kommen hier von unten statt von rechts - passt besser zum
-        // schmalen Hochformat.
+        // Boxen kommen hier von unten (passt zum schmalen Hochformat)
         gsap.set(boxes, { opacity: 0, y: 14 });
 
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
             trigger: cols,
-            // direkt unter der 76px hohen Sticky-Navbar einrasten
+            // direkt unter der Sticky-Navbar einrasten
             start: 'top top+=84',
             end: () => '+=' + window.innerHeight * 2.4,
             pin: true,

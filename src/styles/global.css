@@ -1,10 +1,10 @@
 /* =========================================================================
    Evoque – Yourself // global.css
-   Design-Tokens 1:1 aus visual.md. Keine erfundenen Farben/Schriften.
+   Design-Tokens: Farben, Schriften, Spacing, Layout.
    ========================================================================= */
 
 :root {
-  /* --- Kernfarben (visual.md) --- */
+  /* --- Kernfarben --- */
   --forest-deep: #152c1a;   /* Fließtext, Überschriften, Footer-BG, primäre Buttons */
   --sage-harmony: #acbfaf;  /* Marken-Akzentflächen, Icon-BG, sekundäre Buttons */
   --soft-sand: #dcc9b8;     /* Sektions-/Kartenflächen, sanfte Trennungen (warmes Sand-Taupe, entgelbt) */
@@ -164,7 +164,7 @@ p {
   padding-block: var(--space-2xl);
 }
 
-/* Flächen-Varianten gemäß visual.md */
+/* Flächen-Varianten */
 .surface-sand {
   background: var(--soft-sand);
 }
@@ -272,7 +272,7 @@ p {
   transform: translateY(-2px);
 }
 
-/* Primär: Forest Deep mit hellem Text (visual.md) */
+/* Primär: Forest Deep mit hellem Text */
 .btn--primary {
   background: var(--forest-deep);
   color: var(--on-dark);
@@ -281,7 +281,7 @@ p {
   background: #0e2113;
 }
 
-/* Sekundär: Sage mit dunklem Text (visual.md) */
+/* Sekundär: Sage mit dunklem Text */
 .btn--secondary {
   background: var(--sage-harmony);
   color: var(--forest-deep);
@@ -320,7 +320,7 @@ p {
   padding: 0.4em 0.9em;
   border-radius: 999px;
 }
-/* Pilotphase-Badge: warmer Akzent, NUR hier eingesetzt (visual.md) */
+/* Pilotphase-Badge: warmer Akzent, NUR hier eingesetzt */
 .badge--pilot {
   background: var(--accent-pilot-soft);
   color: var(--accent-pilot);

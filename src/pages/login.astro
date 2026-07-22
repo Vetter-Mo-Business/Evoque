@@ -15,6 +15,30 @@ const password = (
 const rawNext = Astro.url.searchParams.get('next') ?? '/';
 const next = rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/';
 
+// Gemerkte Sprache (Cookie) auch auf der Login-Seite berücksichtigen, obwohl
+// hier kein Sprach-Umschalter sichtbar ist.
+const lang = (Astro.cookies.get('evoque_lang')?.value === 'en' ? 'en' : 'de') as 'de' | 'en';
+const t = {
+  de: {
+    pageTitle: 'Zugang · EVOQUE yourself',
+    heading: 'Vorschau geschützt',
+    intro:
+      'Diese Seite befindet sich noch in der Vorschau. Bitte gib das Passwort ein, um sie anzusehen.',
+    passwordLabel: 'Passwort',
+    error: 'Falsches Passwort. Bitte versuche es erneut.',
+    submit: 'Ansehen',
+  },
+  en: {
+    pageTitle: 'Access · EVOQUE yourself',
+    heading: 'Preview protected',
+    intro:
+      'This page is still in preview. Please enter the password to view it.',
+    passwordLabel: 'Password',
+    error: 'Wrong password. Please try again.',
+    submit: 'View',
+  },
+}[lang];
+
 let error = false;
 
 if (Astro.request.method === 'POST') {
@@ -36,11 +60,11 @@ if (Astro.request.method === 'POST') {
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zugang · EVOQUE yourself</title>
+    <title>{t.pageTitle}</title>
     <meta name="robots" content="noindex" />
     <link rel="icon" type="image/svg+xml" href={logo.src} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -53,14 +77,13 @@ if (Astro.request.method === 'POST') {
   <body class="login-page">
     <main class="login-card">
       <img class="login-logo" src={logo.src} alt="EVOQUE yourself" />
-      <h1>Vorschau geschützt</h1>
+      <h1>{t.heading}</h1>
       <p class="login-intro">
-        Diese Seite befindet sich noch in der Vorschau. Bitte gib das Passwort ein,
-        um sie anzusehen.
+        {t.intro}
       </p>
 
       <form method="POST" class="login-form">
-        <label for="password">Passwort</label>
+        <label for="password">{t.passwordLabel}</label>
         <input
           id="password"
           name="password"
@@ -69,8 +92,8 @@ if (Astro.request.method === 'POST') {
           autofocus
           required
         />
-        {error && <p class="login-error" role="alert">Falsches Passwort. Bitte versuche es erneut.</p>}
-        <button type="submit" class="btn btn--primary">Ansehen</button>
+        {error && <p class="login-error" role="alert">{t.error}</p>}
+        <button type="submit" class="btn btn--primary">{t.submit}</button>
       </form>
     </main>
 

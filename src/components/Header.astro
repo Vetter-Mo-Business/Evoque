@@ -1,6 +1,6 @@
 ---
 import { useTranslations, localizePath, type Lang } from '../i18n/ui';
-import logo from '../assets/logos/nav.svg';
+import logo from '../assets/logos/nav.png';
 
 const lang = (Astro.currentLocale ?? 'de') as Lang;
 const t = useTranslations(lang);
@@ -23,7 +23,7 @@ const switchToEn = localizePath(Astro.url.pathname, 'en');
 
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="site-header__brand" href="/" aria-label="EVOQUE – Yourself, zur Startseite">
+    <a class="site-header__brand" href={localizePath('/', lang)} aria-label={t('nav.brandHome')}>
       <img
         src={logo.src}
         alt="EVOQUE Yourself – Coaching & Strategy"
@@ -36,14 +36,16 @@ const switchToEn = localizePath(Astro.url.pathname, 'en');
       class="site-header__toggle"
       aria-expanded="false"
       aria-controls="primary-nav"
-      aria-label="Menü öffnen"
+      aria-label={t('nav.menuOpen')}
+      data-label-open={t('nav.menuOpen')}
+      data-label-close={t('nav.menuClose')}
     >
       <span class="site-header__toggle-bar"></span>
       <span class="site-header__toggle-bar"></span>
       <span class="site-header__toggle-bar"></span>
     </button>
 
-    <nav id="primary-nav" class="site-nav" aria-label="Hauptnavigation">
+    <nav id="primary-nav" class="site-nav" aria-label={t('nav.primary')}>
       <ul class="site-nav__list">
         {
           nav.map((item) => {
@@ -314,10 +316,12 @@ const switchToEn = localizePath(Astro.url.pathname, 'en');
   const toggle = document.querySelector('.site-header__toggle');
   const navEl = document.getElementById('primary-nav');
   if (toggle && navEl) {
+    const labelOpen = toggle.getAttribute('data-label-open') ?? 'Open menu';
+    const labelClose = toggle.getAttribute('data-label-close') ?? 'Close menu';
     toggle.addEventListener('click', () => {
       const open = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', String(!open));
-      toggle.setAttribute('aria-label', open ? 'Menü öffnen' : 'Menü schließen');
+      toggle.setAttribute('aria-label', open ? labelOpen : labelClose);
       navEl.setAttribute('data-open', String(!open));
     });
   }
@@ -331,4 +335,16 @@ const switchToEn = localizePath(Astro.url.pathname, 'en');
       }
     });
   }
+
+  // Sprachwahl merken: Beim Klick auf eine Sprachoption ein Cookie setzen, damit
+  // die gewählte Sprache dauerhaft bleibt (auch beim Seitenwechsel), bis wieder
+  // umgeschaltet wird. Die Middleware liest dieses Cookie und hält die Sprache.
+  document.querySelectorAll<HTMLAnchorElement>('.lang__option').forEach((opt) => {
+    opt.addEventListener('click', () => {
+      const chosen = opt.getAttribute('hreflang');
+      if (chosen === 'de' || chosen === 'en') {
+        document.cookie = `evoque_lang=${chosen}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
+      }
+    });
+  });
 </script>
