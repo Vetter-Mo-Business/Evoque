@@ -1,0 +1,9 @@
+---
+// Englische Route für die Startseite. Rendert denselben Inhalt wie die
+// deutsche Seite; unter /en/ ist Astro.currentLocale automatisch 'en', sodass
+// die englischen Texte greifen. Nötig, weil der Vercel-Adapter nur physische
+// Seiten als Routen ausliefert (i18n-Fallback wird dort nicht emittiert).
+import Page from '../index.astro';
+---
+
+<Page />
