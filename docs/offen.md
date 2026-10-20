@@ -1,8 +1,9 @@
 # Offene Punkte
 
 ## Macht ihr (Tim / Malin)
-- [ ] Tim: Vercel-Projekt von GitHub trennen bzw. löschen, danach Claude Bescheid geben → Push von main
-- [ ] Tim: Ort der Abnahme ins Abnahmeprotokoll (`intern/kunden/2026-001-evoque-yourself/projekt.js`, `abnahme.ort`) oder handschriftlich
+- [x] Vercel von GitHub getrennt, main gepusht (20.10.2026)
+- [ ] Vercel-Projekt ganz löschen (wird nicht mehr gebraucht)
+- [ ] Termin mit Malin: Besprechungsunterlage `intern/kunden/2026-001-evoque-yourself/besprechung.html`
 - [ ] Malin: Webhosting + Domain evoque-yourself.com bei netcup buchen, AVV mit netcup
 - [ ] Malin: Postfach coaching@evoque-yourself.com anlegen
 - [ ] Malin: Rückmeldung zu `docs/rueckmeldung-malin.md` (Abschnitt 4 bestätigen, Hinweise 1–3)
