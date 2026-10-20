@@ -4,8 +4,8 @@
  *
  * Wird vom Cookie-Banner (src/lib/consent.ts) bei jeder Entscheidung
  * aufgerufen. Gespeichert werden NUR:
- *   Zeitpunkt (UTC), zufällige ID aus dem Cookie, Banner-Version,
- *   Auswahl (Cal.com ja/nein, Instagram ja/nein), Quelle des Klicks.
+ *   Zeitpunkt (UTC), Banner-Version, Auswahl (Cal.com ja/nein,
+ *   Instagram ja/nein), Quelle des Klicks.
  * Keine IP-Adresse, kein Browser, keine sonstigen Daten.
  *
  * Ablage: eine Datei pro Monat (JSON Lines). Bevorzugt AUSSERHALB des
@@ -46,15 +46,13 @@ if (!is_array($d)) {
     ende(400);
 }
 
-$id = $d['id'] ?? null;
 $version = $d['version'] ?? null;
 $cal = $d['cal'] ?? null;
 $instagram = $d['instagram'] ?? null;
 $quelle = $d['source'] ?? null;
 
 if (
-    !is_string($id) || !preg_match('/^[0-9a-f-]{32,36}$/i', $id)
-    || !is_string($version) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $version)
+    !is_string($version) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $version)
     || !is_bool($cal) || !is_bool($instagram)
     || !is_string($quelle) || !in_array($quelle, QUELLEN, true)
 ) {
@@ -114,7 +112,6 @@ if (is_file($datei) && filesize($datei) > MAX_DATEIGROESSE) {
 
 $zeile = json_encode([
     'zeit' => gmdate('Y-m-d\TH:i:s\Z'),
-    'id' => strtolower($id),
     'banner_version' => $version,
     'cal' => $cal,
     'instagram' => $instagram,

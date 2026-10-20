@@ -5,8 +5,9 @@
 // - Ändert sich CONSENT_VERSION, gilt eine alte Auswahl nicht mehr und das
 //   Banner erscheint erneut (z. B. wenn ein neuer externer Dienst dazukommt).
 // - Jede Entscheidung wird an /api/einwilligung.php gemeldet und dort als
-//   Nachweis protokolliert: Zeitpunkt, Auswahl, Banner-Version und eine
-//   zufällige ID. Keine IP-Adresse, kein Browser-Fingerabdruck.
+//   Nachweis protokolliert: Zeitpunkt, Auswahl und Banner-Version – genau
+//   das, was die Datenschutzerklärung (Abschnitt 4) nennt. Keine Kennung,
+//   keine IP-Adresse, kein Browser-Fingerabdruck.
 
 export const CONSENT_VERSION = '2026-10-21';
 
@@ -18,7 +19,6 @@ export type Service = 'cal' | 'instagram';
 
 export interface Consent {
   v: string;
-  id: string;
   ts: number;
   cal: boolean;
   instagram: boolean;
@@ -43,10 +43,9 @@ export function readConsent(): Consent | null {
   if (!raw) return null;
   try {
     const c = JSON.parse(decodeURIComponent(raw)) as Partial<Consent>;
-    if (c.v !== CONSENT_VERSION || typeof c.id !== 'string') return null;
+    if (c.v !== CONSENT_VERSION) return null;
     return {
       v: c.v,
-      id: c.id,
       ts: Number(c.ts) || 0,
       cal: c.cal === true,
       instagram: c.instagram === true,
@@ -60,12 +59,6 @@ export function hasConsent(service: Service): boolean {
   return readConsent()?.[service] === true;
 }
 
-function randomId(): string {
-  if (crypto.randomUUID) return crypto.randomUUID();
-  const b = crypto.getRandomValues(new Uint8Array(16));
-  return Array.from(b, (x) => x.toString(16).padStart(2, '0')).join('');
-}
-
 export function saveConsent(
   choice: { cal: boolean; instagram: boolean },
   source: ConsentSource,
@@ -73,9 +66,6 @@ export function saveConsent(
   const previous = readConsent();
   const consent: Consent = {
     v: CONSENT_VERSION,
-    // ID bleibt bei Änderungen gleich, damit sich der Verlauf einer
-    // Einwilligung im Protokoll nachvollziehen lässt.
-    id: previous?.id ?? randomId(),
     ts: Date.now(),
     cal: choice.cal,
     instagram: choice.instagram,
@@ -100,7 +90,6 @@ function logConsent(consent: Consent, source: ConsentSource) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        id: consent.id,
         version: consent.v,
         cal: consent.cal,
         instagram: consent.instagram,

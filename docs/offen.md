@@ -1,29 +1,23 @@
 # Offene Punkte
 
-## Macht ihr (Tim / Malin)
-- [x] Vercel von GitHub getrennt, main gepusht (20.10.2026)
-- [ ] Vercel-Projekt ganz löschen (wird nicht mehr gebraucht)
-- [ ] Termin mit Malin: Besprechungsunterlage `intern/kunden/2026-001-evoque-yourself/besprechung.html`
-- [ ] Malin: Webhosting + Domain evoque-yourself.com bei netcup buchen, AVV mit netcup
-- [ ] Malin: Postfach coaching@evoque-yourself.com anlegen
-- [ ] Malin: Rückmeldung zu `docs/rueckmeldung-malin.md` (Abschnitt 4 bestätigen, Hinweise 1–3)
-- [ ] Malin: Wirtschafts-Identifikationsnummer nachreichen, sobald vorhanden
-- [ ] Klären, wer hochlädt (Malin selbst oder wir mit Plesk-Zugang + AVV)
-- [ ] Plesk-Einstellungen laut `docs/netcup-livegang.md` (SSL, HTTPS-Weiterleitung, Logs 14 Tage)
+Die Website ist fertig. Offen ist nur, was nach der Übergabe passiert.
+Unterlagen für Malin: `Website-v3/intern/kunden/2026-001-evoque-yourself/pdf/`
+(`uebergabe.pdf` und `anleitung.pdf`).
 
-## Kann Claude machen
-- [ ] Malins Antworten zur Datenschutzerklärung einbauen
-- [ ] W-IdNr. ins Impressum (Abschnitt ist in `src/pages/impressum.astro` vorbereitet)
-- [ ] Nach dem Upload: Live-Prüfung (curl, Weiterleitungen, Netzwerk vor Zustimmung, Formular)
+## Nach der Übergabe (Malin, laut Übergabe-Unterlage)
+- [ ] netcup: Webhosting (Nürnberg) und Domain evoque-yourself.com buchen, AVV abschließen
+- [ ] Postfach coaching@evoque-yourself.com anlegen
+- [ ] Website hochladen, SSL und HTTPS-Weiterleitung, Server-Logs 14 Tage (Anleitung Kapitel 3–7)
+- [ ] Wirtschafts-Identifikationsnummer schicken, sobald vorhanden → wir tragen sie ins Impressum ein
+- [ ] Empfehlung an Malin: Kontaktformular in Abschnitt 7 der Datenschutzerklärung erwähnen
 
-## Erledigt (21.10.2026)
-- [x] Umstellung Vercel → statische Seite für netcup, Passwortschutz entfernt
-- [x] Impressum und Datenschutzerklärung wortgleich eingebaut
-- [x] Footer: Impressum, Datenschutz, Cookie-Einstellungen, Kontaktformular
-- [x] Eigenes Cookie-Banner mit Einstellungen und Protokoll
-- [x] Cal.com und Instagram erst nach Zustimmung, Platzhalter mit Button
-- [x] Kontaktformular (PHP, Honeypot, keine Speicherung)
-- [x] E-Mail-Adressen im Quelltext verschlüsselt
-- [x] Google Fonts lokal, keine externen Verbindungen vor Zustimmung
-- [x] .htaccess: HTTPS, ohne www, Adressen ohne Schrägstrich, 404
-- [x] Footer: VeMo-Logo mit Schrift auf #dce5f3, Link zu vemo-it-design.com
+## Wir
+- [ ] `website-zum-hochladen.zip` (Inhalt von `dist/`) und `quellcode.zip` erstellen und mit den Logo-Dateien übergeben
+- [ ] Nach ihrem Upload: Live-Prüfung (https, Weiterleitungen, keine fremden Verbindungen vor Zustimmung, Formular-Testmail)
+- [ ] Vercel-Projekt löschen (Verbindung zu GitHub ist getrennt)
+
+## Technik-Notizen
+- Statische Seite (Astro, `npm run build` → `dist/`), Kontaktformular und
+  Einwilligungs-Protokoll als PHP in `public/api/`, Server-Regeln in `public/.htaccess`.
+- Einwilligungs-Protokoll speichert nur Zeitpunkt, Auswahl, Banner-Version
+  (wie Datenschutzerklärung Abschnitt 4), Löschung nach 12 Monaten.
