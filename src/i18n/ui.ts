@@ -41,7 +41,7 @@ export const ui = {
     'footer.cookies': 'Cookie-Einstellungen',
     'footer.note': 'Coaching, keine Psychotherapie/Heilbehandlung.',
     'footer.copy': 'EVOQUE yourself · Coaching & Strategie',
-    'footer.credit': 'In Kooperation mit VeMo IT & Design',
+    'footer.credit': 'In Kooperation mit',
 
     // Seite "Für Unternehmen"
     'company.meta.title': 'Für Unternehmen',
@@ -179,7 +179,7 @@ export const ui = {
     'footer.cookies': 'Cookie settings',
     'footer.note': 'Coaching, not psychotherapy or medical treatment.',
     'footer.copy': 'EVOQUE yourself · Coaching & Strategy',
-    'footer.credit': 'In cooperation with VeMo IT & Design',
+    'footer.credit': 'In cooperation with',
 
     'company.meta.title': 'For Companies',
     'company.meta.description':

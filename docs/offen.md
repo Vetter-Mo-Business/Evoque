@@ -23,3 +23,4 @@
 - [x] E-Mail-Adressen im Quelltext verschlüsselt
 - [x] Google Fonts lokal, keine externen Verbindungen vor Zustimmung
 - [x] .htaccess: HTTPS, ohne www, Adressen ohne Schrägstrich, 404
+- [x] Footer: VeMo-Logo mit Schrift auf #dce5f3, Link zu vemo-it-design.com
