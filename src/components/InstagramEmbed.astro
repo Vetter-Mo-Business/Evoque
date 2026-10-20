@@ -1,0 +1,144 @@
+---
+// Instagram-Profil-Einbettung (Metas eigener Einbettungs-iFrame) – lädt
+// erst nach Einwilligung. Vorher: Platzhalter mit Hinweis und Button
+// „Akzeptieren und Instagram-Beiträge laden“.
+import { localizePath, type Lang } from '../i18n/ui';
+
+const PROFILE = 'evoqueyourself';
+
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+const privacyHref = localizePath('/datenschutz', lang);
+const c = {
+  de: {
+    iframeTitle: 'EVOQUE auf Instagram',
+    title: 'Instagram-Beiträge',
+    textBefore:
+      'Zum Anzeigen der Instagram-Beiträge wird eine Verbindung zu Instagram (Meta) hergestellt. Dabei werden Daten an Meta übertragen, auch in die USA. Mehr dazu in der ',
+    link: 'Datenschutzerklärung',
+    textAfter: '.',
+    button: 'Akzeptieren und Instagram-Beiträge laden',
+  },
+  en: {
+    iframeTitle: 'EVOQUE on Instagram',
+    title: 'Instagram posts',
+    textBefore:
+      'To display the Instagram posts, a connection to Instagram (Meta) is established. In the process, data is transferred to Meta, including to the USA. More information in the ',
+    link: 'privacy policy',
+    textAfter: '.',
+    button: 'Accept and load Instagram posts',
+  },
+}[lang];
+---
+
+<div
+  class="ig-embed"
+  data-ig-embed
+  data-src={`https://www.instagram.com/${PROFILE}/embed`}
+  data-title={c.iframeTitle}
+>
+  <div class="ig-embed__placeholder">
+    <svg class="ig-embed__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+    <p class="ig-embed__title">{c.title}</p>
+    <p class="ig-embed__text">
+      {c.textBefore}<a href={privacyHref}>{c.link}</a>{c.textAfter}
+    </p>
+    <button type="button" class="btn btn--primary ig-embed__btn" data-ig-accept>
+      {c.button}
+    </button>
+  </div>
+</div>
+
+<script>
+  import { hasConsent, saveConsent, readConsent, onConsentChange } from '../lib/consent';
+
+  const slots = document.querySelectorAll<HTMLElement>('[data-ig-embed]');
+
+  function loadInstagram(el: HTMLElement) {
+    if (el.dataset.consentLoaded) return;
+    el.dataset.consentLoaded = 'instagram';
+    const iframe = document.createElement('iframe');
+    iframe.src = el.dataset.src!;
+    iframe.title = el.dataset.title!;
+    iframe.loading = 'lazy';
+    iframe.setAttribute('scrolling', 'no');
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('allowtransparency', 'true');
+    el.replaceChildren(iframe);
+    el.classList.add('is-loaded');
+  }
+
+  slots.forEach((el) => {
+    if (hasConsent('instagram')) loadInstagram(el);
+    el.querySelector('[data-ig-accept]')?.addEventListener('click', () => {
+      // Nur Instagram freigeben; eine bestehende Cal.com-Auswahl bleibt.
+      const current = readConsent();
+      saveConsent({ cal: current?.cal === true, instagram: true }, 'platzhalter-instagram');
+    });
+  });
+
+  onConsentChange((consent) => {
+    if (consent.instagram) slots.forEach(loadInstagram);
+  });
+</script>
+
+<style>
+  /* Breite begrenzt -> Inhaltshöhe bleibt vorhersehbar; zusammen mit
+     scrolling="no" am iFrame verhindert das den internen Scrollbalken. */
+  .ig-embed {
+    width: 100%;
+    max-width: 360px;
+    margin-inline: auto;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    border: var(--border-soft);
+    background: #fff;
+  }
+  .ig-embed :global(iframe) {
+    display: block;
+    width: 100%;
+    border: 0;
+    /* Höhe passend zum Instagram-Profil-Embed (kein interner Scroll).
+       Bei Bedarf hier fein justieren. */
+    height: 540px;
+  }
+  .ig-embed__placeholder {
+    height: 100%;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xl) var(--space-lg);
+    text-align: center;
+  }
+  .ig-embed__icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: var(--forest-deep);
+  }
+  .ig-embed__title {
+    margin: 0;
+    font-weight: 600;
+    color: var(--forest-deep);
+  }
+  .ig-embed__text {
+    margin: 0 0 var(--space-sm);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--earth-deep);
+  }
+  .ig-embed__text a {
+    color: var(--forest-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ig-embed__btn {
+    font-size: 0.92rem;
+    padding: 0.85em 1.3em;
+    line-height: 1.25;
+  }
+</style>

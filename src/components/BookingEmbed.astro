@@ -1,5 +1,9 @@
 ---
-// Cal.com Inline-Embed.
+// Cal.com Inline-Embed – lädt erst nach Einwilligung.
+//
+// Ohne Zustimmung zu „Cal.com“ (Cookie-Banner) wird keine Verbindung zu
+// Cal.com aufgebaut. Stattdessen steht hier ein Platzhalter mit dem Button
+// „Akzeptieren und Kalender laden“ und der E-Mail-Adresse als Alternative.
 //
 // EINRICHTUNG (einmalig):
 //   1. Auf https://cal.com kostenlos registrieren.
@@ -13,6 +17,8 @@
 //      Beispiel: "malin-evoque/kennenlernen"
 //
 // Solange calLink leer ist, wird ein Platzhalter angezeigt.
+import Email from './Email.astro';
+import { localizePath, type Lang } from '../i18n/ui';
 
 interface Props {
   /** Cal.com-Link im Format "benutzername/event-typ" (oder nur "benutzername"). Leer = Platzhalter. */
@@ -22,6 +28,7 @@ interface Props {
   /**
    * Cal-Region/Instanz. Standard = cal.com. Fuer die EU-Region den Wert
    * "cal.eu" setzen (Links, die auf https://cal.eu/... liegen).
+   * Achtung: Bei einem Wechsel auch die Datenschutzerklärung anpassen.
    */
   calOrigin?: 'cal.com' | 'cal.eu';
 }
@@ -31,24 +38,58 @@ const isConfigured = calLink.trim().length > 0;
 // Region -> Origin + Embed-Skript. cal.eu nutzt die EU-Instanz von Cal.com.
 const origin = `https://${calOrigin}`;
 const embedScript = `https://app.${calOrigin}/embed/embed.js`;
-const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+const privacyHref = localizePath('/datenschutz', lang);
 const ph = {
   de: {
     title: 'Online-Terminbuchung',
     text: 'Der Buchungskalender ist gleich startklar. Sobald der Cal.com-Link eingetragen ist, erscheint hier der live verknüpfte Kalender mit Echtzeit-Verfügbarkeit.',
-    hint: 'Bis dahin: Buchung per E-Mail oder Telefon (siehe unten).',
+    hint: 'Bis dahin: Buchung per E-Mail (siehe unten).',
+    consentBefore:
+      'Zum Anzeigen des Buchungskalenders wird eine Verbindung zu Cal.com hergestellt. Dabei werden Daten an Cal.com in den USA übertragen. Mehr dazu in der ',
+    consentLink: 'Datenschutzerklärung',
+    consentAfter: '.',
+    consentButton: 'Akzeptieren und Kalender laden',
+    emailAlt: 'Sie können einen Termin auch per E-Mail vereinbaren:',
   },
   en: {
     title: 'Online appointment booking',
     text: 'The booking calendar is almost ready. As soon as the Cal.com link is set, the live-connected calendar with real-time availability appears here.',
-    hint: 'Until then: booking by email or phone (see below).',
+    hint: 'Until then: booking by email (see below).',
+    consentBefore:
+      'To display the booking calendar, a connection to Cal.com is established. In the process, data is transferred to Cal.com in the USA. More information in the ',
+    consentLink: 'privacy policy',
+    consentAfter: '.',
+    consentButton: 'Accept and load calendar',
+    emailAlt: 'You can also arrange an appointment by email:',
   },
 }[lang];
 ---
 
 <div class="booking-embed" id="buchung">
   {isConfigured ? (
-    <div class="booking-embed__cal" id="cal-inline" data-cal-link={calLink}></div>
+    <div
+      class="booking-embed__slot"
+      data-cal-embed
+      data-cal-link={calLink}
+      data-brand-color={brandColor}
+      data-origin={origin}
+      data-embed-script={embedScript}
+    >
+      <div class="booking-embed__placeholder" data-cal-placeholder>
+        <span class="booking-embed__icon" aria-hidden="true">📅</span>
+        <h3>{ph.title}</h3>
+        <p class="booking-embed__consent-text">
+          {ph.consentBefore}<a href={privacyHref}>{ph.consentLink}</a>{ph.consentAfter}
+        </p>
+        <button type="button" class="btn btn--primary" data-cal-accept>
+          {ph.consentButton}
+        </button>
+        <p class="booking-embed__hint">
+          {ph.emailAlt} <Email />
+        </p>
+      </div>
+    </div>
   ) : (
     <div class="booking-embed__placeholder">
       <span class="booking-embed__icon" aria-hidden="true">📅</span>
@@ -59,10 +100,22 @@ const ph = {
   )}
 </div>
 
-{isConfigured && (
-  <script define:vars={{ calLink, brandColor, origin, embedScript }}>
-    (function (C, A, L) {
-      let p = function (a, ar) { a.q.push(ar); };
+<script>
+  import { hasConsent, saveConsent, readConsent, onConsentChange } from '../lib/consent';
+
+  const slot = document.querySelector<HTMLElement>('[data-cal-embed]');
+
+  function loadCal(el: HTMLElement) {
+    if (el.dataset.consentLoaded) return;
+    el.dataset.consentLoaded = 'cal';
+    const { calLink, brandColor, origin, embedScript } = el.dataset as Record<string, string>;
+
+    el.innerHTML = '<div class="booking-embed__cal" id="cal-inline"></div>';
+
+    // Offizieller Cal.com-Embed-Loader (unverändert übernommen).
+    const w = window as any;
+    (function (C: any, A: string, L: string) {
+      let p = function (a: any, ar: any) { a.q.push(ar); };
       let d = C.document;
       C.Cal = C.Cal || function () {
         let cal = C.Cal;
@@ -74,7 +127,7 @@ const ph = {
           cal.loaded = true;
         }
         if (ar[0] === L) {
-          const api = function () { p(api, arguments); };
+          const api: any = function () { p(api, arguments); };
           const namespace = ar[1];
           api.q = api.q || [];
           if (typeof namespace === 'string') {
@@ -88,19 +141,19 @@ const ph = {
         }
         p(cal, ar);
       };
-    })(window, embedScript, 'init');
+    })(w, embedScript, 'init');
 
-    Cal('init', { origin: origin });
-    Cal('inline', {
+    w.Cal('init', { origin });
+    w.Cal('inline', {
       elementOrSelector: '#cal-inline',
-      calLink: calLink,
+      calLink,
       config: { layout: 'month_view', theme: 'light' },
     });
-    Cal('ui', {
+    w.Cal('ui', {
       hideEventTypeDetails: false,
       layout: 'month_view',
       theme: 'light',
-      styles: { branding: { brandColor: brandColor } },
+      styles: { branding: { brandColor } },
       cssVarsPerTheme: {
         light: {
           'cal-brand': brandColor,
@@ -113,8 +166,22 @@ const ph = {
         },
       },
     });
-  </script>
-)}
+  }
+
+  if (slot) {
+    if (hasConsent('cal')) loadCal(slot);
+
+    slot.querySelector('[data-cal-accept]')?.addEventListener('click', () => {
+      // Nur Cal.com freigeben; eine bestehende Instagram-Auswahl bleibt.
+      const current = readConsent();
+      saveConsent({ cal: true, instagram: current?.instagram === true }, 'platzhalter-cal');
+    });
+
+    onConsentChange((consent) => {
+      if (consent.cal) loadCal(slot);
+    });
+  }
+</script>
 
 <style>
   .booking-embed {
@@ -128,7 +195,7 @@ const ph = {
     border: var(--border-soft);
     box-shadow: var(--shadow-card);
   }
-  .booking-embed__cal {
+  .booking-embed :global(.booking-embed__cal) {
     width: 100%;
     min-height: 640px;
     overflow: hidden;
@@ -142,11 +209,17 @@ const ph = {
     border-radius: var(--radius-lg);
     padding: var(--space-2xl) var(--space-xl);
   }
-  .booking-embed__placeholder code {
-    font-size: 0.85em;
-    background: rgba(21, 44, 26, 0.06);
-    padding: 0.1em 0.4em;
-    border-radius: 4px;
+  .booking-embed__placeholder h3 {
+    margin-top: 0;
+  }
+  .booking-embed__consent-text {
+    max-width: 52ch;
+    margin: 0 auto var(--space-lg);
+  }
+  .booking-embed__placeholder a {
+    color: var(--forest-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .booking-embed__icon {
     font-size: 2.4rem;
@@ -154,8 +227,13 @@ const ph = {
     margin-bottom: var(--space-md);
   }
   .booking-embed__hint {
-    margin: 0;
+    margin: var(--space-lg) 0 0;
     font-size: 0.95rem;
-    color: var(--calm-earth);
+    color: var(--earth-deep);
+  }
+  @media (max-width: 520px) {
+    .booking-embed__placeholder {
+      padding: var(--space-xl) var(--space-md);
+    }
   }
 </style>

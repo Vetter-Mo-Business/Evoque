@@ -1,382 +1,363 @@
 ---
+// Datenschutzerklärung – Text von Malin Langer (Stand 21. Oktober 2026),
+// wortgleich übernommen. Rechtstexte liefert und verantwortet die Kundin;
+// Änderungen am Wortlaut nur nach Rücksprache mit ihr.
+//
+// Einzige Ergänzung: die Platzhalter in Abschnitt 4 (Consent-Tool,
+// Speicherdauer, Protokollierung) sind mit den tatsächlichen technischen
+// Angaben gefüllt (siehe src/lib/consent.ts, public/api/einwilligung.php).
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Email from '../components/Email.astro';
+import { type Lang } from '../i18n/ui';
 
-const lang = (Astro.currentLocale ?? 'de') as 'de' | 'en';
+const lang = (Astro.currentLocale ?? 'de') as Lang;
 
-const EMAIL = 'evoqueyourself.coaching@gmail.com';
-
-// Struktur: Einleitung + Abschnitte. Ein Abschnitt hat einen Titel und
-// Blöcke (Absatz oder Aufzählung). So bleibt die lange Erklärung übersichtlich
-// und in beiden Sprachen gepflegt. Persönliche Pflichtangaben (Name, Anschrift,
-// Telefon) sind als [BITTE AUSFÜLLEN] markiert.
-type Block = { p: string } | { list: string[] };
-type Section = { title: string; blocks: Block[] };
-
-const c = {
-  de: {
-    metaTitle: 'Datenschutz',
-    metaDesc: 'Datenschutzerklärung von EVOQUE – Yourself // Coaching & Strategy.',
-    eyebrow: 'Rechtliches',
-    title: 'Datenschutzerklärung',
-    intro:
-      'Der Schutz Deiner personenbezogenen Daten ist uns wichtig. Nachfolgend informieren wir Dich darüber, welche Daten beim Besuch dieser Website erhoben werden, wofür wir sie verwenden und welche Rechte Dir zustehen. Wir verarbeiten personenbezogene Daten ausschließlich im Einklang mit der Datenschutz-Grundverordnung (DSGVO) und dem Bundesdatenschutzgesetz (BDSG).',
-    sections: [
-      {
-        title: '1. Verantwortliche Stelle',
-        blocks: [
-          { p: 'Verantwortlich für die Datenverarbeitung auf dieser Website ist:' },
-          {
-            list: [
-              '[BITTE AUSFÜLLEN: vollständiger Name, z. B. Malin Langer]',
-              'EVOQUE – Yourself // Coaching & Strategy',
-              '[BITTE AUSFÜLLEN: Straße und Hausnummer]',
-              '[BITTE AUSFÜLLEN: PLZ und Ort], Deutschland',
-              `E-Mail: ${EMAIL}`,
-              'Telefon: [BITTE AUSFÜLLEN: Telefonnummer]',
-            ],
-          },
-          {
-            p: 'Wir haben keine gesetzliche Pflicht zur Benennung einer/eines Datenschutzbeauftragten und haben keine solche Person bestellt.',
-          },
-        ],
-      },
-      {
-        title: '2. Grundsätze und Rechtsgrundlagen',
-        blocks: [
-          {
-            p: 'Wir verarbeiten personenbezogene Daten nur, wenn dafür eine Rechtsgrundlage besteht. Rechtsgrundlagen sind insbesondere: Deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die Anbahnung oder Erfüllung eines Vertrags bzw. vorvertragliche Maßnahmen auf Deine Anfrage (Art. 6 Abs. 1 lit. b DSGVO), die Erfüllung rechtlicher Pflichten (Art. 6 Abs. 1 lit. c DSGVO) sowie unser berechtigtes Interesse an einem sicheren und funktionsfähigen Webauftritt (Art. 6 Abs. 1 lit. f DSGVO).',
-          },
-        ],
-      },
-      {
-        title: '3. Hosting und Server-Logfiles',
-        blocks: [
-          {
-            p: 'Diese Website wird bei einem externen Dienstleister gehostet: Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA (bzw. der Vercel-Konzern). Der Anbieter verarbeitet in unserem Auftrag Daten, die zur Bereitstellung und zum Betrieb der Website erforderlich sind. Zur schnelleren Auslieferung optimierter Bilder (moderne Formate wie WebP/AVIF, passende Größen) nutzen wir zudem die in Vercel integrierte Bildoptimierung; die Bilddateien werden dabei auf der Infrastruktur von Vercel verarbeitet und zwischengespeichert.',
-          },
-          {
-            p: 'Beim Aufruf der Website werden durch den Server automatisch Informationen erfasst und in sogenannten Server-Logfiles gespeichert. Dazu gehören insbesondere: IP-Adresse des anfragenden Geräts, Datum und Uhrzeit des Zugriffs, aufgerufene Seite/Datei, übertragene Datenmenge, verwendeter Browser und Betriebssystem sowie die zuvor besuchte Seite (Referrer).',
-          },
-          {
-            p: 'Diese Verarbeitung erfolgt zur Gewährleistung eines störungsfreien Betriebs sowie zur Sicherheit unserer Website. Rechtsgrundlage ist unser berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO). Da eine Datenübermittlung in die USA erfolgen kann, haben wir mit dem Anbieter einen Auftragsverarbeitungsvertrag geschlossen und stützen die Übermittlung auf geeignete Garantien (z. B. EU-Standardvertragsklauseln bzw. das EU-US Data Privacy Framework). [BITTE PRÜFEN: Auftragsverarbeitungsvertrag mit dem Hosting-Anbieter abschließen und bestätigen.]',
-          },
-        ],
-      },
-      {
-        title: '4. Schriftarten (Google Fonts)',
-        blocks: [
-          {
-            p: 'Zur einheitlichen Darstellung von Schriften nutzt diese Website Schriftarten von Google Fonts, bereitgestellt durch Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Beim Aufruf einer Seite lädt Dein Browser die benötigten Schriftarten direkt von Servern von Google, um Texte korrekt anzuzeigen. Dabei wird Deine IP-Adresse an Google übermittelt; eine Übermittlung in die USA ist möglich.',
-          },
-          {
-            p: 'Rechtsgrundlage ist unser berechtigtes Interesse an einer einheitlichen und ansprechenden Darstellung unseres Angebots (Art. 6 Abs. 1 lit. f DSGVO). Weitere Informationen findest Du in der Datenschutzerklärung von Google unter https://policies.google.com/privacy sowie unter https://developers.google.com/fonts/faq. [EMPFEHLUNG: Google Fonts lokal auf dem eigenen Server einbinden (Self-Hosting), dann entfällt die Übermittlung an Google und dieser Abschnitt kann entfallen.]',
-          },
-        ],
-      },
-      {
-        title: '5. Kontaktaufnahme per E-Mail',
-        blocks: [
-          {
-            p: 'Wenn Du uns per E-Mail kontaktierst, verarbeiten wir die von Dir übermittelten Daten (z. B. Name, E-Mail-Adresse, Inhalt der Nachricht), um Deine Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (bei vertragsbezogenen Anfragen) bzw. unser berechtigtes Interesse an der Beantwortung von Anfragen (Art. 6 Abs. 1 lit. f DSGVO).',
-          },
-          {
-            p: 'Unser E-Mail-Postfach wird über einen Dienst von Google (Gmail, Google Ireland Limited) betrieben. Deine per E-Mail übermittelten Daten werden daher auf Servern dieses Anbieters verarbeitet. Wir speichern Deine Anfrage, bis der Zweck der Bearbeitung entfällt und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.',
-          },
-        ],
-      },
-      {
-        title: '6. Online-Terminbuchung (Cal.com)',
-        blocks: [
-          {
-            p: 'Für die Buchung von (Kennenlern-)Terminen binden wir den Dienst Cal.com ein (Cal.com, Inc., USA). Beim Aufruf der Buchungsseite wird ein Skript von Servern von Cal.com geladen und der Buchungskalender direkt in die Seite eingebettet. Dabei kann Deine IP-Adresse an Cal.com übermittelt werden.',
-          },
-          {
-            p: 'Wenn Du einen Termin buchst, verarbeitet Cal.com die von Dir eingegebenen Daten (insbesondere Name, E-Mail-Adresse, gewünschter Termin sowie ggf. weitere von Dir gemachte Angaben) in unserem Auftrag, um die Terminvereinbarung durchzuführen. Zur Verfügbarkeitsprüfung ist der Kalender mit unserem Google-Kalender verknüpft (Zwei-Wege-Synchronisierung belegter Zeiten).',
-          },
-          {
-            p: 'Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Durchführung vorvertraglicher Maßnahmen bzw. Vertragsanbahnung) sowie unser berechtigtes Interesse an einer effizienten Terminverwaltung (Art. 6 Abs. 1 lit. f DSGVO). Weitere Informationen: https://cal.com/privacy. [BITTE PRÜFEN: Auftragsverarbeitungsvertrag mit Cal.com abschließen; nach Möglichkeit die EU-Instanz (cal.eu) nutzen.]',
-          },
-        ],
-      },
-      {
-        title: '7. Einbindung von Instagram-Inhalten',
-        blocks: [
-          {
-            p: 'Auf der Kontaktseite sowie auf der Unternehmensseite betten wir über einen iFrame einen Ausschnitt unseres Instagram-Profils ein. Anbieter ist Meta Platforms Ireland Limited, 4 Grand Canal Square, Grand Canal Harbour, Dublin 2, Irland. Beim Laden dieser Einbettung wird eine Verbindung zu Servern von Meta/Instagram hergestellt; dabei können Deine IP-Adresse übermittelt und Cookies gesetzt werden, auch wenn Du nicht bei Instagram eingeloggt bist oder kein Konto hast. Eine Übermittlung in die USA ist möglich.',
-          },
-          {
-            p: 'Auf Umfang und Zweck der Datenerhebung durch Meta sowie die weitere Verarbeitung haben wir keinen Einfluss. Informationen dazu findest Du in der Datenschutzerklärung von Meta/Instagram unter https://privacycenter.instagram.com/policy. [BITTE PRÜFEN: Die Einbettung lädt derzeit automatisch. Rechtssicher ist in der Regel eine Einwilligungslösung (z. B. „2-Klick-Lösung“/Consent-Banner), sodass Instagram erst nach aktiver Zustimmung geladen wird (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG). Bis dahin bitte Rücksprache halten.]',
-          },
-        ],
-      },
-      {
-        title: '8. Social-Media-Präsenz (Instagram)',
-        blocks: [
-          {
-            p: 'Wir sind auf Instagram (@evoqueyourself) mit einem Profil vertreten und verlinken darauf. Wenn Du unserem Profil folgst oder es besuchst, verarbeitet Meta Platforms Ireland Limited Deine Daten in eigener Verantwortung nach den dortigen Datenschutzbestimmungen. Für Verarbeitungen, die im Zusammenhang mit unserer Seite gemeinsam mit Meta erfolgen, gelten die jeweiligen Bedingungen des Anbieters.',
-          },
-        ],
-      },
-      {
-        title: '9. Cookies und lokale Speicherung',
-        blocks: [
-          {
-            p: 'Diese Website setzt nur technisch notwendige bzw. funktionale Cookies ein. Wir verwenden keine Analyse-, Tracking- oder Werbe-Cookies.',
-          },
-          {
-            list: [
-              'evoque_lang – speichert Deine gewählte Sprache (Deutsch/Englisch), damit die Seite in der von Dir gewünschten Sprache angezeigt wird. Funktionaler Cookie, Rechtsgrundlage Art. 6 Abs. 1 lit. f DSGVO bzw. § 25 Abs. 2 TDDDG (unbedingt erforderlich für die angeforderte Funktion).',
-              'evoque_gate – wird nur während der Vorschau-/Aufbauphase gesetzt: Solange die Website mit einem Passwort geschützt ist, merkt sich dieser technisch notwendige Cookie nach korrekter Passworteingabe Deinen Zugang, damit die geschützten Seiten nicht bei jedem Aufruf erneut das Passwort verlangen. Er enthält keine Analyse- oder Tracking-Funktion und wird nach 30 Tagen automatisch ungültig. Rechtsgrundlage: § 25 Abs. 2 TDDDG (unbedingt erforderlich) bzw. Art. 6 Abs. 1 lit. f DSGVO. [BITTE PRÜFEN: Nach dem öffentlichen Start ohne Passwortschutz entfällt dieser Cookie – diesen Punkt dann entfernen.]',
-            ],
-          },
-          {
-            p: 'Du kannst Cookies in den Einstellungen Deines Browsers jederzeit löschen oder deren Speicherung einschränken. Werden funktionale Cookies deaktiviert, kann es sein, dass einzelne Funktionen (z. B. die dauerhafte Sprachwahl) nicht mehr vollständig zur Verfügung stehen.',
-          },
-        ],
-      },
-      {
-        title: '10. Speicherdauer',
-        blocks: [
-          {
-            p: 'Wir speichern personenbezogene Daten nur so lange, wie es für die jeweiligen Zwecke erforderlich ist oder gesetzliche Aufbewahrungsfristen (z. B. handels- und steuerrechtlich) dies vorschreiben. Danach werden die Daten gelöscht oder gesperrt.',
-          },
-        ],
-      },
-      {
-        title: '11. Deine Rechte',
-        blocks: [
-          { p: 'Dir stehen im Rahmen der gesetzlichen Vorgaben folgende Rechte zu:' },
-          {
-            list: [
-              'Auskunft über die zu Dir gespeicherten personenbezogenen Daten (Art. 15 DSGVO)',
-              'Berichtigung unrichtiger Daten (Art. 16 DSGVO)',
-              'Löschung („Recht auf Vergessenwerden“, Art. 17 DSGVO)',
-              'Einschränkung der Verarbeitung (Art. 18 DSGVO)',
-              'Datenübertragbarkeit (Art. 20 DSGVO)',
-              'Widerspruch gegen Verarbeitungen, die auf einem berechtigten Interesse beruhen (Art. 21 DSGVO)',
-              'Widerruf erteilter Einwilligungen mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)',
-            ],
-          },
-          {
-            p: `Zur Ausübung Deiner Rechte genügt eine formlose Nachricht an ${EMAIL}.`,
-          },
-        ],
-      },
-      {
-        title: '12. Beschwerderecht bei der Aufsichtsbehörde',
-        blocks: [
-          {
-            p: 'Unbeschadet anderweitiger Rechtsbehelfe hast Du das Recht, Dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, wenn Du der Ansicht bist, dass die Verarbeitung Deiner personenbezogenen Daten gegen die DSGVO verstößt. Zuständig ist die Aufsichtsbehörde des Bundeslandes, in dem die verantwortliche Stelle ihren Sitz hat. [BITTE AUSFÜLLEN: zuständige Landes-Aufsichtsbehörde nach Bundesland.]',
-          },
-        ],
-      },
-      {
-        title: '13. Aktualität und Änderung dieser Datenschutzerklärung',
-        blocks: [
-          {
-            p: 'Diese Datenschutzerklärung ist aktuell gültig. Durch die Weiterentwicklung der Website oder aufgrund geänderter gesetzlicher bzw. behördlicher Vorgaben kann es notwendig werden, diese Erklärung anzupassen. Die jeweils aktuelle Fassung kann jederzeit auf dieser Seite abgerufen werden.',
-          },
-        ],
-      },
-    ] as Section[],
-    note: 'Hinweis: Dieser Text ist ein sorgfältig erstellter Entwurf, aber keine Rechtsberatung. Die mit [BITTE AUSFÜLLEN] bzw. [BITTE PRÜFEN] markierten Punkte sind vor der Veröffentlichung zu ergänzen bzw. rechtlich abzuklären.',
-  },
-
-  en: {
-    metaTitle: 'Privacy',
-    metaDesc: 'Privacy policy of EVOQUE – Yourself // Coaching & Strategy.',
-    eyebrow: 'Legal',
-    title: 'Privacy policy',
-    intro:
-      'The protection of your personal data is important to us. Below we inform you about which data is collected when you visit this website, what we use it for and which rights you have. We process personal data exclusively in accordance with the General Data Protection Regulation (GDPR) and the German Federal Data Protection Act (BDSG).',
-    sections: [
-      {
-        title: '1. Data controller',
-        blocks: [
-          { p: 'The party responsible for data processing on this website is:' },
-          {
-            list: [
-              '[PLEASE COMPLETE: full name, e.g. Malin Langer]',
-              'EVOQUE – Yourself // Coaching & Strategy',
-              '[PLEASE COMPLETE: street and house number]',
-              '[PLEASE COMPLETE: postal code and city], Germany',
-              `Email: ${EMAIL}`,
-              'Phone: [PLEASE COMPLETE: phone number]',
-            ],
-          },
-          {
-            p: 'We are not legally required to appoint a data protection officer and have not appointed one.',
-          },
-        ],
-      },
-      {
-        title: '2. Principles and legal bases',
-        blocks: [
-          {
-            p: 'We only process personal data where there is a legal basis for doing so. Legal bases are in particular: your consent (Art. 6 (1) (a) GDPR), the initiation or performance of a contract or pre-contractual measures at your request (Art. 6 (1) (b) GDPR), compliance with legal obligations (Art. 6 (1) (c) GDPR), and our legitimate interest in a secure and functional web presence (Art. 6 (1) (f) GDPR).',
-          },
-        ],
-      },
-      {
-        title: '3. Hosting and server log files',
-        blocks: [
-          {
-            p: 'This website is hosted by an external service provider: Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA (or the Vercel group). The provider processes, on our behalf, data required to provide and operate the website. To deliver optimised images faster (modern formats such as WebP/AVIF, appropriate sizes), we also use the image optimisation integrated in Vercel; the image files are processed and cached on Vercel’s infrastructure in the process.',
-          },
-          {
-            p: 'When the website is accessed, the server automatically collects information and stores it in so-called server log files. This includes in particular: the IP address of the requesting device, date and time of access, the page/file accessed, the amount of data transferred, the browser and operating system used, and the previously visited page (referrer).',
-          },
-          {
-            p: 'This processing serves to ensure trouble-free operation and the security of our website. The legal basis is our legitimate interest (Art. 6 (1) (f) GDPR). As data may be transferred to the USA, we have concluded a data processing agreement with the provider and base the transfer on appropriate safeguards (e.g. EU standard contractual clauses or the EU-US Data Privacy Framework). [PLEASE CHECK: conclude and confirm a data processing agreement with the hosting provider.]',
-          },
-        ],
-      },
-      {
-        title: '4. Fonts (Google Fonts)',
-        blocks: [
-          {
-            p: 'To display fonts consistently, this website uses Google Fonts provided by Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland. When a page is accessed, your browser loads the required fonts directly from Google servers in order to display text correctly. Your IP address is transmitted to Google in the process; a transfer to the USA is possible.',
-          },
-          {
-            p: 'The legal basis is our legitimate interest in a consistent and appealing presentation of our offer (Art. 6 (1) (f) GDPR). Further information can be found in Google’s privacy policy at https://policies.google.com/privacy and at https://developers.google.com/fonts/faq. [RECOMMENDATION: host Google Fonts locally on your own server (self-hosting); the transfer to Google is then avoided and this section can be removed.]',
-          },
-        ],
-      },
-      {
-        title: '5. Contact by email',
-        blocks: [
-          {
-            p: 'If you contact us by email, we process the data you provide (e.g. name, email address, content of the message) in order to answer your enquiry. The legal basis is Art. 6 (1) (b) GDPR (for contract-related enquiries) or our legitimate interest in answering enquiries (Art. 6 (1) (f) GDPR).',
-          },
-          {
-            p: 'Our email inbox is operated via a service by Google (Gmail, Google Ireland Limited). The data you send by email is therefore processed on that provider’s servers. We store your enquiry until the purpose of processing no longer applies and no statutory retention obligations prevent deletion.',
-          },
-        ],
-      },
-      {
-        title: '6. Online appointment booking (Cal.com)',
-        blocks: [
-          {
-            p: 'To book (intro) appointments, we integrate the Cal.com service (Cal.com, Inc., USA). When the booking page is accessed, a script is loaded from Cal.com servers and the booking calendar is embedded directly into the page. Your IP address may be transmitted to Cal.com in the process.',
-          },
-          {
-            p: 'When you book an appointment, Cal.com processes the data you enter (in particular name, email address, desired appointment and any further details you provide) on our behalf in order to arrange the appointment. To check availability, the calendar is linked to our Google Calendar (two-way synchronisation of busy times).',
-          },
-          {
-            p: 'The legal basis is Art. 6 (1) (b) GDPR (performance of pre-contractual measures / contract initiation) and our legitimate interest in efficient appointment management (Art. 6 (1) (f) GDPR). Further information: https://cal.com/privacy. [PLEASE CHECK: conclude a data processing agreement with Cal.com; use the EU instance (cal.eu) where possible.]',
-          },
-        ],
-      },
-      {
-        title: '7. Embedding of Instagram content',
-        blocks: [
-          {
-            p: 'On the contact page and the company page we embed an excerpt of our Instagram profile via an iframe. The provider is Meta Platforms Ireland Limited, 4 Grand Canal Square, Grand Canal Harbour, Dublin 2, Ireland. When this embed loads, a connection is established to Meta/Instagram servers; your IP address may be transmitted and cookies may be set, even if you are not logged in to Instagram or do not have an account. A transfer to the USA is possible.',
-          },
-          {
-            p: 'We have no influence on the scope and purpose of the data collection by Meta or its further processing. Information can be found in Meta/Instagram’s privacy policy at https://privacycenter.instagram.com/policy. [PLEASE CHECK: the embed currently loads automatically. A consent solution (e.g. a “two-click solution”/consent banner) that loads Instagram only after active consent is usually required to be legally compliant (Art. 6 (1) (a) GDPR, § 25 (1) TDDDG). Please seek advice until then.]',
-          },
-        ],
-      },
-      {
-        title: '8. Social media presence (Instagram)',
-        blocks: [
-          {
-            p: 'We maintain a profile on Instagram (@evoqueyourself) and link to it. If you follow or visit our profile, Meta Platforms Ireland Limited processes your data under its own responsibility in accordance with its privacy policy. For processing carried out jointly with Meta in connection with our page, the provider’s respective terms apply.',
-          },
-        ],
-      },
-      {
-        title: '9. Cookies and local storage',
-        blocks: [
-          {
-            p: 'This website only uses technically necessary or functional cookies. We do not use any analytics, tracking or advertising cookies.',
-          },
-          {
-            list: [
-              'evoque_lang – stores your selected language (German/English) so the site is displayed in your preferred language. Functional cookie, legal basis Art. 6 (1) (f) GDPR or § 25 (2) TDDDG (strictly necessary for the requested function).',
-              'evoque_gate – set only during the preview/build phase: while the website is protected by a password, this technically necessary cookie remembers your access after you enter the correct password so the protected pages do not ask for the password on every visit. It has no analytics or tracking function and expires automatically after 30 days. Legal basis: § 25 (2) TDDDG (strictly necessary) or Art. 6 (1) (f) GDPR. [PLEASE CHECK: once the site goes live without password protection this cookie no longer applies – remove this item then.]',
-            ],
-          },
-          {
-            p: 'You can delete cookies at any time in your browser settings or restrict their storage. If functional cookies are disabled, some functions (e.g. the persistent language selection) may no longer be fully available.',
-          },
-        ],
-      },
-      {
-        title: '10. Storage period',
-        blocks: [
-          {
-            p: 'We only store personal data for as long as is necessary for the respective purposes or as required by statutory retention periods (e.g. under commercial and tax law). After that, the data is deleted or blocked.',
-          },
-        ],
-      },
-      {
-        title: '11. Your rights',
-        blocks: [
-          { p: 'Within the framework of the statutory provisions, you have the following rights:' },
-          {
-            list: [
-              'Access to the personal data stored about you (Art. 15 GDPR)',
-              'Rectification of inaccurate data (Art. 16 GDPR)',
-              'Erasure (“right to be forgotten”, Art. 17 GDPR)',
-              'Restriction of processing (Art. 18 GDPR)',
-              'Data portability (Art. 20 GDPR)',
-              'Objection to processing based on a legitimate interest (Art. 21 GDPR)',
-              'Withdrawal of consent given, with effect for the future (Art. 7 (3) GDPR)',
-            ],
-          },
-          {
-            p: `To exercise your rights, an informal message to ${EMAIL} is sufficient.`,
-          },
-        ],
-      },
-      {
-        title: '12. Right to lodge a complaint with a supervisory authority',
-        blocks: [
-          {
-            p: 'Without prejudice to any other legal remedy, you have the right to lodge a complaint with a data protection supervisory authority if you believe that the processing of your personal data violates the GDPR. The competent authority is the supervisory authority of the federal state in which the controller is based. [PLEASE COMPLETE: competent state supervisory authority by federal state.]',
-          },
-        ],
-      },
-      {
-        title: '13. Validity and changes to this privacy policy',
-        blocks: [
-          {
-            p: 'This privacy policy is currently valid. As the website develops or due to changed legal or regulatory requirements, it may become necessary to adjust this policy. The current version can be accessed on this page at any time.',
-          },
-        ],
-      },
-    ] as Section[],
-    note: 'Note: This text is a carefully prepared draft, but it is not legal advice. The points marked with [PLEASE COMPLETE] or [PLEASE CHECK] must be added or legally clarified before publication.',
-  },
+const meta = {
+  de: { title: 'Datenschutz', desc: 'Datenschutzerklärung von EVOQUE – Malin Langer, Oelde.', eyebrow: 'Rechtliches' },
+  en: { title: 'Privacy', desc: 'Privacy policy (Datenschutzerklärung) of EVOQUE – Malin Langer, Oelde, Germany.', eyebrow: 'Legal' },
 }[lang];
+
+const ext = { target: '_blank', rel: 'noopener noreferrer' };
 ---
 
-<BaseLayout title={c.metaTitle} description={c.metaDesc}>
+<BaseLayout title={meta.title} description={meta.desc}>
   <section class="section">
     <div class="container container--narrow legal">
-      <p class="eyebrow">{c.eyebrow}</p>
-      <h1>{c.title}</h1>
+      <p class="eyebrow">{meta.eyebrow}</p>
+      {lang === 'en' && (
+        <p class="legal__lang-note">
+          The privacy policy (Datenschutzerklärung) is only available in German.
+        </p>
+      )}
 
-      <p class="lead">{c.intro}</p>
+      <div lang="de">
+        <h1>Datenschutzerklärung</h1>
 
-      {c.sections.map((s) => (
-        <>
-          <h2>{s.title}</h2>
-          {s.blocks.map((b) =>
-            'list' in b ? (
-              <ul>
-                {b.list.map((item) => <li>{item}</li>)}
-              </ul>
-            ) : (
-              <p>{b.p}</p>
-            ),
-          )}
-        </>
-      ))}
+        <h2>1. Verantwortlicher</h2>
+        <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
+        <p>
+          Malin Langer<br />
+          Inhaberin von EVOQUE<br />
+          Joseph-Cardijn-Straße 30<br />
+          59302 Oelde<br />
+          E-Mail: <Email />
+        </p>
+        <p>
+          Ein Datenschutzbeauftragter ist nicht bestellt, da hierzu keine gesetzliche Pflicht
+          besteht.
+        </p>
 
-      <p class="legal__note text-muted">{c.note}</p>
+        <h2>2. Allgemeine Informationen zur Datenverarbeitung</h2>
+        <p>
+          <strong>Rechtsgrundlagen.</strong> Ich verarbeite personenbezogene Daten nur, wenn eine
+          Rechtsgrundlage der Datenschutz-Grundverordnung (DSGVO) dies erlaubt. In Betracht
+          kommen:
+        </p>
+        <ul>
+          <li>
+            Art. 6 Abs. 1 lit. a DSGVO – Ihre Einwilligung. Sie können sie jederzeit mit Wirkung
+            für die Zukunft widerrufen.
+          </li>
+          <li>
+            Art. 6 Abs. 1 lit. b DSGVO – die Erfüllung eines Vertrags oder vorvertragliche
+            Maßnahmen, etwa eine Terminbuchung oder das Coaching.
+          </li>
+          <li>
+            Art. 6 Abs. 1 lit. c DSGVO – eine rechtliche Pflicht, etwa steuerrechtliche
+            Aufbewahrungspflichten.
+          </li>
+          <li>
+            Art. 6 Abs. 1 lit. f DSGVO – mein berechtigtes Interesse, sofern Ihre Interessen nicht
+            überwiegen.
+          </li>
+          <li>
+            Art. 9 Abs. 2 lit. a DSGVO – Ihre ausdrückliche Einwilligung, soweit Gesundheitsdaten
+            betroffen sind.
+          </li>
+        </ul>
+        <p>
+          Werden Informationen auf Ihrem Endgerät gespeichert oder dort ausgelesen (z. B.
+          Cookies), gilt zusätzlich § 25 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes
+          (TDDDG). Das ist nur mit Ihrer Einwilligung zulässig, außer es ist für den von Ihnen
+          gewünschten Dienst unbedingt erforderlich.
+        </p>
+        <p>
+          <strong>Speicherdauer.</strong> Ich lösche Ihre Daten, sobald der Zweck der Verarbeitung
+          entfällt und keine gesetzliche Aufbewahrungspflicht entgegensteht. Die konkreten
+          Fristen nenne ich in den einzelnen Abschnitten.
+        </p>
+        <p>
+          <strong>Empfänger.</strong> Ich setze Dienstleister ein, die Daten in meinem Auftrag
+          verarbeiten (Auftragsverarbeiter nach Art. 28 DSGVO). Mit ihnen habe ich Verträge zur
+          Auftragsverarbeitung geschlossen. Darüber hinaus gebe ich Daten nur weiter, wenn dies
+          für die Abwicklung eines Vertrags erforderlich ist oder ich gesetzlich dazu verpflichtet
+          bin (siehe Abschnitt 9). Ich verkaufe keine Daten und gebe sie nicht zu Werbezwecken
+          weiter.
+        </p>
+        <p>
+          <strong>Übermittlung in Drittländer.</strong> Einige Dienstleister haben ihren Sitz in
+          den USA, gehören zu Unternehmensgruppen mit Sitz dort oder können Daten dort verarbeiten
+          (Cal.com, Microsoft, Meta). Für die USA besteht ein Angemessenheitsbeschluss der
+          EU-Kommission (EU-U.S. Data Privacy Framework, Art. 45 DSGVO) für Unternehmen, die
+          danach zertifiziert sind. Ergänzend sind EU-Standardvertragsklauseln vereinbart (Art. 46
+          Abs. 2 lit. c DSGVO). Ein Restrisiko, dass US-Behörden auf Daten zugreifen, lässt sich
+          nicht ausschließen.
+        </p>
+        <p>
+          <strong>Keine automatisierte Entscheidung.</strong> Ich nutze keine automatisierte
+          Entscheidungsfindung und kein Profiling im Sinne von Art. 22 DSGVO.
+        </p>
+        <p>
+          <strong>Pflicht zur Angabe.</strong> Die Website können Sie ohne Angabe persönlicher
+          Daten nutzen. Für eine Terminbuchung oder ein Coaching benötige ich die jeweils als
+          erforderlich gekennzeichneten Angaben; ohne sie ist die Buchung bzw. der Vertrag nicht
+          möglich.
+        </p>
+
+        <h2>3. Hosting und Bereitstellung der Website</h2>
+        <p>
+          Diese Website wird bei der netcup GmbH, Daimlerstraße 25, 76185 Karlsruhe, Deutschland,
+          gehostet. Die Server stehen in Deutschland.
+        </p>
+        <p>
+          Bei jedem Aufruf der Website speichert der Server automatisch Informationen, die Ihr
+          Browser übermittelt (Server-Logfiles):
+        </p>
+        <ul>
+          <li>IP-Adresse</li>
+          <li>Datum und Uhrzeit des Zugriffs</li>
+          <li>aufgerufene Seite bzw. Datei</li>
+          <li>zuvor besuchte Seite (Referrer)</li>
+          <li>Browsertyp, Browserversion und Betriebssystem</li>
+          <li>übertragene Datenmenge und Statuscode</li>
+        </ul>
+        <p>
+          Diese Daten sind technisch nötig, um die Website auszuliefern und ihre Stabilität und
+          Sicherheit zu gewährleisten, etwa zur Abwehr von Angriffen. Rechtsgrundlage ist mein
+          berechtigtes Interesse nach Art. 6 Abs. 1 lit. f DSGVO. Die Logfiles werden nach 14
+          Tagen automatisch gelöscht. Mit netcup habe ich einen Vertrag zur Auftragsverarbeitung
+          geschlossen.
+        </p>
+        <p>
+          <strong>Verschlüsselung.</strong> Die Website nutzt eine SSL- bzw. TLS-Verschlüsselung.
+          Sie erkennen sie an „https://“ und dem Schloss-Symbol in der Adresszeile. Daten, die Sie
+          an die Website übermitteln, können dadurch nicht von Dritten mitgelesen werden.
+        </p>
+
+        <h2>4. Cookies und Einwilligungsverwaltung</h2>
+        <p>
+          Diese Website verwendet Cookies und ähnliche Techniken (z. B. den lokalen Speicher Ihres
+          Browsers). Das sind kleine Datensätze, die auf Ihrem Endgerät gespeichert werden.
+        </p>
+        <p>
+          <strong>Technisch notwendige Cookies</strong> setze ich ohne Einwilligung ein, weil die
+          Website sonst nicht wie gewünscht funktioniert. Dazu gehört das Speichern Ihrer Auswahl
+          im Cookie-Banner. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG in Verbindung mit Art. 6
+          Abs. 1 lit. f DSGVO.
+        </p>
+        <p>
+          <strong>Externe Inhalte</strong> – der Buchungskalender von Cal.com (Abschnitt 5) und
+          der Instagram-Feed (Abschnitt 6) – werden erst geladen, wenn Sie im Banner zustimmen.
+          Rechtsgrundlage ist dann Ihre Einwilligung nach § 25 Abs. 1 TDDDG und Art. 6 Abs. 1 lit.
+          a DSGVO.
+        </p>
+        <p>
+          Zur Verwaltung Ihrer Einwilligung nutze ich ein selbst programmiertes Einwilligungs-Tool,
+          das vollständig auf meinem Webserver bei netcup läuft; ein externer Anbieter ist nicht
+          beteiligt. Es speichert Ihre Auswahl für 12 Monate in einem Cookie auf Ihrem Gerät. Zum
+          Nachweis Ihrer Einwilligung wird Ihre Entscheidung (Zeitpunkt, Auswahl und Version des
+          Banners) protokolliert. Rechtsgrundlage hierfür ist meine gesetzliche Nachweispflicht
+          nach Art. 7 Abs. 1 DSGVO in Verbindung mit Art. 6 Abs. 1 lit. c DSGVO. Sie können Ihre
+          Einwilligung jederzeit über den Link
+          „<button type="button" class="legal__inline-btn" data-consent-open>Cookie-Einstellungen</button>“
+          im Fußbereich der Website ändern oder widerrufen.
+        </p>
+
+        <h2>5. Online-Terminbuchung über Cal.com</h2>
+        <p>
+          Für die Buchung von Terminen nutze ich den Dienst Cal.com. Anbieter ist die Cal.com,
+          Inc., 2261 Market Street #4382, San Francisco, CA 94114, USA. Der Buchungskalender ist
+          direkt in diese Website eingebunden.
+        </p>
+        <p>
+          <strong>Beim Laden des Kalenders</strong> stellt Ihr Browser eine Verbindung zu den
+          Servern von Cal.com her. Dabei werden Ihre IP-Adresse, Browserinformationen und die
+          aufgerufene Seite übertragen; gegebenenfalls werden Informationen auf Ihrem Endgerät
+          gespeichert. Der Kalender wird deshalb erst geladen, wenn Sie eingewilligt haben (§ 25
+          Abs. 1 TDDDG, Art. 6 Abs. 1 lit. a DSGVO). Ohne Einwilligung können Sie Termine per
+          E-Mail vereinbaren.
+        </p>
+        <p>
+          <strong>Bei einer Buchung</strong> verarbeite ich die Daten, die Sie eingeben: Ihren
+          Namen, Ihre E-Mail-Adresse, das Angebot, für das Sie sich interessieren, Ihr Anliegen,
+          den gewünschten Termin, Ihre Zeitzone sowie freiwillig gemachte weitere Informationen.
+          Pflichtangaben sind als solche gekennzeichnet. Ich nutze diese Daten, um den Termin zu
+          vereinbaren, durchzuführen und Ihnen eine Bestätigung mit Kalendereinladung sowie
+          Erinnerungen per E-Mail zu senden. Für Online-Termine wird ein Link zu Microsoft Teams
+          erzeugt (siehe Abschnitt 9). Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO. Bitte
+          machen Sie bei der Buchung keine Angaben zu Ihrer Gesundheit.
+        </p>
+        <p>
+          Cal.com verarbeitet die Daten als mein Auftragsverarbeiter; ich habe mit Cal.com einen
+          Vertrag zur Auftragsverarbeitung geschlossen. Die Daten werden in den USA verarbeitet.
+          Die Übermittlung stützt sich auf die Zertifizierung von Cal.com, Inc. nach dem EU-U.S.
+          Data Privacy Framework (Art. 45 DSGVO); soweit diese nicht greift, auf die im Vertrag
+          vereinbarten EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO). Soweit Cal.com
+          Daten für eigene Zwecke verarbeitet, etwa zum Betrieb und zur Sicherheit des Dienstes,
+          ist Cal.com hierfür selbst verantwortlich.
+        </p>
+        <p>
+          Buchungsdaten lösche ich 12 Monate nach dem Termin, sofern kein Coachingvertrag zustande
+          kommt; andernfalls gilt Abschnitt 9. Weitere Informationen:
+          <a href="https://cal.com/privacy" {...ext}>Datenschutzerklärung von Cal.com</a>.
+        </p>
+
+        <h2>6. Eingebundener Instagram-Feed</h2>
+        <p>
+          Auf dieser Website zeige ich die neuesten Beiträge meines Instagram-Profils. Anbieter
+          ist die Meta Platforms Ireland Limited, Merrion Road, Dublin 4, D04 X2K5, Irland.
+        </p>
+        <p>
+          Wenn der Feed geladen wird, stellt Ihr Browser eine Verbindung zu Servern von Meta her.
+          Dabei werden Ihre IP-Adresse und Browserinformationen an Meta übermittelt. Sind Sie
+          gleichzeitig bei Instagram angemeldet, kann Meta den Besuch Ihrem Konto zuordnen. Meta
+          kann Daten auch in die USA übermitteln; die Meta Platforms, Inc. ist nach dem EU-U.S.
+          Data Privacy Framework zertifiziert.
+        </p>
+        <p>
+          Der Feed wird erst geladen, wenn Sie eingewilligt haben (§ 25 Abs. 1 TDDDG, Art. 6 Abs.
+          1 lit. a DSGVO). Sie können Ihre Einwilligung jederzeit über die
+          Cookie-Einstellungen widerrufen. Soweit ich mit Meta für die Erhebung und Übermittlung
+          dieser Daten gemeinsam verantwortlich bin (Art. 26 DSGVO), beschränkt sich das auf
+          diesen Vorgang. Auf die weitere Verarbeitung durch Meta habe ich keinen Einfluss.
+          Weitere Informationen:
+          <a href="https://privacycenter.instagram.com/policy" {...ext}>Datenschutzrichtlinie von Instagram</a>.
+        </p>
+
+        <h2>7. Kontakt per E-Mail oder Telefon</h2>
+        <p>
+          Wenn Sie mir eine E-Mail schreiben oder mich anrufen, verarbeite ich Ihre E-Mail-Adresse
+          bzw. Telefonnummer, Ihren Namen (falls angegeben), den Inhalt Ihres Anliegens und den
+          Zeitpunkt der Kontaktaufnahme. Ich nutze diese Daten, um Ihre Anfrage zu beantworten.
+          Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, wenn Ihre Anfrage mit einem Vertrag oder
+          einem möglichen Coaching zusammenhängt, sonst mein berechtigtes Interesse an der
+          Beantwortung (Art. 6 Abs. 1 lit. f DSGVO).
+        </p>
+        <p>
+          Ich lösche Ihre Nachricht bzw. meine Notizen zu Ihrem Anruf, wenn die Anfrage
+          abschließend bearbeitet ist, spätestens nach 6 Monaten, sofern keine gesetzliche
+          Aufbewahrungspflicht besteht. Mein E-Mail-Postfach liegt ebenfalls bei der netcup GmbH
+          (Anschrift siehe Abschnitt 3); mit netcup habe ich einen Vertrag zur
+          Auftragsverarbeitung geschlossen.
+        </p>
+        <p>
+          E-Mails werden in der Regel nicht Ende-zu-Ende verschlüsselt. Für sehr vertrauliche
+          Inhalte sprechen Sie mich gern auf einem anderen Weg an. Bitte teilen Sie mir in Ihrer
+          ersten Nachricht keine Angaben zu Ihrer Gesundheit mit; solche Themen besprechen wir
+          gern im Erstgespräch.
+        </p>
+
+        <h2>8. Mein Instagram-Profil</h2>
+        <p>
+          Ich betreibe ein Unternehmensprofil bei Instagram (@evoqueyourself). Anbieter ist die
+          Meta Platforms Ireland Limited (Anschrift siehe Abschnitt 6).
+        </p>
+        <p>
+          Wenn Sie mein Profil besuchen, verarbeitet Meta Ihre Daten nach eigenen Bedingungen.
+          Meta stellt mir darüber hinaus zusammengefasste Statistiken zur Nutzung meines Profils
+          bereit (Insights), aus denen ich keine einzelnen Personen erkennen kann. Für diese
+          Statistiken bin ich mit Meta gemeinsam verantwortlich (Art. 26 DSGVO). Die zugrunde
+          liegende
+          <a href="https://www.facebook.com/legal/terms/page_controller_addendum" {...ext}>Vereinbarung zur gemeinsamen Verantwortlichkeit</a>
+          gilt auch für Instagram; darin übernimmt Meta die primäre Verantwortung, etwa für
+          Auskunftsanfragen.
+        </p>
+        <p>
+          Wenn Sie mir über Instagram schreiben oder kommentieren, verarbeite ich diese Inhalte, um
+          mit Ihnen zu kommunizieren (Art. 6 Abs. 1 lit. b bzw. lit. f DSGVO). Ihre Rechte können
+          Sie am wirksamsten direkt bei Meta geltend machen; Anfragen an mich leite ich bei Bedarf
+          an Meta weiter. Nachrichten, die Sie mir über Instagram senden, lösche ich, sobald Ihr
+          Anliegen abschließend bearbeitet ist, spätestens nach 12 Monaten, sofern keine
+          gesetzliche Aufbewahrungspflicht besteht.
+        </p>
+
+        <h2>9. Durchführung des Coachings und Kommunikation über Microsoft Teams</h2>
+        <p>
+          <strong>Vertragsdaten.</strong> Wenn Sie ein Coaching bei mir buchen, verarbeite ich
+          Ihren Namen, Ihre Anschrift, E-Mail-Adresse, Ihre Telefonnummer (sofern Sie sie angeben),
+          die vereinbarten Termine sowie Rechnungs- und Zahlungsdaten. Rechtsgrundlage ist Art. 6
+          Abs. 1 lit. b DSGVO; für Rechnungen zusätzlich Art. 6 Abs. 1 lit. c DSGVO in Verbindung
+          mit steuerrechtlichen Aufbewahrungspflichten. Soweit erforderlich, gebe ich Rechnungs-
+          und Zahlungsdaten an mein Kreditinstitut zur Zahlungsabwicklung, sowie im Rahmen
+          gesetzlicher Pflichten an Finanzbehörden weiter.
+        </p>
+        <p>
+          <strong>Inhalte des Coachings.</strong> Ich führe zu den Sitzungen Notizen. Im Coaching
+          können Themen zur Sprache kommen, die Ihre Gesundheit betreffen, etwa Stress,
+          Belastungen und psychische Schwierigkeiten. Solche Angaben verarbeite ich nur mit Ihrer
+          ausdrücklichen Einwilligung, die ich im Coachingvertrag einhole (Art. 9 Abs. 2 lit. a
+          DSGVO). Sie können sie jederzeit widerrufen. Einzelheiten erhalten Sie mit dem
+          Coachingvertrag.
+        </p>
+        <p>
+          <strong>Microsoft Teams.</strong> Für Nachrichten, Dateiaustausch und Videositzungen
+          nutze ich Microsoft Teams. Anbieter ist die Microsoft Ireland Operations Limited, One
+          Microsoft Place, South County Business Park, Leopardstown, Dublin 18, D18 P521, Irland.
+          Dabei werden insbesondere verarbeitet: Name, E-Mail-Adresse und Anzeigename,
+          Chatnachrichten und geteilte Dateien, Termin- und Teilnahmedaten (Zeitpunkt, Dauer,
+          Teilnehmende), IP-Adresse und Geräteinformationen sowie während einer Videositzung Bild
+          und Ton. Videositzungen werden nicht aufgezeichnet. Kamera und Mikrofon können Sie
+          jederzeit selbst ausschalten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.
+        </p>
+        <p>
+          Die Microsoft Ireland Operations Limited verarbeitet die Daten als mein
+          Auftragsverarbeiter auf Grundlage der Datenschutzvereinbarung für Geschäftskunden. Die
+          Daten werden grundsätzlich in der EU gespeichert; Zugriffe aus den USA sind nicht
+          ausgeschlossen. Dafür gelten die Zertifizierung der US-Muttergesellschaft Microsoft
+          Corporation nach dem EU-U.S. Data Privacy Framework und EU-Standardvertragsklauseln.
+          Soweit Microsoft Daten für eigene Zwecke verarbeitet, etwa wenn Sie eine
+          Microsoft-Website aufrufen oder ein eigenes Microsoft-Konto nutzen, ist Microsoft hierfür
+          selbst verantwortlich. Sie können an Videositzungen ohne eigenes Microsoft-Konto über
+          Ihren Browser teilnehmen.
+        </p>
+        <p>
+          <strong>Speicherdauer.</strong> Coachingnotizen und Teams-Chats lösche ich 3 Jahre nach
+          Abschluss des Coachings. Rechnungen und andere steuerlich relevante Unterlagen bewahre
+          ich so lange auf, wie es gesetzlich vorgeschrieben ist (bis zu zehn Jahre).
+        </p>
+
+        <h2>10. Ihre Rechte</h2>
+        <p>Sie haben jederzeit das Recht auf:</p>
+        <ul>
+          <li>Auskunft über die Daten, die ich über Sie gespeichert habe (Art. 15 DSGVO),</li>
+          <li>Berichtigung unrichtiger Daten (Art. 16 DSGVO),</li>
+          <li>Löschung Ihrer Daten (Art. 17 DSGVO),</li>
+          <li>Einschränkung der Verarbeitung (Art. 18 DSGVO),</li>
+          <li>Datenübertragbarkeit (Art. 20 DSGVO),</li>
+          <li>Widerruf einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO),</li>
+          <li>
+            Beschwerde bei einer Datenschutz-Aufsichtsbehörde (Art. 77 DSGVO), insbesondere in dem
+            EU-Mitgliedstaat Ihres Aufenthaltsorts, Ihres Arbeitsplatzes oder des Orts des
+            mutmaßlichen Verstoßes. Für mich zuständig ist Landesbeauftragte für Datenschutz und
+            Informationsfreiheit Nordrhein-Westfalen, Kavalleriestraße 2–4, 40213 Düsseldorf.
+          </li>
+        </ul>
+        <p>Für alle Anliegen genügt eine formlose Nachricht an <Email />.</p>
+        <p>
+          <strong>Widerspruchsrecht nach Art. 21 DSGVO.</strong> Verarbeite ich Ihre Daten auf
+          Grundlage meines berechtigten Interesses (Art. 6 Abs. 1 lit. f DSGVO), können Sie dieser
+          Verarbeitung aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit
+          widersprechen. Ich verarbeite die Daten dann nicht mehr, es sei denn, ich kann zwingende
+          schutzwürdige Gründe nachweisen, die Ihre Interessen überwiegen, oder die Verarbeitung
+          dient der Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen.
+        </p>
+
+        <h2>11. Aktualität dieser Datenschutzerklärung</h2>
+        <p>
+          Stand: 21. Oktober 2026. Ich passe diese Datenschutzerklärung an, wenn sich die Website,
+          die eingesetzten Dienste oder die Rechtslage ändern.
+        </p>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -390,13 +371,30 @@ const c = {
     margin-top: var(--space-sm);
   }
   .legal ul {
-    margin: var(--space-sm) 0 0;
+    margin: var(--space-sm) 0;
     padding-left: 1.2em;
     display: grid;
     gap: var(--space-2xs);
   }
-  .legal__note {
-    margin-top: var(--space-2xl);
-    font-size: 0.9rem;
+  .legal a,
+  .legal__inline-btn {
+    color: var(--forest-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+  /* „Cookie-Einstellungen“ im Fließtext öffnet direkt die Einstellungen. */
+  .legal__inline-btn {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+  .legal__lang-note {
+    padding: var(--space-sm) var(--space-md);
+    background: var(--soft-sand);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
   }
 </style>

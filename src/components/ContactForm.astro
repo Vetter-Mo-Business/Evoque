@@ -1,0 +1,237 @@
+---
+// Kontaktformular – läuft komplett auf dem eigenen Server:
+// Versand über public/api/kontakt.php an das netcup-Postfach, keine
+// Speicherung, kein externer Formular- oder Captcha-Dienst.
+// Spamschutz: verstecktes Honeypot-Feld + Mindest-Ausfüllzeit.
+// Funktioniert auch ohne Cookie-Zustimmung und ohne JavaScript
+// (dann klassischer Seitenwechsel statt Meldung im Formular).
+import { localizePath, type Lang } from '../i18n/ui';
+
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+const privacyHref = localizePath('/datenschutz', lang);
+
+const c = {
+  de: {
+    name: 'Name',
+    email: 'E-Mail-Adresse',
+    message: 'Nachricht',
+    required: 'Pflichtfeld',
+    honeypot: 'Bitte dieses Feld leer lassen',
+    submit: 'Nachricht senden',
+    sending: 'Wird gesendet …',
+    privacyBefore: 'Informationen zur Verarbeitung Ihrer Daten finden Sie in der ',
+    privacyLink: 'Datenschutzerklärung',
+    privacyAfter: '.',
+    ok: 'Vielen Dank! Die Nachricht ist angekommen. Ich melde mich so bald wie möglich.',
+    error:
+      'Die Nachricht konnte leider nicht gesendet werden. Bitte versuchen Sie es später erneut oder schreiben Sie direkt eine E-Mail.',
+    invalid: 'Bitte füllen Sie alle Felder aus und prüfen Sie die E-Mail-Adresse.',
+  },
+  en: {
+    name: 'Name',
+    email: 'Email address',
+    message: 'Message',
+    required: 'required',
+    honeypot: 'Please leave this field empty',
+    submit: 'Send message',
+    sending: 'Sending …',
+    privacyBefore: 'Information on how your data is processed can be found in the ',
+    privacyLink: 'privacy policy',
+    privacyAfter: '.',
+    ok: 'Thank you! Your message has arrived. I will get back to you as soon as possible.',
+    error:
+      'Unfortunately, the message could not be sent. Please try again later or write an email directly.',
+    invalid: 'Please fill in all fields and check the email address.',
+  },
+}[lang];
+---
+
+<form
+  class="contact-form"
+  action="/api/kontakt.php"
+  method="post"
+  accept-charset="UTF-8"
+  data-contact-form
+  data-msg-ok={c.ok}
+  data-msg-error={c.error}
+  data-msg-invalid={c.invalid}
+  data-msg-sending={c.sending}
+>
+  <input type="hidden" name="lang" value={lang} />
+  <input type="hidden" name="t" value="" data-contact-time />
+
+  <div class="contact-form__row">
+    <div class="contact-form__field">
+      <label for="cf-name">{c.name} <span class="contact-form__req">({c.required})</span></label>
+      <input id="cf-name" name="name" type="text" required maxlength="100" autocomplete="name" />
+    </div>
+    <div class="contact-form__field">
+      <label for="cf-email">{c.email} <span class="contact-form__req">({c.required})</span></label>
+      <input id="cf-email" name="email" type="email" required maxlength="254" autocomplete="email" />
+    </div>
+  </div>
+
+  <div class="contact-form__field">
+    <label for="cf-message">{c.message} <span class="contact-form__req">({c.required})</span></label>
+    <textarea id="cf-message" name="message" rows="6" required maxlength="5000"></textarea>
+  </div>
+
+  <!-- Honeypot: für Menschen unsichtbar, Bots füllen es aus. -->
+  <div class="contact-form__hp" aria-hidden="true">
+    <label for="cf-website">{c.honeypot}</label>
+    <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="contact-form__actions">
+    <button type="submit" class="btn btn--primary" data-contact-submit>{c.submit}</button>
+  </div>
+
+  <p class="contact-form__status" role="status" aria-live="polite" data-contact-status hidden></p>
+
+  <p class="contact-form__privacy">
+    {c.privacyBefore}<a href={privacyHref}>{c.privacyLink}</a>{c.privacyAfter}
+  </p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-contact-status]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-contact-submit]')!;
+    const timeField = form.querySelector<HTMLInputElement>('[data-contact-time]')!;
+    const submitLabel = submit.textContent;
+
+    // Zeitpunkt des Seitenaufrufs – Bots senden meist sofort ab.
+    timeField.value = String(Math.floor(Date.now() / 1000));
+
+    function show(text: string, kind: 'ok' | 'error') {
+      status.textContent = text;
+      status.dataset.kind = kind;
+      status.hidden = false;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      submit.disabled = true;
+      submit.textContent = form.dataset.msgSending!;
+      status.hidden = true;
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) {
+          form.reset();
+          timeField.value = String(Math.floor(Date.now() / 1000));
+          show(form.dataset.msgOk!, 'ok');
+        } else if (res.status === 422) {
+          show(form.dataset.msgInvalid!, 'error');
+        } else {
+          show(form.dataset.msgError!, 'error');
+        }
+      } catch {
+        show(form.dataset.msgError!, 'error');
+      } finally {
+        submit.disabled = false;
+        submit.textContent = submitLabel;
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: var(--space-md);
+  }
+  .contact-form__row {
+    display: grid;
+    gap: var(--space-md);
+  }
+  @media (min-width: 640px) {
+    .contact-form__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .contact-form__field {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+  .contact-form label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--forest-deep);
+  }
+  .contact-form__req {
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: #5c544d;
+  }
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--forest-deep);
+    background: #fff;
+    border: 1px solid rgba(133, 124, 117, 0.55);
+    border-radius: var(--radius);
+    padding: 0.7em 0.85em;
+  }
+  .contact-form textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+  .contact-form input:focus-visible,
+  .contact-form textarea:focus-visible {
+    outline: 3px solid var(--sage-harmony);
+    outline-offset: 1px;
+    border-color: var(--forest-deep);
+  }
+  .contact-form__hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .contact-form__actions {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .contact-form__actions .btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
+  }
+  .contact-form__status {
+    margin: 0;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius);
+    font-weight: 500;
+  }
+  .contact-form__status[data-kind='ok'] {
+    background: rgba(172, 191, 175, 0.45);
+    color: var(--forest-deep);
+  }
+  .contact-form__status[data-kind='error'] {
+    background: var(--accent-pilot-soft);
+    color: var(--earth-deep);
+  }
+  .contact-form__privacy {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #5c544d;
+  }
+  .contact-form__privacy a {
+    color: var(--forest-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

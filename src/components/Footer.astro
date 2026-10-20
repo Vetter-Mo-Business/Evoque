@@ -41,7 +41,12 @@ const l = (p: string) => localizePath(p, lang);
       <ul>
         <li><a href={l('/impressum')}>{t('footer.imprint')}</a></li>
         <li><a href={l('/datenschutz')}>{t('footer.privacy')}</a></li>
-        <li><a href={l('/kontakt')}>{t('footer.contactShort')}</a></li>
+        <li>
+          <button type="button" class="site-footer__consent" data-consent-open>
+            {t('footer.cookies')}
+          </button>
+        </li>
+        <li><a href={`${l('/kontakt')}#kontaktformular`}>{t('footer.contactForm')}</a></li>
       </ul>
     </nav>
   </div>
@@ -124,6 +129,21 @@ const l = (p: string) => localizePath(p, lang);
   .site-footer__nav a:hover {
     border-bottom-color: var(--sage-harmony);
   }
+  /* „Cookie-Einstellungen“ ist ein Button (öffnet das Banner), sieht aber
+     aus wie die Links daneben. */
+  .site-footer__consent {
+    background: none;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    padding: 0;
+    font: inherit;
+    color: var(--on-dark);
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+  .site-footer__consent:hover {
+    border-bottom-color: var(--sage-harmony);
+  }
 
   .site-footer__bar {
     border-top: 1px solid rgba(172, 191, 175, 0.25);
@@ -165,3 +185,13 @@ const l = (p: string) => localizePath(p, lang);
     flex-shrink: 0;
   }
 </style>
+
+<script>
+  import { openConsentSettings } from '../lib/consent';
+
+  // Gilt für alle „Cookie-Einstellungen“-Schalter der Seite (Footer und
+  // Datenschutzerklärung).
+  document.querySelectorAll('[data-consent-open]').forEach((btn) => {
+    btn.addEventListener('click', () => openConsentSettings());
+  });
+</script>

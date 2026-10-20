@@ -1,46 +1,23 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-import vercel from '@astrojs/vercel';
-
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://evoque-yourself.example',
+  site: 'https://evoque-yourself.com',
   // Zweisprachigkeit: Deutsch unter "/", Englisch unter "/en/...".
-  // fallbackType "rewrite": noch nicht übersetzte /en-Seiten zeigen vorerst
-  // den deutschen Inhalt unter der /en-URL (kein 404), bis eine echte
-  // englische Seite (src/pages/en/...) den Fallback überschreibt.
+  // Jede /en-Seite liegt als eigene Datei unter src/pages/en/ und rendert
+  // den deutschen Seitenaufbau mit englischen Texten.
   i18n: {
     locales: ['de', 'en'],
     defaultLocale: 'de',
     routing: {
       prefixDefaultLocale: false,
-      fallbackType: 'rewrite',
-    },
-    fallback: {
-      en: 'de',
     },
   },
-  // On-Demand-Rendering, damit das Passwort-Gate (Middleware) bei jeder
-  // Anfrage greift und geschützte Seiten gar nicht erst ausgeliefert werden.
-  output: 'server',
-  // Vercels Bild-Optimierung nutzen: <Image> liefert dann kleine, moderne
-  // Formate (WebP/AVIF) in der jeweils benötigten Größe, edge-gecached.
-  // Behebt das ewige Laden der hochauflösenden Originale.
-  adapter: vercel({
-    imageService: true,
-    // Erlaubte Zielbreiten für die Bild-Optimierung. <Image>-Breiten müssen
-    // aus dieser Liste stammen, sonst lehnt Vercel die Anfrage ab.
-    imagesConfig: {
-      sizes: [300, 480, 640, 768, 960, 1200, 1600, 2048],
-      formats: ['image/avif', 'image/webp'],
-    },
-  }),
-  // Astros Origin-Check (CSRF) deaktivieren: hinter Vercels Proxy stimmen
-  // Origin- und Host-Header nicht überein, wodurch das Login-POST sonst als
-  // "cross-site" abgelehnt wird ("Cross-site POST form submissions are
-  // forbidden"). Der Login-Cookie nutzt bereits sameSite: 'lax' als Schutz.
-  security: {
-    checkOrigin: false,
-  },
+  // Rein statische Ausgabe: Der Ordner dist/ wird 1:1 auf das
+  // netcup-Webhosting hochgeladen. Bilder werden beim Bauen lokal
+  // optimiert (sharp), es wird kein fremder Bild-Dienst genutzt.
+  // Das Kontaktformular und das Einwilligungs-Protokoll laufen als
+  // kleine PHP-Skripte (public/api/) auf demselben Server.
+  output: 'static',
 });

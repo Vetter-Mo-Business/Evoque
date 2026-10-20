@@ -1,0 +1,32 @@
+---
+// E-Mail-Adresse mit Spam-Schutz – wie das WordPress-Plugin
+// „Email Address Encoder“: Adresse und mailto-Link stehen im Quelltext nur
+// als HTML-Zeichencodes (&#99;&#x6f;…). Browser zeigen sie ganz normal
+// lesbar und klickbar an, einfache Adress-Sammler finden sie aber nicht.
+// Funktioniert ohne JavaScript.
+import { EMAIL } from '../lib/contact';
+
+interface Props {
+  address?: string;
+  class?: string;
+}
+
+const { address = EMAIL, class: className } = Astro.props;
+
+// Abwechselnd dezimal und hexadezimal kodieren (Reihenfolge fest, damit
+// der Build bei jedem Lauf dasselbe Ergebnis liefert).
+function encode(text: string): string {
+  return Array.from(text)
+    .map((ch, i) => {
+      const code = ch.codePointAt(0)!;
+      return i % 2 === 0 ? `&#${code};` : `&#x${code.toString(16)};`;
+    })
+    .join('');
+}
+
+const html = `<a href="${encode('mailto:' + address)}"${
+  className ? ` class="${className}"` : ''
+}>${encode(address)}</a>`;
+---
+
+<Fragment set:html={html} />

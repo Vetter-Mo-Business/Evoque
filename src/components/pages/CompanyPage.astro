@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TopicCard from '../TopicCard.astro';
+import Email from '../Email.astro';
+import InstagramEmbed from '../InstagramEmbed.astro';
 import portraitImg from '../../assets/about/portrait.jpg';
 import { useTranslations, localizePath, type Lang } from '../../i18n/ui';
 
@@ -113,24 +115,20 @@ const directContent =
     ? {
         title: 'Contact me directly',
         email: 'Email',
-        emailNote: '[PLACEHOLDER: confirm final email address]',
         instagram: 'Instagram',
         instagramHandle: '@evoqueyourself',
         portraitAlt: 'Malin – EVOQUE',
         cardAlt: 'QR code to the EVOQUE Instagram profile',
-        igTitle: 'EVOQUE on Instagram',
         faqPrompt: 'Still have open questions?',
         faqCta: 'To the FAQ',
       }
     : {
         title: 'Kontaktiere mich direkt',
         email: 'E-Mail',
-        emailNote: '[PLATZHALTER: finale E-Mail-Adresse bestätigen]',
         instagram: 'Instagram',
         instagramHandle: '@evoqueyourself',
         portraitAlt: 'Malin – EVOQUE',
         cardAlt: 'QR-Code zum EVOQUE Instagram-Profil',
-        igTitle: 'EVOQUE auf Instagram',
         faqPrompt: 'Noch Fragen offen?',
         faqCta: "Zu den FAQ's",
       };
@@ -284,10 +282,7 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
                 <div>
                   <dt>{directContent.email}</dt>
                   <dd>
-                    <a href="mailto:evoqueyourself.coaching@gmail.com"
-                      >evoqueyourself.coaching@gmail.com</a
-                    >
-                    <span class="contact-note">{directContent.emailNote}</span>
+                    <Email />
                   </dd>
                 </div>
                 <div>
@@ -301,16 +296,7 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
               </dl>
             </article>
 
-            <div class="ig-embed">
-              <iframe
-                src="https://www.instagram.com/evoqueyourself/embed"
-                title={directContent.igTitle}
-                loading="lazy"
-                scrolling="no"
-                frameborder="0"
-                allowtransparency="true"
-              ></iframe>
-            </div>
+            <InstagramEmbed />
           </div>
 
           <p class="contact-faq">
@@ -731,33 +717,7 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
     text-decoration: underline;
     text-underline-offset: 3px;
   }
-  .contact-note {
-    display: block;
-    font-size: 0.82rem;
-    color: var(--calm-earth);
-  }
 
-  /* Instagram-Feed-Einbettung (rechte Spalte, statt QR-Code). Breite begrenzt
-     -> Inhaltshöhe bleibt vorhersehbar; zusammen mit scrolling="no" am Iframe
-     verhindert das den internen Scrollbalken. */
-  .ig-embed {
-    width: 100%;
-    max-width: 360px;
-    margin-inline: auto;
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-soft);
-    border: var(--border-soft);
-    background: #fff;
-  }
-  .ig-embed iframe {
-    display: block;
-    width: 100%;
-    border: 0;
-    /* Höhe passend zum Instagram-Profil-Embed (kein interner Scroll).
-       Bei Bedarf hier fein justieren. */
-    height: 540px;
-  }
 </style>
 
 <script>

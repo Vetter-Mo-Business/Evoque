@@ -335,16 +335,4 @@ const switchToEn = localizePath(Astro.url.pathname, 'en');
       }
     });
   }
-
-  // Sprachwahl merken: Beim Klick auf eine Sprachoption ein Cookie setzen, damit
-  // die gewählte Sprache dauerhaft bleibt (auch beim Seitenwechsel), bis wieder
-  // umgeschaltet wird. Die Middleware liest dieses Cookie und hält die Sprache.
-  document.querySelectorAll<HTMLAnchorElement>('.lang__option').forEach((opt) => {
-    opt.addEventListener('click', () => {
-      const chosen = opt.getAttribute('hreflang');
-      if (chosen === 'de' || chosen === 'en') {
-        document.cookie = `evoque_lang=${chosen}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
-      }
-    });
-  });
 </script>

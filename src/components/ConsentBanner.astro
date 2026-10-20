@@ -1,0 +1,432 @@
+---
+// Cookie-Banner (erste Ebene) und Einstellungen (zweite Ebene).
+// Logik und Speicherung: src/lib/consent.ts.
+//
+// Vorgaben (Aufgabenliste Malin):
+// - „Alle akzeptieren“ und „Nur notwendige“ gleich groß, gleiche Form und
+//   Farbe; nichts vorausgewählt.
+// - Einstellungen: „Notwendig“ immer an, Cal.com und Instagram einzeln
+//   wählbar und standardmäßig aus, Button „Auswahl speichern“.
+import { localizePath, type Lang } from '../i18n/ui';
+
+const lang = (Astro.currentLocale ?? 'de') as Lang;
+const privacyHref = localizePath('/datenschutz', lang);
+
+const c = {
+  de: {
+    title: 'Cookie-Einstellungen',
+    textBefore:
+      'Diese Website verwendet technisch notwendige Cookies, die immer gesetzt werden. Externe Inhalte – den Buchungskalender von Cal.com und meinen Instagram-Feed – lade ich nur mit Ihrer Zustimmung. Dabei werden Daten an die jeweiligen Anbieter, auch in die USA, übertragen. Ihre Auswahl können Sie jederzeit über ‚Cookie-Einstellungen‘ im Fußbereich ändern. Mehr dazu in der ',
+    privacyLink: 'Datenschutzerklärung',
+    textAfter: '.',
+    acceptAll: 'Alle akzeptieren',
+    onlyNecessary: 'Nur notwendige',
+    settings: 'Einstellungen',
+    necessaryTitle: 'Notwendig',
+    necessaryText:
+      'Speichert Ihre Auswahl in diesem Banner. Ohne diese Angabe funktioniert die Website nicht wie gewünscht.',
+    alwaysOn: 'Immer aktiv',
+    externalTitle: 'Externe Inhalte',
+    calTitle: 'Cal.com',
+    calText:
+      'Buchungskalender für Termine. Anbieter: Cal.com, Inc., USA. Beim Laden werden Daten an Cal.com in den USA übertragen.',
+    igTitle: 'Instagram',
+    igText:
+      'Beiträge meines Instagram-Profils. Anbieter: Meta Platforms Ireland Limited, Irland. Beim Laden werden Daten an Meta übertragen, auch in die USA.',
+    save: 'Auswahl speichern',
+  },
+  en: {
+    title: 'Cookie settings',
+    textBefore:
+      'This website uses technically necessary cookies, which are always set. External content – the booking calendar by Cal.com and my Instagram feed – is only loaded with your consent. In that case, data is transferred to the respective providers, including to the USA. You can change your choice at any time via ‘Cookie settings’ in the footer. More information in the ',
+    privacyLink: 'privacy policy',
+    textAfter: '.',
+    acceptAll: 'Accept all',
+    onlyNecessary: 'Only necessary',
+    settings: 'Settings',
+    necessaryTitle: 'Necessary',
+    necessaryText:
+      'Stores your choice in this banner. Without it, the website does not work as intended.',
+    alwaysOn: 'Always on',
+    externalTitle: 'External content',
+    calTitle: 'Cal.com',
+    calText:
+      'Booking calendar for appointments. Provider: Cal.com, Inc., USA. When loaded, data is transferred to Cal.com in the USA.',
+    igTitle: 'Instagram',
+    igText:
+      'Posts from my Instagram profile. Provider: Meta Platforms Ireland Limited, Ireland. When loaded, data is transferred to Meta, including to the USA.',
+    save: 'Save selection',
+  },
+}[lang];
+---
+
+<section
+  class="consent"
+  data-consent-banner
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="consent-title"
+  aria-describedby="consent-text"
+  hidden
+>
+  <div class="consent__inner">
+    <h2 class="consent__title" id="consent-title" tabindex="-1">{c.title}</h2>
+    <p class="consent__text" id="consent-text">
+      {c.textBefore}<a href={privacyHref}>{c.privacyLink}</a>{c.textAfter}
+    </p>
+
+    <!-- Zweite Ebene: Einzelauswahl -->
+    <form class="consent__settings" data-consent-settings hidden>
+      <div class="consent__group">
+        <label class="consent__option">
+          <span class="consent__option-text">
+            <span class="consent__option-name">{c.necessaryTitle}</span>
+            <span class="consent__option-desc">{c.necessaryText}</span>
+          </span>
+          <span class="consent__switch">
+            <input type="checkbox" role="switch" checked disabled aria-describedby="consent-always" />
+            <span class="consent__slider" aria-hidden="true"></span>
+          </span>
+        </label>
+        <p class="consent__always" id="consent-always">{c.alwaysOn}</p>
+      </div>
+
+      <fieldset class="consent__group">
+        <legend class="consent__group-title">{c.externalTitle}</legend>
+        <label class="consent__option">
+          <span class="consent__option-text">
+            <span class="consent__option-name">{c.calTitle}</span>
+            <span class="consent__option-desc">{c.calText}</span>
+          </span>
+          <span class="consent__switch">
+            <input type="checkbox" role="switch" name="cal" />
+            <span class="consent__slider" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="consent__option">
+          <span class="consent__option-text">
+            <span class="consent__option-name">{c.igTitle}</span>
+            <span class="consent__option-desc">{c.igText}</span>
+          </span>
+          <span class="consent__switch">
+            <input type="checkbox" role="switch" name="instagram" />
+            <span class="consent__slider" aria-hidden="true"></span>
+          </span>
+        </label>
+      </fieldset>
+
+      <div class="consent__actions">
+        <button type="submit" class="btn consent__btn">{c.save}</button>
+      </div>
+    </form>
+
+    <!-- Erste Ebene -->
+    <div class="consent__actions" data-consent-main>
+      <div class="consent__choices">
+        <button type="button" class="btn consent__btn" data-consent-all>{c.acceptAll}</button>
+        <button type="button" class="btn consent__btn" data-consent-necessary>{c.onlyNecessary}</button>
+      </div>
+      <button
+        type="button"
+        class="consent__link"
+        data-consent-toggle-settings
+        aria-expanded="false"
+      >
+        {c.settings}
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .consent {
+    position: fixed;
+    z-index: 200;
+    inset: auto var(--space-md) var(--space-md) var(--space-md);
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .consent[hidden] {
+    display: none;
+  }
+  .consent__inner {
+    pointer-events: auto;
+    width: 100%;
+    max-width: 640px;
+    max-height: calc(100vh - 2 * var(--space-md));
+    max-height: calc(100dvh - 2 * var(--space-md));
+    overflow-y: auto;
+    background: var(--bg);
+    color: var(--forest-deep);
+    border: var(--border-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 18px 50px rgba(21, 44, 26, 0.22);
+    padding: var(--space-lg);
+  }
+  .consent__title {
+    font-size: 1.3rem;
+    margin: 0 0 var(--space-sm);
+  }
+  .consent__title:focus {
+    outline: none;
+  }
+  .consent__text {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .consent__text a {
+    color: var(--forest-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .consent__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm) var(--space-md);
+    margin-top: var(--space-lg);
+  }
+  .consent__actions[hidden] {
+    display: none;
+  }
+  /* Beide Hauptschaltflächen identisch: gleiche Größe, Form und Farbe.
+     Festes Raster mit zwei gleich breiten Spalten (auf schmalen Handys
+     untereinander, dann beide volle Breite). */
+  .consent__choices {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+  @media (max-width: 400px) {
+    .consent__choices {
+      grid-template-columns: 1fr;
+    }
+    [data-consent-main] {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+  .consent__btn {
+    width: 100%;
+    background: var(--forest-deep);
+    color: var(--on-dark);
+    padding: 0.85em 1.4em;
+  }
+  .consent__btn:hover {
+    background: #0e2113;
+  }
+  .consent__link {
+    flex: 0 0 auto;
+    margin-inline: auto;
+    background: none;
+    border: 0;
+    padding: 0.4em 0.2em;
+    font: inherit;
+    font-weight: 600;
+    color: var(--forest-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .consent__btn:focus-visible,
+  .consent__link:focus-visible,
+  .consent__text a:focus-visible,
+  .consent__switch input:focus-visible + .consent__slider {
+    outline: 3px solid var(--sage-harmony);
+    outline-offset: 2px;
+  }
+
+  /* Zweite Ebene */
+  .consent__settings {
+    margin-top: var(--space-lg);
+    display: grid;
+    gap: var(--space-md);
+  }
+  .consent__settings[hidden] {
+    display: none;
+  }
+  .consent__group {
+    margin: 0;
+    padding: var(--space-md);
+    border: var(--border-soft);
+    border-radius: var(--radius);
+    background: #fff;
+    display: grid;
+    gap: var(--space-md);
+  }
+  .consent__group-title {
+    padding: 0 var(--space-2xs);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--calm-earth);
+  }
+  .consent__option {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-md);
+    cursor: pointer;
+  }
+  .consent__option-text {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+  .consent__option-name {
+    font-weight: 600;
+  }
+  .consent__option-desc {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: #5c544d;
+  }
+  .consent__always {
+    margin: calc(-1 * var(--space-sm)) 0 0;
+    font-size: 0.8rem;
+    color: #5c544d;
+  }
+
+  /* Schalter */
+  .consent__switch {
+    position: relative;
+    flex: 0 0 auto;
+    width: 3rem;
+    height: 1.7rem;
+    margin-top: 0.1rem;
+  }
+  .consent__switch input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .consent__switch input:disabled {
+    cursor: not-allowed;
+  }
+  .consent__slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #c9c2bb;
+    transition: background 0.2s ease;
+    pointer-events: none;
+  }
+  .consent__slider::after {
+    content: '';
+    position: absolute;
+    top: 0.2rem;
+    left: 0.2rem;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease;
+  }
+  .consent__switch input:checked + .consent__slider {
+    background: var(--forest-deep);
+  }
+  .consent__switch input:checked + .consent__slider::after {
+    transform: translateX(1.3rem);
+  }
+  .consent__switch input:disabled + .consent__slider {
+    opacity: 0.55;
+  }
+
+  @media (max-width: 520px) {
+    .consent {
+      inset: auto 0 0 0;
+    }
+    .consent__inner {
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      max-height: 85vh;
+      max-height: 85dvh;
+      padding: var(--space-md);
+    }
+  }
+</style>
+
+<script>
+  import {
+    readConsent,
+    saveConsent,
+    onOpenSettings,
+    onConsentChange,
+    reloadIfRevoked,
+  } from '../lib/consent';
+
+  const banner = document.querySelector<HTMLElement>('[data-consent-banner]');
+  if (banner) {
+    const title = banner.querySelector<HTMLElement>('#consent-title')!;
+    const main = banner.querySelector<HTMLElement>('[data-consent-main]')!;
+    const settings = banner.querySelector<HTMLFormElement>('[data-consent-settings]')!;
+    const toggle = banner.querySelector<HTMLButtonElement>('[data-consent-toggle-settings]')!;
+    const calBox = settings.elements.namedItem('cal') as HTMLInputElement;
+    const igBox = settings.elements.namedItem('instagram') as HTMLInputElement;
+
+    // Fokus nach dem Schließen dorthin zurück, wo er vorher war
+    // (z. B. auf den Footer-Link „Cookie-Einstellungen“).
+    let returnFocus: HTMLElement | null = null;
+
+    function showSettings(show: boolean) {
+      settings.hidden = !show;
+      main.hidden = show;
+      toggle.setAttribute('aria-expanded', String(show));
+      if (show) calBox.focus();
+    }
+
+    function open(withSettings: boolean) {
+      // Schalter spiegeln die aktuelle Auswahl wider; ohne Auswahl ist alles aus.
+      const current = readConsent();
+      calBox.checked = current?.cal === true;
+      igBox.checked = current?.instagram === true;
+      banner!.hidden = false;
+      showSettings(withSettings);
+    }
+
+    function close() {
+      banner!.hidden = true;
+      returnFocus?.focus();
+      returnFocus = null;
+    }
+
+    banner.querySelector('[data-consent-all]')!.addEventListener('click', () => {
+      saveConsent({ cal: true, instagram: true }, 'banner-alle');
+      close();
+    });
+    banner.querySelector('[data-consent-necessary]')!.addEventListener('click', () => {
+      saveConsent({ cal: false, instagram: false }, 'banner-notwendig');
+      close();
+    });
+    toggle.addEventListener('click', () => showSettings(true));
+    settings.addEventListener('submit', (e) => {
+      e.preventDefault();
+      saveConsent({ cal: calBox.checked, instagram: igBox.checked }, 'einstellungen');
+      close();
+    });
+
+    onOpenSettings(() => {
+      const active = document.activeElement as HTMLElement | null;
+      returnFocus = active && !banner!.contains(active) ? active : null;
+      open(true);
+      title.focus();
+    });
+
+    // Banner schließen, wenn die Zustimmung über einen Platzhalter-Button
+    // erteilt wurde; geladene Inhalte bei Widerruf entfernen.
+    onConsentChange((consent) => {
+      if (!banner!.hidden && main.hidden === false) close();
+      reloadIfRevoked(consent);
+    });
+
+    if (!readConsent()) open(false);
+  }
+</script>

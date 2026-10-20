@@ -37,6 +37,8 @@ export const ui = {
     'footer.imprint': 'Impressum',
     'footer.privacy': 'Datenschutz',
     'footer.contactShort': 'Kontakt',
+    'footer.contactForm': 'Kontaktformular',
+    'footer.cookies': 'Cookie-Einstellungen',
     'footer.note': 'Coaching, keine Psychotherapie/Heilbehandlung.',
     'footer.copy': 'EVOQUE yourself · Coaching & Strategie',
     'footer.credit': 'In Kooperation mit VeMo IT & Design',
@@ -173,6 +175,8 @@ export const ui = {
     'footer.imprint': 'Imprint',
     'footer.privacy': 'Privacy',
     'footer.contactShort': 'Contact',
+    'footer.contactForm': 'Contact form',
+    'footer.cookies': 'Cookie settings',
     'footer.note': 'Coaching, not psychotherapy or medical treatment.',
     'footer.copy': 'EVOQUE yourself · Coaching & Strategy',
     'footer.credit': 'In cooperation with VeMo IT & Design',
@@ -300,8 +304,10 @@ export function useTranslations(lang: Lang) {
 }
 
 // Gibt denselben Seitenpfad in der Zielsprache zurück (/... <-> /en/...).
+// Ohne Schrägstrich am Ende (/kontakt statt /kontakt/), so wie der Server
+// die Adressen ausliefert (public/.htaccess); Ausnahme: Startseiten / und /en/.
 export function localizePath(pathname: string, target: Lang): string {
-  const base = pathname.replace(/^\/en(?=\/|$)/, '') || '/';
+  const base = pathname.replace(/^\/en(?=\/|$)/, '').replace(/\/+$/, '') || '/';
   if (target === 'en') return base === '/' ? '/en/' : '/en' + base;
   return base;
 }

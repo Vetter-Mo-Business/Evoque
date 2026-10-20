@@ -3,6 +3,9 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import BookingEmbed from '../components/BookingEmbed.astro';
+import Email from '../components/Email.astro';
+import InstagramEmbed from '../components/InstagramEmbed.astro';
+import ContactForm from '../components/ContactForm.astro';
 import portraitImg from '../assets/about/portrait.jpg';
 import { localizePath, type Lang } from '../i18n/ui';
 
@@ -25,14 +28,14 @@ const content = {
     bookTitle: 'Termin direkt sichern',
     directTitle: 'Kontaktiere mich direkt',
     email: 'E-Mail',
-    emailNote: '[PLATZHALTER: finale E-Mail-Adresse bestätigen]',
     instagram: 'Instagram',
     instagramHandle: '@evoqueyourself',
     portraitAlt: 'Malin – EVOQUE',
     cardAlt: 'QR-Code zum EVOQUE Instagram-Profil',
-    igTitle: 'EVOQUE auf Instagram',
     faqPrompt: 'Noch Fragen offen?',
     faqCta: "Zu den FAQ's",
+    formEyebrow: 'Kontaktformular',
+    formTitle: 'Nachricht schreiben',
   },
   en: {
     metaTitle: 'Contact & Booking',
@@ -45,14 +48,14 @@ const content = {
     bookTitle: 'Secure your appointment directly',
     directTitle: 'Contact me directly',
     email: 'Email',
-    emailNote: '[PLACEHOLDER: confirm final email address]',
     instagram: 'Instagram',
     instagramHandle: '@evoqueyourself',
     portraitAlt: 'Malin – EVOQUE',
     cardAlt: 'QR code to the EVOQUE Instagram profile',
-    igTitle: 'EVOQUE on Instagram',
     faqPrompt: 'Still have open questions?',
     faqCta: 'To the FAQ',
+    formEyebrow: 'Contact form',
+    formTitle: 'Send a message',
   },
 }[lang];
 const instagramUrl = 'https://www.instagram.com/evoqueyourself';
@@ -100,10 +103,7 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
               <div>
                 <dt>{content.email}</dt>
                 <dd>
-                  <a href="mailto:evoqueyourself.coaching@gmail.com"
-                    >evoqueyourself.coaching@gmail.com</a
-                  >
-                  <span class="contact-note">{content.emailNote}</span>
+                  <Email />
                 </dd>
               </div>
               <div>
@@ -117,16 +117,7 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
             </dl>
           </article>
 
-          <div class="ig-embed">
-            <iframe
-              src="https://www.instagram.com/evoqueyourself/embed"
-              title={content.igTitle}
-              loading="lazy"
-              scrolling="no"
-              frameborder="0"
-              allowtransparency="true"
-            ></iframe>
-          </div>
+          <InstagramEmbed />
         </div>
 
         <p class="contact-faq">
@@ -137,9 +128,21 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
     </div>
   </section>
 
+  <!-- Kontaktformular (Ziel des Links im Impressum und im Footer) -->
+  <section class="section section--tight contact-form-section" id="kontaktformular">
+    <div class="container">
+      <SectionHeading eyebrow={content.formEyebrow} title={content.formTitle} align="center" />
+      <div class="contact-box">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
+  .contact-form-section {
+    scroll-margin-top: 100px;
+  }
   .contact-direct__title {
     text-align: center;
     margin-bottom: var(--space-lg);
@@ -236,31 +239,5 @@ const instagramUrl = 'https://www.instagram.com/evoqueyourself';
     text-decoration: underline;
     text-underline-offset: 3px;
   }
-  .contact-note {
-    display: block;
-    font-size: 0.82rem;
-    color: var(--calm-earth);
-  }
 
-  /* Instagram-Feed-Einbettung (rechte Spalte, statt Visitenkarte).
-     Breite begrenzt -> Inhaltshöhe bleibt vorhersehbar; zusammen mit
-     scrolling="no" am Iframe verhindert das den internen Scrollbalken. */
-  .ig-embed {
-    width: 100%;
-    max-width: 360px;
-    margin-inline: auto;
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-soft);
-    border: var(--border-soft);
-    background: #fff;
-  }
-  .ig-embed iframe {
-    display: block;
-    width: 100%;
-    border: 0;
-    /* Höhe passend zum Instagram-Profil-Embed (kein interner Scroll).
-       Bei Bedarf hier fein justieren. */
-    height: 540px;
-  }
 </style>

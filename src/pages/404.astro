@@ -1,0 +1,19 @@
+---
+// Fehlerseite für nicht vorhandene Adressen (ErrorDocument in public/.htaccess).
+// Zweisprachig auf einer Seite, weil der Server nur eine 404-Seite kennt.
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Seite nicht gefunden" noindex>
+  <section class="section">
+    <div class="container container--narrow center">
+      <p class="eyebrow">404</p>
+      <h1>Diese Seite gibt es leider nicht.</h1>
+      <p class="lead">Vielleicht hat sich die Adresse geändert.</p>
+      <p><a href="/" class="btn btn--primary">Zur Startseite</a></p>
+      <p class="text-muted" lang="en">
+        This page does not exist. <a href="/en/">Go to the English home page</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

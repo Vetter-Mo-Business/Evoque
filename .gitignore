@@ -29,3 +29,7 @@ Thumbs.db
 
 # Sicherung der unkomprimierten Original-Medien (nur lokal, nicht deployen)
 .media-originals/
+
+# Einwilligungs-Protokoll (entsteht nur beim lokalen Test mit PHP)
+einwilligungen/
+dist/api/_protokoll/
