@@ -16,7 +16,7 @@ DirectorySlash Off
   RewriteEngine On
 
   # 1. Immer HTTPS (zusätzlich in Plesk die 301-Weiterleitung aktivieren,
-  #    siehe docs/netcup-livegang.md).
+  #    siehe Anleitung für Malin, Kapitel 5).
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
