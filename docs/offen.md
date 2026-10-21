@@ -20,7 +20,7 @@ Die Website ist fertig. Offen ist nur, was nach der Übergabe passiert.
 - [ ] Nach ihrem Upload: Live-Prüfung (https, Weiterleitungen, keine fremden Verbindungen vor Zustimmung, Formular-Testmail)
 - [x] Automatik GitHub → Zweig `live` läuft (`.github/workflows/live.yml`)
 - [ ] Wenn Malin Schlüssel und Webhook-URL schickt: Deploy key (ohne Schreibrecht) und Webhook eintragen (`docs/automatische-aktualisierung.md`, Teil C)
-- [ ] Vercel-Projekt löschen (Verbindung zu GitHub ist getrennt)
+- [x] Vercel-Projekt gelöscht (21.10.2026)
 
 ## Technik-Notizen
 - Statische Seite (Astro, `npm run build` → `dist/`), Kontaktformular und
