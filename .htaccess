@@ -1,0 +1,67 @@
+# evoque-yourself.com – Regeln für den Apache-Webserver bei netcup
+#
+# Liegt im Hauptordner der Website (httpdocs) und wird beim Upload des
+# dist/-Ordners automatisch mitkopiert.
+
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset UTF-8
+ErrorDocument 404 /404.html
+
+# Adressen ohne Schrägstrich am Ende (/kontakt statt /kontakt/), so wie
+# alle Links der Website geschrieben sind. Siehe Regel 3 und 4.
+DirectorySlash Off
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 1. Immer HTTPS (zusätzlich in Plesk unter Hosting-Einstellungen die
+  #    301-Weiterleitung von HTTP zu HTTPS aktivieren).
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # 2. www.evoque-yourself.com -> evoque-yourself.com
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # 3. Schrägstrich am Ende entfernen: /kontakt/ -> /kontakt
+  #    (Ausnahme: die englische Startseite /en/)
+  RewriteCond %{REQUEST_URI} !^/en/$
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # 4. /kontakt intern aus /kontakt/index.html ausliefern
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.+?)/?$ /$1/index.html [L]
+</IfModule>
+
+# Protokolle und versteckte Dateien nie ausliefern
+<FilesMatch "(^\.|\.(jsonl|log)$)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+  # Dateien in /_astro/ tragen einen Prüfwert im Namen und ändern sich nie:
+  # ein Jahr im Browser behalten. HTML immer frisch prüfen.
+  <If "%{REQUEST_URI} =~ m#^/_astro/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
+</IfModule>
