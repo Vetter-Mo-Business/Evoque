@@ -9,9 +9,8 @@ import ContactForm from '../components/ContactForm.astro';
 import portraitImg from '../assets/about/portrait.jpg';
 import { localizePath, type Lang } from '../i18n/ui';
 
-// Cal.com-Buchungslink im Format "benutzername/event-typ" eintragen.
-// Beispiel: 'malin-evoque/kennenlernen'. Leer lassen -> Platzhalter wird angezeigt.
-// Einrichtungs-Anleitung steht in src/components/BookingEmbed.astro.
+// Cal.com-Buchungslink im Format "benutzername/event-typ". Wird der
+// Termintyp in Cal.com umbenannt, muss er hier angepasst werden.
 const CAL_LINK = 'malin-langer-g1yec0/30min';
 
 const lang = (Astro.currentLocale ?? 'de') as Lang;

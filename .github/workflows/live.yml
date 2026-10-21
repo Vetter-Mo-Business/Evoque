@@ -1,6 +1,6 @@
 # Baut die Website bei jeder Änderung auf main und legt das fertige Ergebnis
-# (Inhalt von dist/) in den Zweig "live". Malins netcup-Plesk holt sich
-# diesen Zweig per Git-Erweiterung (Nur-Lese-Schlüssel) und Webhook ab.
+# (Inhalt von dist/) in den Zweig "live". Der Webspace bei netcup holt sich
+# diesen Zweig per Plesk-Git-Erweiterung (Nur-Lese-Schlüssel) und Webhook ab.
 # Anleitung: docs/automatische-aktualisierung.md
 name: Website bauen (live)
 

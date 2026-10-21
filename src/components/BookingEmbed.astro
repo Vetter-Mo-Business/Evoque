@@ -5,18 +5,9 @@
 // Cal.com aufgebaut. Stattdessen steht hier ein Platzhalter mit dem Button
 // „Akzeptieren und Kalender laden“ und der E-Mail-Adresse als Alternative.
 //
-// EINRICHTUNG (einmalig):
-//   1. Auf https://cal.com kostenlos registrieren.
-//   2. Unter "Apps" den Google Kalender verbinden  -> belegte Zeiten werden
-//      automatisch online gesperrt (Zwei-Wege-Sync).
-//   3. Beim Event-Typ unter "Erweitert" die Option
-//      "Bestätigung erforderlich" aktivieren  -> Kunde stellt eine Anfrage,
-//      du bekommst eine Mail und bestätigst/lehnst ab. Erst nach Bestätigung
-//      landet der Termin in deinem Kalender und ist online als belegt markiert.
-//   4. Deinen Buchungslink unten als calLink eintragen, Format: "name/event"
-//      Beispiel: "malin-evoque/kennenlernen"
-//
-// Solange calLink leer ist, wird ein Platzhalter angezeigt.
+// calLink = Cal.com-Buchungslink im Format "benutzername/event-typ"
+// (eingetragen in src/pages/kontakt.astro). Ist er leer, erscheint ein
+// allgemeiner Hinweis statt des Kalenders.
 import Email from './Email.astro';
 import { localizePath, type Lang } from '../i18n/ui';
 

@@ -24,7 +24,7 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
-# local Claude Code tooling (installed skills, local settings)
+# lokale Werkzeug-Einstellungen
 .claude/
 
 # Sicherung der unkomprimierten Original-Medien (nur lokal, nicht deployen)
