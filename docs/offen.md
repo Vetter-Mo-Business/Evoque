@@ -1,8 +1,8 @@
 # Offene Punkte
 
 Die Website ist fertig. Offen ist nur, was nach der Übergabe passiert.
-Unterlagen für Malin: `Website-v3/intern/kunden/2026-001-evoque-yourself/pdf/`
-(`uebergabe.pdf` und `anleitung.pdf`).
+Übergeben am 21.10.2026 (Protokoll unterschrieben). Unterlagen:
+`Website-v3/intern/kunden/2026-001-evoque-yourself/uebergabe/`.
 
 ## Nach der Übergabe (Malin, laut Übergabe-Unterlage)
 - [ ] netcup: Webhosting (Nürnberg) und Domain evoque-yourself.com buchen, AVV abschließen
@@ -14,9 +14,11 @@ Unterlagen für Malin: `Website-v3/intern/kunden/2026-001-evoque-yourself/pdf/`
 ## Wir
 - Kostenloser Support bis einschließlich 18.11.2026 (4 Wochen ab Übergabe), danach 12,50 € je angefangene 15 Minuten mit Schätzung vorab
 - Malin bucht netcup erst noch und lädt selbst hoch; sie meldet sich nach dem Upload für die Live-Prüfung
-- [ ] `website-zum-hochladen.zip` (Inhalt von `dist/`) und `quellcode.zip` erstellen und mit den Logo-Dateien übergeben
+- [x] `website-zum-hochladen.zip` und `quellcode.zip` erstellt und geprüft (`Website-v3/intern/kunden/2026-001-evoque-yourself/uebergabe/`)
+- [ ] Übergabe-Paket an Malin schicken (ZIPs, Logo-Paket, Anleitung)
 - [ ] Nach ihrem Upload: Live-Prüfung (https, Weiterleitungen, keine fremden Verbindungen vor Zustimmung, Formular-Testmail)
-- [ ] Automatische Aktualisierung GitHub → netcup einrichten, nach Malins Buchung (`docs/automatische-aktualisierung.md`)
+- [x] Automatik GitHub → Zweig `live` läuft (`.github/workflows/live.yml`)
+- [ ] Wenn Malin Schlüssel und Webhook-URL schickt: Deploy key (ohne Schreibrecht) und Webhook eintragen (`docs/automatische-aktualisierung.md`, Teil C)
 - [ ] Vercel-Projekt löschen (Verbindung zu GitHub ist getrennt)
 
 ## Technik-Notizen
