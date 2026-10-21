@@ -16,6 +16,7 @@ Unterlagen für Malin: `Website-v3/intern/kunden/2026-001-evoque-yourself/pdf/`
 - Malin bucht netcup erst noch und lädt selbst hoch; sie meldet sich nach dem Upload für die Live-Prüfung
 - [ ] `website-zum-hochladen.zip` (Inhalt von `dist/`) und `quellcode.zip` erstellen und mit den Logo-Dateien übergeben
 - [ ] Nach ihrem Upload: Live-Prüfung (https, Weiterleitungen, keine fremden Verbindungen vor Zustimmung, Formular-Testmail)
+- [ ] Automatische Aktualisierung GitHub → netcup einrichten, nach Malins Buchung (`docs/automatische-aktualisierung.md`)
 - [ ] Vercel-Projekt löschen (Verbindung zu GitHub ist getrennt)
 
 ## Technik-Notizen

@@ -1,0 +1,43 @@
+# Baut die Website bei jeder Änderung auf main und legt das fertige Ergebnis
+# (Inhalt von dist/) in den Zweig "live". Malins netcup-Plesk holt sich
+# diesen Zweig per Git-Erweiterung (Nur-Lese-Schlüssel) und Webhook ab.
+# Anleitung: docs/automatische-aktualisierung.md
+name: Website bauen (live)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: live
+  cancel-in-progress: false
+
+jobs:
+  bauen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+        env:
+          ASTRO_TELEMETRY_DISABLED: 1
+
+      # Fertige Website in den Zweig "live" legen (mit Verlauf, kein
+      # Überschreiben der Historie, damit Plesk normal nachziehen kann).
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: live
+          enable_jekyll: true   # keine zusätzliche .nojekyll-Datei im Webspace
+          commit_message: "Live-Stand"
