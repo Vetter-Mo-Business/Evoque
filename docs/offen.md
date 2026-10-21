@@ -15,7 +15,8 @@ Die Website ist fertig. Offen ist nur, was nach der Übergabe passiert.
 - Kostenloser Support bis einschließlich 18.11.2026 (4 Wochen ab Übergabe), danach 12,50 € je angefangene 15 Minuten mit Schätzung vorab
 - Malin bucht netcup erst noch und lädt selbst hoch; sie meldet sich nach dem Upload für die Live-Prüfung
 - [x] `website-zum-hochladen.zip` und `quellcode.zip` erstellt und geprüft (`Website-v3/intern/kunden/2026-001-evoque-yourself/uebergabe/`)
-- [ ] Übergabe-Mail an Malin: beide ZIPs, Anleitung, unterschriebenes Protokoll (Logo-Paket separat übergeben)
+- [x] Übergabe-Mail an Malin verschickt (21.10.2026): PDFs als Anhang, ZIPs und Logo-Paket im Google-Drive-Ordner (Gmail blockiert ZIPs mit .js-Dateien)
+- [ ] Drive-Ordner schließen, sobald Malin alles heruntergeladen hat
 - [ ] Nach ihrem Upload: Live-Prüfung (https, Weiterleitungen, keine fremden Verbindungen vor Zustimmung, Formular-Testmail)
 - [x] Automatik GitHub → Zweig `live` läuft (`.github/workflows/live.yml`)
 - [ ] Wenn Malin Schlüssel und Webhook-URL schickt: Deploy key (ohne Schreibrecht) und Webhook eintragen (`docs/automatische-aktualisierung.md`, Teil C)
